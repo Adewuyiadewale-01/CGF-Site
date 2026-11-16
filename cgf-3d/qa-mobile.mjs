@@ -34,20 +34,19 @@ for (const [w, h] of [[390, 844], [375, 667]]) {
   if (w === 390 && (only === 'all' || only === 'areas')) {
     await p.evaluate(() => window.scrollTo(0, document.querySelector('#areas').getBoundingClientRect().top + scrollY - 60)); await p.waitForTimeout(1200);
     await p.screenshot({ path: `${OUT}/areas-0.png` });
-    const open = () => p.$eval('#regions li.is-on', (e) => e.dataset.region + ' @' + Math.round(e.getBoundingClientRect().top));
+    const open = () => p.$$eval('#regions li.is-open', (a) => a.map((e) => e.dataset.region.slice(0, 5)).join(','));
     const log = [];
     for (let k = 1; k <= 12; k++) { // scroll down like a person: small flicks with pauses
-      await p.evaluate(() => window.scrollBy(0, 260)); await p.waitForTimeout(600);
+      await p.evaluate(() => window.scrollBy(0, 260)); await p.waitForTimeout(700);
       log.push(await open());
-      if (k === 3 || k === 5) await p.screenshot({ path: `${OUT}/areas-${k}.png` });
+      if (k === 2 || k === 4 || k === 7) await p.screenshot({ path: `${OUT}/areas-${k}.png` });
     }
-    for (let k = 1; k <= 8; k++) { await p.evaluate(() => window.scrollBy(0, -300)); await p.waitForTimeout(600); log.push('up ' + await open()); }
     console.log(log.join(' | '));
-    // tap a header directly
-    await p.evaluate(() => document.querySelector('#regions').scrollIntoView()); await p.waitForTimeout(700);
-    const nb = await p.$('#regions li[data-region="north-shore"] b'); const before = (await nb.boundingBox()).y;
-    await nb.tap(); await p.waitForTimeout(1500);
-    console.log('tap north-shore ->', await open(), 'header moved', Math.round((await nb.boundingBox()).y - before), 'px');
+    // tap toggles: close then reopen Inner West
+    const iw = await p.$('#regions li[data-region="inner-west"] b');
+    await iw.scrollIntoViewIfNeeded(); await iw.tap(); await p.waitForTimeout(900);
+    const a = await open(); await iw.tap(); await p.waitForTimeout(900);
+    console.log('tap closes ->', a, '| tap reopens ->', await open());
     await p.screenshot({ path: `${OUT}/areas-tap.png` });
   }
   console.log(w, 'overflow-x:', await p.evaluate(() => document.documentElement.scrollWidth - innerWidth));

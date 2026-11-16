@@ -21,12 +21,12 @@ Then open http://localhost:4173. The site is static: no build step.
 
 ## Highlights
 
-- **Hero:** live Three.js house; press and hold to arm it (power pulses, cameras sweep, counters climb). On phones the hero is exactly one screen with the hold button on the scene.
+- **Hero:** live Three.js house; press and hold to arm it (power pulses, cameras sweep, counters climb). On phones the hero is exactly one screen, with the hold button just under the nav.
 - **How it's wired:** one continuous 3D scene pinned on scroll; the camera flies between five stations that assemble as it arrives.
 - **Unified nav:** one dropdown panel that morphs between Security, Electrical and Company; full-screen accordion on phones.
-- **Service areas:** real dotted map; hover a region or row to highlight it. On phones the regions are an accordion: the map sits under the open region, pans to it, and the next region opens as you scroll.
+- **Service areas:** real dotted map; hover a region or row to highlight it. On phones each region has its own map; Sutherland starts open and the rest expand in order as you scroll (and stay open); tap a title to open or close it.
 - **Who we work with:** hover a property type to see a real CGF job photo; phones get inline thumbnails.
-- **Reviews:** ten real Google reviews (verbatim excerpts) in two columns drifting in opposite directions; pauses on hover.
+- **Reviews:** ten real Google reviews (verbatim excerpts) in two columns drifting in opposite directions; pauses on hover. Phones get a static stack.
 - **Get a quote:** the only light section, sliding over the map, on a light 3D city scene; 3-step form with validation.
 - Reduced-motion and no-WebGL visitors get rendered stills instead of live 3D.
 

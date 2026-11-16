@@ -313,6 +313,7 @@ a.tr:hover .ic { color: var(--signal); }
 .areas__l { display: grid; gap: 28px; }
 .areas__l .eyebrow { margin-bottom: 0; }
 .areas__l > p { font-size: 18px; line-height: 1.6; }
+.r-body { display: none; } /* phone-only region bodies (map per region); see the 860px block */
 .regions li { display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: 24px; align-items: center; padding: 18px 14px; border-bottom: 1px solid var(--line); border-radius: 10px; cursor: pointer; transition: background .25s; }
 .regions b { display: flex; gap: 10px; align-items: center; font-weight: 400; font-size: 17px; }
 .regions i { width: 6px; height: 6px; border-radius: 50%; background: var(--stone); transition: background .25s, box-shadow .25s; }
@@ -444,7 +445,7 @@ a.tr:hover .ic { color: var(--signal); }
 @media (max-width: 860px) {
   .hero::before { background: linear-gradient(180deg, rgba(10, 11, 13, .55) 0%, rgba(10, 11, 13, 0) 90px); }
   .hero__coords, .hero__callouts { display: none; }
-  /* phone hero: exactly one screen. 3D on top (flexible), arm button on its lower edge, copy + rating below */
+  /* phone hero: exactly one screen. Arm button just under the nav, 3D in the flexible middle, copy + both CTAs + rating below */
   .hero { height: 100svh; min-height: 560px; max-height: 1000px; display: grid; grid-template-rows: minmax(0, 1fr) auto; }
   .hero__stage { position: relative; inset: auto; grid-row: 1; grid-column: 1; z-index: -2; }
   .hero__stage::after { content: ""; position: absolute; inset: auto 0 0; height: 45%; background: linear-gradient(180deg, rgba(10, 11, 13, 0), var(--ink)); }
@@ -452,9 +453,13 @@ a.tr:hover .ic { color: var(--signal); }
   .hero__copy { position: relative; bottom: auto; gap: 16px; }
   .hero h1 { font-size: clamp(38px, 11vw, 52px); }
   .hero .lede { font-size: 15.5px; line-height: 1.5; }
-  .hero .ctas .btn--ghost { display: none; }
+  .hero .ctas { flex-wrap: nowrap; gap: 8px; }
+  .hero .ctas .btn { font-size: 14px; flex: 0 1 auto; }
+  .hero .ctas .btn--primary { padding: 6px 6px 6px 18px; gap: 10px; }
+  .hero .ctas .btn--primary .btn__ar { width: 32px; height: 32px; }
+  .hero .ctas .btn--ghost { padding-inline: 16px; }
   .hero__trust { position: relative; bottom: auto; margin-top: 18px; gap: 4px 14px; font-size: 9px; }
-  .sim { grid-row: 1; grid-column: 1; align-self: end; justify-self: start; position: relative; right: auto; bottom: auto; width: auto; margin: 0 0 8px max(var(--gut), env(safe-area-inset-left, 0px)); padding: 0; background: none; border: 0; backdrop-filter: none; -webkit-backdrop-filter: none; z-index: 2; }
+  .sim { grid-row: 1; grid-column: 1; align-self: start; justify-self: start; position: relative; right: auto; bottom: auto; width: auto; margin: 84px 0 0 max(var(--gut), env(safe-area-inset-left, 0px)); padding: 0; background: none; border: 0; backdrop-filter: none; -webkit-backdrop-filter: none; z-index: 2; }
   .sim header, .sim__stats { display: none; }
   .sim .hold { background: rgba(10, 11, 13, .62); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); padding-right: 20px; }
   .step { grid-area: auto; opacity: 1; transform: none; pointer-events: auto; padding-block: 8px; }
@@ -473,12 +478,10 @@ a.tr:hover .ic { color: var(--signal); }
     backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
     mask-image: linear-gradient(180deg, #000 30%, transparent); -webkit-mask-image: linear-gradient(180deg, #000 30%, transparent); }
   .cards { grid-template-columns: minmax(0, 1fr); }
-  /* phones: the two columns become two rows drifting in opposite directions */
-  .quotes { grid-template-columns: minmax(0, 1fr); height: auto; gap: 14px; margin-inline: calc(var(--gut) * -1); mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent); -webkit-mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent); }
-  .quotes__track { flex-direction: row; gap: 14px; width: max-content; }
-  .quotes__track blockquote { width: 300px; align-content: start; }
-  .quotes__col--up .quotes__track { animation-name: q-left; }
-  .quotes__col--down .quotes__track { animation-name: q-right; }
+  /* phones: a plain static stack of review cards (the loop clones are hidden) */
+  .quotes { grid-template-columns: minmax(0, 1fr); height: auto; gap: 16px; overflow: visible; mask-image: none; -webkit-mask-image: none; }
+  .quotes__track { gap: 16px; animation: none !important; transform: none !important; }
+  .quotes__track > [aria-hidden="true"] { display: none; }
   .card__b { padding: 22px 22px 26px; }
   .steps5 { grid-template-columns: minmax(0, 1fr); }
   .tr { grid-template-columns: minmax(0, 1fr) 20px; gap: 8px 16px; }
@@ -490,20 +493,23 @@ a.tr:hover .ic { color: var(--signal); }
   .ph--d { display: none; }
   .ph--e img { aspect-ratio: 16 / 9; height: auto; }
   .areas__grid { grid-template-columns: minmax(0, 1fr); }
-  /* phones: accordion; the single map sits under the open region and pans to it */
+  /* phones: regions expand one after another as they scroll in, each with its own map, and stay open */
+  .areas__grid > .map { display: none; }
   .regions li { grid-template-columns: minmax(0, 1fr) 16px; gap: 0 12px; padding: 18px 4px; border-radius: 0; background: none !important; -webkit-tap-highlight-color: transparent; }
-  .regions li::after { content: ""; grid-column: 2; grid-row: 1; width: 8px; height: 8px; justify-self: center; border-right: 1.5px solid var(--stone); border-bottom: 1.5px solid var(--stone); transform: translateY(-2px) rotate(45deg); transition: transform .35s var(--ease); }
-  .regions li.is-on::after { transform: translateY(2px) rotate(-135deg); border-color: var(--signal); }
+  .regions li::after { content: ""; grid-column: 2; grid-row: 1; width: 8px; height: 8px; justify-self: center; border-right: 1.5px solid var(--stone); border-bottom: 1.5px solid var(--stone); transform: translateY(-2px) rotate(45deg); transition: transform .35s var(--ease), border-color .3s; }
   .regions li > b { grid-column: 1; }
-  .regions li > span { grid-column: 1 / -1; display: none; margin-top: 8px; }
-  .regions li.is-on > span { display: block; }
-  .regions li.is-on b { color: var(--bone); }
-  .regions .map { grid-column: 1 / -1; margin-top: 16px; aspect-ratio: auto; height: min(440px, 62svh); border-radius: 20px; cursor: default; animation: map-in .5s var(--ease); }
-  .regions .map__svg { transition: transform .6s var(--ease); }
-  .regions .map__hq { transition: top .6s var(--ease), opacity .3s; }
-  .regions .map__tip, .regions .map__legend { display: none; }
-  .regions .map::after { background: linear-gradient(180deg, var(--surface) 0%, rgba(19, 20, 23, 0) 14%, rgba(19, 20, 23, 0) 86%, var(--surface) 100%); }
-  @keyframes map-in { from { opacity: 0; transform: translateY(8px); } }
+  .regions li > span { display: none; }
+  .regions li i { background: var(--stone) !important; box-shadow: none !important; }
+  .regions li.is-open::after { transform: translateY(2px) rotate(-135deg); border-color: var(--signal); }
+  .regions li.is-open i { background: var(--signal) !important; box-shadow: 0 0 10px var(--signal) !important; }
+  .r-body { grid-column: 1 / -1; display: grid; grid-template-rows: 0fr; transition: grid-template-rows .6s var(--ease); }
+  .r-body > div { min-height: 0; overflow: hidden; opacity: 0; transition: opacity .45s .1s; }
+  .regions li.is-open .r-body { grid-template-rows: 1fr; }
+  .regions li.is-open .r-body > div { opacity: 1; }
+  .r-body p { margin-top: 8px; font-size: 13px; color: var(--stone); }
+  .r-map { position: relative; margin-top: 16px; height: 340px; border-radius: 20px; overflow: hidden; background: var(--surface); border: 1px solid var(--line); cursor: default; }
+  .r-map .map__svg { position: absolute; top: 0; left: 0; width: 100%; height: auto; display: block; }
+  .r-map::after { content: ""; position: absolute; inset: 0; pointer-events: none; background: linear-gradient(180deg, var(--surface) 0%, rgba(19, 20, 23, 0) 14%, rgba(19, 20, 23, 0) 86%, var(--surface) 100%); }
   .quote { border-radius: 28px 28px 0 0; padding-block: 72px 200px; }
   .qform { padding: 24px 20px; }
   .ptype { grid-template-columns: repeat(2, minmax(0, 1fr)); }
