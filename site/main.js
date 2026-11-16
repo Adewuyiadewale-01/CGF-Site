@@ -255,3 +255,49 @@ $('#q-back').addEventListener('click', () => showQ(Math.max(0, q - 1)));
 $$('.faq details').forEach((d) => d.addEventListener('toggle', () => { if (d.open) $$('.faq details').forEach((o) => o !== d && (o.open = false)); ScrollTrigger.refresh(); }));
 
 window.addEventListener('load', () => ScrollTrigger.refresh());
+
+/* ---------- who we work with: photo peek ---------- */
+{
+  const table = $('.who .table'), peek = $('.who .peek');
+  const fine = matchMedia('(hover: hover) and (pointer: fine)');
+  if (table && peek) {
+    const imgs = $$('.peek__frame img', peek), caps = $$('figcaption span', peek);
+    let x = 0, y = 0, tx = 0, ty = 0, raf = 0, on = false;
+    const show = (i) => { imgs.forEach((im, k) => im.classList.toggle('is-on', k === i)); caps.forEach((c, k) => c.classList.toggle('is-on', k === i)); };
+    const tick = () => {
+      const k = reduce ? 1 : 0.16; x += (tx - x) * k; y += (ty - y) * k;
+      const tilt = reduce ? 0 : Math.max(-8, Math.min(8, (tx - x) * 0.06));
+      peek.style.transform = `translate3d(${x}px, ${y}px, 0) rotate(${tilt}deg)`;
+      raf = on || Math.abs(tx - x) > 0.5 || Math.abs(ty - y) > 0.5 ? requestAnimationFrame(tick) : 0;
+    };
+    const aim = (cx, cy) => {
+      const h = peek.offsetHeight || 340;
+      tx = cx + 28; ty = Math.max(12, Math.min(innerHeight - h - 12, cy - h * 0.5));
+      if (tx + 260 > innerWidth - 12) tx = cx - 288;
+    };
+    const start = (cx, cy, jump) => { aim(cx, cy); if (jump) { x = tx; y = ty; } on = true; peek.classList.add('is-on'); if (!raf) raf = requestAnimationFrame(tick); };
+    const stop = () => { on = false; peek.classList.remove('is-on'); };
+    table.addEventListener('pointermove', (e) => {
+      if (!fine.matches || e.pointerType !== 'mouse') return;
+      const row = e.target.closest('a.tr[data-peek]');
+      if (!row) return stop();
+      show(+row.dataset.peek); start(e.clientX, e.clientY, !on);
+    });
+    table.addEventListener('pointerleave', stop);
+    window.addEventListener('scroll', () => { if (on && !table.matches(':hover')) stop(); }, { passive: true });
+    $$('a.tr[data-peek]', table).forEach((row) => {
+      row.addEventListener('focus', () => {
+        if (!fine.matches || !row.matches(':focus-visible')) return;
+        const r = row.getBoundingClientRect(); show(+row.dataset.peek); start(r.right - 320, r.top + r.height / 2, !on);
+      });
+      row.addEventListener('blur', stop);
+    });
+    // load the four photos just before the table scrolls in, so the first reveal isn't blank
+    new IntersectionObserver((es, o) => { if (es.some((e) => e.isIntersecting)) { imgs.forEach((im) => { im.loading = 'eager'; }); o.disconnect(); } }, { rootMargin: '600px' }).observe(table);
+  }
+}
+
+/* ---------- reviews: loop each column by cloning its cards once ---------- */
+if (!reduce) $$('.quotes__track').forEach((track) => {
+  [...track.children].forEach((card) => { const c = card.cloneNode(true); c.setAttribute('aria-hidden', 'true'); track.appendChild(c); });
+});
