@@ -1,0 +1,596 @@
+<title>CGF Live Hero</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: full-bleed live WebGL hero, copy bottom-left, simulation widget bottom-right; then a row of four live discipline scenes. */
+:root{
+  --ink:#0A0B0D; --night:#0E0F12; --surface:#131417; --bone:#EDEBE6; --stone:#8C8A85; --dim:#55534F; --soft:#BDBAB4;
+  --signal:#FF5B2E; --line:rgba(237,235,230,.1);
+  --display:"Instrument Sans", ui-sans-serif, system-ui, sans-serif;
+  --mono:"Geist Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  color-scheme:dark;
+}
+html,body{background:var(--ink);color:var(--bone)}
+body{font-family:var(--display);-webkit-font-smoothing:antialiased}
+.gut{padding-left:max(24px, env(safe-area-inset-left, 0px));padding-right:max(24px, env(safe-area-inset-right, 0px))}
+.mono{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--stone)}
+.hero{position:relative;min-height:min(900px, 92vh);height:720px;overflow:hidden;isolation:isolate}
+@media (min-height:760px){.hero{height:min(900px, 92vh)}}
+#stage{position:absolute;inset:0;z-index:-2}
+#stage canvas{display:block;width:100%;height:100%}
+.hero::before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;
+  background:linear-gradient(90deg, rgba(10,11,13,.9) 0%, rgba(10,11,13,.5) 32%, rgba(10,11,13,0) 55%),
+             linear-gradient(180deg, rgba(10,11,13,0) 65%, rgba(10,11,13,.95) 100%)}
+nav{position:absolute;top:0;left:0;right:0;display:flex;align-items:center;justify-content:space-between;gap:16px;padding-block:22px}
+.wm{display:flex;align-items:center;gap:12px}
+.wm b{font-weight:600;font-size:24px;letter-spacing:-.02em}
+.wm i{width:1px;height:22px;background:var(--line)}
+.wm span{font-family:var(--mono);font-size:9px;letter-spacing:.08em;line-height:1.3;color:var(--soft)}
+.links{display:flex;gap:4px;padding:5px;border:1px solid var(--line);border-radius:999px;background:rgba(10,11,13,.5);backdrop-filter:blur(20px)}
+.links a{color:var(--soft);text-decoration:none;font-size:14px;padding:9px 16px;border-radius:999px}
+.links a:hover,.links a:focus-visible{background:rgba(237,235,230,.06);color:var(--bone)}
+.btn{display:inline-flex;align-items:center;gap:12px;border-radius:999px;font:500 15px var(--display);text-decoration:none;border:0;cursor:pointer}
+.btn.primary{background:var(--signal);color:var(--ink);padding:8px 8px 8px 22px}
+.btn.primary .ar{display:grid;place-items:center;width:34px;height:34px;border-radius:50%;background:var(--ink);color:var(--bone)}
+.btn.ghost{color:var(--bone);padding:14px 22px;border:1px solid rgba(237,235,230,.16);background:rgba(237,235,230,.03)}
+.btn:focus-visible,.hold:focus-visible,.links a:focus-visible{outline:2px solid var(--signal);outline-offset:3px}
+.navr{display:flex;align-items:center;gap:20px}
+.navr .tel{font-family:var(--mono);font-size:13px;color:var(--bone)}
+.coords{position:absolute;top:100px;font-family:var(--mono);font-size:10px;line-height:1.6;letter-spacing:.08em;color:var(--stone)}
+.copy{position:absolute;left:0;bottom:120px;max-width:720px;display:grid;gap:26px}
+h1{margin:0;font-weight:400;font-size:clamp(46px, 6.2vw, 88px);line-height:.98;letter-spacing:-.045em;text-wrap:balance}
+.lede{margin:0;max-width:30em;font-size:18px;line-height:1.55;color:var(--soft)}
+.ctas{display:flex;flex-wrap:wrap;gap:12px}
+.trust{position:absolute;left:0;right:0;bottom:28px;display:flex;flex-wrap:wrap;gap:8px 28px}
+.trust .stars{color:#FBBC05;letter-spacing:2px;margin-right:6px}
+.sim{position:absolute;right:max(24px, env(safe-area-inset-right, 0px));bottom:84px;width:340px;padding:20px;border-radius:18px;
+  background:rgba(10,11,13,.62);border:1px solid rgba(237,235,230,.12);backdrop-filter:blur(24px);display:grid;gap:16px}
+.sim header{display:flex;justify-content:space-between;align-items:center}
+.sim header .live{display:flex;gap:8px;align-items:center;color:var(--soft);font-size:10px}
+.dot{width:6px;height:6px;border-radius:50%;background:var(--signal);box-shadow:0 0 10px var(--signal)}
+.state{font-family:var(--mono);font-size:9px;letter-spacing:.08em;padding:3px 7px;border-radius:4px;background:rgba(237,235,230,.06);color:var(--stone);transition:.3s}
+.state.on{background:rgba(255,91,46,.15);color:var(--signal)}
+.stats{display:grid;grid-template-columns:repeat(3,1fr)}
+.stats div{display:grid;gap:4px}
+.stats .mono{font-size:9px}
+.stats strong{font-weight:400;font-size:30px;letter-spacing:-.03em;font-variant-numeric:tabular-nums}
+.stats small{font-size:14px;color:var(--stone)}
+.hold{display:flex;align-items:center;gap:12px;padding:8px 16px 8px 8px;border-radius:999px;border:1px solid rgba(237,235,230,.14);background:transparent;color:var(--bone);cursor:pointer;
+  user-select:none;-webkit-user-select:none;touch-action:none;text-align:left;font:inherit}
+.hold svg{flex:none}
+.hold b{display:block;font-weight:500;font-size:14px}
+.hold:active{border-color:rgba(255,91,46,.5)}
+.disc{background:var(--night);border-top:1px solid var(--line);padding-block:96px}
+.disc .head{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:end;gap:24px;margin-bottom:40px}
+.disc h2{margin:0;font-weight:400;font-size:clamp(34px, 4vw, 52px);line-height:1.05;letter-spacing:-.03em}
+.disc .head p{margin:0;max-width:26em;color:var(--stone);line-height:1.6}
+.grid{display:grid;grid-template-columns:repeat(4, minmax(0,1fr));gap:16px}
+.card{border:1px solid var(--line);border-radius:20px;overflow:hidden;background:var(--surface);min-width:0}
+.card .v{aspect-ratio:4/3;max-width:100%}
+.card .v canvas{display:block;width:100%;height:100%}
+.card .b{padding:18px 20px 22px;display:grid;gap:8px}
+.card .b .mono{color:var(--signal);font-size:10px}
+.card h3{margin:0;font-weight:400;font-size:22px;letter-spacing:-.02em}
+.card p{margin:0;font-size:14px;line-height:1.55;color:var(--stone)}
+.note{margin-top:28px}
+@media (max-width:1000px){.links{display:none}.grid{grid-template-columns:repeat(2, minmax(0,1fr))}}
+@media (max-width:760px){
+  .hero{height:auto;min-height:0;padding-bottom:28px}
+  #stage{height:420px;bottom:auto}
+  .hero::before{background:linear-gradient(180deg, rgba(10,11,13,0) 40%, rgba(10,11,13,1) 70%)}
+  .coords,.navr .tel{display:none}
+  .copy{position:relative;bottom:auto;padding-top:360px}
+  .sim{position:relative;right:auto;bottom:auto;width:auto;margin-top:28px}
+  .trust{position:relative;bottom:auto;margin-top:22px}
+  .grid{grid-template-columns:minmax(0,1fr)}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<section class="hero" aria-label="CGF Security and Electrical">
+  <div id="stage" aria-hidden="true"></div>
+  <nav class="gut">
+    <div class="wm"><b>CGF</b><i></i><span>SECURITY<br>+ ELECTRICAL</span></div>
+    <div class="links"><a href="#disc">Security</a><a href="#disc">Electrical</a><a href="#disc">Strata &amp; business</a><a href="#disc">Reviews</a><a href="#disc">Areas</a></div>
+    <div class="navr"><span class="tel">1300 243 732</span><a class="btn primary" href="#disc">Get a quote <span class="ar">→</span></a></div>
+  </nav>
+  <div class="coords gut">34.0446° S · 151.1172° E<br>CGF HQ — CARINGBAH, NSW</div>
+  <div class="gut" style="position:relative;height:100%">
+    <div class="copy">
+      <h1>Your property,<br>wired by one team.</h1>
+      <p class="lede">Cameras, alarms, intercoms and the electrical work behind them, designed, installed and supported by one licensed Sydney team.</p>
+      <div class="ctas"><a class="btn primary" href="#disc">Get a free quote <span class="ar">→</span></a><a class="btn ghost" href="#disc">See how it works</a></div>
+    </div>
+    <div class="trust mono"><span><span class="stars">★★★★★</span>Excellent · 170 Google reviews</span><span>Security Master Lic. 000104676</span><span>Electrical Contractor Lic. 487799C</span></div>
+  </div>
+  <aside class="sim" aria-label="Live simulation">
+    <header><span class="live mono"><span class="dot"></span>Live simulation · one property</span><span class="state" id="state">IDLE</span></header>
+    <div class="stats">
+      <div><span class="mono">Cameras</span><span><strong id="cams">0</strong><small>/3</small></span></div>
+      <div><span class="mono">Zones armed</span><span><strong id="zones">0</strong><small>/4</small></span></div>
+      <div><span class="mono">Circuits</span><span><strong id="circ">6</strong></span></div>
+    </div>
+    <button class="hold" id="hold" type="button" aria-describedby="holdhint">
+      <svg width="36" height="36" viewBox="0 0 36 36" aria-hidden="true"><circle cx="18" cy="18" r="15" fill="rgba(255,91,46,.12)" stroke="rgba(255,91,46,.25)" stroke-width="2"/><circle id="ring" cx="18" cy="18" r="15" fill="none" stroke="#FF5B2E" stroke-width="2" stroke-linecap="round" stroke-dasharray="94.25" stroke-dashoffset="94.25" transform="rotate(-90 18 18)"/></svg>
+      <span><b id="holdlabel">Hold to arm the property</b><span class="mono" id="holdhint" style="font-size:9px">Release to disarm</span></span>
+    </button>
+  </aside>
+</section>
+
+<section class="disc gut" id="disc" aria-labelledby="disc-h">
+  <div class="head"><h2 id="disc-h">Four disciplines.<br>One licensed team.</h2><p>Each scene is a live Three.js model built from primitives, the same ones that will run on the site. Drag your pointer over the hero to move its camera.</p></div>
+  <div class="grid">
+    <article class="card"><div class="v" data-scene="cctv"></div><div class="b"><span class="mono">Security · 01</span><h3>CCTV &amp; cameras</h3><p>AI-enabled cameras with live view and playback on your phone.</p></div></article>
+    <article class="card"><div class="v" data-scene="alarm"></div><div class="b"><span class="mono">Security · 02</span><h3>Alarms &amp; sensors</h3><p>Monitored alarms and interconnected smoke alarms, tested to code.</p></div></article>
+    <article class="card"><div class="v" data-scene="access"></div><div class="b"><span class="mono">Security · 03</span><h3>Intercom &amp; access</h3><p>Video intercoms and fobs you can add or cancel without re-keying.</p></div></article>
+    <article class="card"><div class="v" data-scene="power"></div><div class="b"><span class="mono">Electrical · 04</span><h3>Electrical &amp; energy</h3><p>Switchboards, solar, batteries and EV chargers, same team, same licence.</p></div></article>
+  </div>
+  <p class="mono note">Concept · CGF Security &amp; Electrical homepage redesign · live 3D prototype</p>
+</section>
+
+<script type="importmap">
+{ "imports": {
+  "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js",
+  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"
+} }
+</script>
+<script type="module">
+// CGF — procedural Three.js scenes. No imported models, no AI imagery.
+// Every object is built from primitives so lighting, colour and motion are fully controllable.
+import * as THREE from 'three';
+import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
+import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
+import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
+import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
+
+export const PALETTE = {
+  bg: 0x0a0b0d,
+  graphite: 0x26282c,
+  graphiteLight: 0x34373c,
+  concrete: 0x3c3d40,
+  slab: 0x1c1d20,
+  signal: 0xff5b2e,      // the one accent: "live / recording" signal
+  warm: 0xffb27a,       // interior light, never used in UI
+  white: 0xf2efe8,
+};
+
+const C = (h) => new THREE.Color(h);
+
+/* ---------------- shared materials ---------------- */
+function mats() {
+  return {
+    graphite: new THREE.MeshStandardMaterial({ color: PALETTE.graphite, roughness: 0.78, metalness: 0.05 }),
+    graphiteLight: new THREE.MeshStandardMaterial({ color: PALETTE.graphiteLight, roughness: 0.7, metalness: 0.05 }),
+    concrete: new THREE.MeshStandardMaterial({ color: PALETTE.concrete, roughness: 0.92 }),
+    slab: new THREE.MeshStandardMaterial({ color: PALETTE.slab, roughness: 0.95 }),
+    metal: new THREE.MeshStandardMaterial({ color: 0x8b8e94, roughness: 0.35, metalness: 0.9 }),
+    darkMetal: new THREE.MeshStandardMaterial({ color: 0x15161a, roughness: 0.4, metalness: 0.7 }),
+    white: new THREE.MeshStandardMaterial({ color: 0xe9e7e2, roughness: 0.45, metalness: 0.0 }),
+    glass: new THREE.MeshPhysicalMaterial({ color: 0x0c0e12, roughness: 0.08, metalness: 0.2, clearcoat: 1, clearcoatRoughness: 0.05 }),
+    lens: new THREE.MeshPhysicalMaterial({ color: 0x050608, roughness: 0.02, metalness: 0.5, clearcoat: 1 }),
+    warmGlass: new THREE.MeshPhysicalMaterial({ color: 0x0b0c0f, emissive: C(PALETTE.warm), emissiveIntensity: 0.16, roughness: 0.06, metalness: 0.1, clearcoat: 1, clearcoatRoughness: 0.03 }),
+    signal: new THREE.MeshStandardMaterial({ color: 0x220a04, emissive: C(PALETTE.signal), emissiveIntensity: 2.2 }),
+    lamp: new THREE.MeshStandardMaterial({ color: 0x222222, emissive: C(PALETTE.white), emissiveIntensity: 0 }),
+    solar: new THREE.MeshPhysicalMaterial({ color: 0x0b1018, roughness: 0.15, metalness: 0.6, clearcoat: 1 }),
+    foliage: new THREE.MeshStandardMaterial({ color: 0x1a201c, roughness: 1, flatShading: true }),
+  };
+}
+
+/* ---------------- interior glow (canvas) ---------------- */
+// Fakes a lit room behind the glass: warm ceiling wash, a pendant, furniture silhouettes.
+function interiorTexture(w, h, seed = 1) {
+  const c = document.createElement('canvas'); c.width = 512; c.height = Math.round(512 * h / w);
+  const x = c.getContext('2d'); const H = c.height;
+  const g = x.createLinearGradient(0, 0, 0, H); g.addColorStop(0, '#ffcf9e'); g.addColorStop(0.35, '#b8723f'); g.addColorStop(1, '#2a160b');
+  x.fillStyle = g; x.fillRect(0, 0, 512, H);
+  const rnd = (n) => { const v = Math.sin(seed * 999 + n * 77.7) * 43758.5; return v - Math.floor(v); };
+  for (let i = 0; i < 3; i++) { const px = 60 + rnd(i) * 390; const rg = x.createRadialGradient(px, H * 0.12, 4, px, H * 0.2, 140); rg.addColorStop(0, 'rgba(255,236,210,0.95)'); rg.addColorStop(1, 'rgba(255,200,150,0)'); x.fillStyle = rg; x.fillRect(0, 0, 512, H); x.fillStyle = '#1a0f08'; x.fillRect(px - 1, 0, 2, H * 0.12); }
+  x.fillStyle = 'rgba(16,9,5,0.92)';
+  for (let i = 0; i < 4; i++) { const fx = rnd(i + 10) * 440, fw = 50 + rnd(i + 20) * 110, fh = H * (0.16 + rnd(i + 30) * 0.22); x.fillRect(fx, H - fh, fw, fh); }
+  x.fillRect(0, H * 0.9, 512, H * 0.1);
+  const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; return t;
+}
+function windowMat(w, h, seed, k = 1) {
+  const tex = interiorTexture(w, h, seed);
+  return new THREE.MeshPhysicalMaterial({ color: 0x000000, emissive: 0xffffff, emissiveMap: tex, emissiveIntensity: 0.85 * k, roughness: 0.05, metalness: 0.1, clearcoat: 1, clearcoatRoughness: 0.02 });
+}
+
+/* ---------------- shader helpers ---------------- */
+// Energy flowing along a tube: uv.x runs along the cable length.
+function cableMaterial() {
+  return new THREE.ShaderMaterial({
+    uniforms: { uTime: { value: 0 }, uOn: { value: 0 }, uColor: { value: C(PALETTE.signal) }, uSpeed: { value: 0.6 }, uOffset: { value: 0 } },
+    vertexShader: `varying vec2 vUv; void main(){ vUv=uv; gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0);} `,
+    fragmentShader: `uniform float uTime,uOn,uSpeed,uOffset; uniform vec3 uColor; varying vec2 vUv;
+      void main(){
+        float p = fract(vUv.x*3.0 - uTime*uSpeed + uOffset);
+        float pulse = smoothstep(0.0,0.12,p)*(1.0-smoothstep(0.12,0.32,p));
+        vec3 base = vec3(0.07,0.07,0.08);
+        vec3 col = base + uColor*(0.18*uOn + pulse*3.2*uOn);
+        gl_FragColor = vec4(col,1.0);
+      }`,
+  });
+}
+
+// Camera field-of-view volume: soft additive cone fading with distance.
+function coneMaterial() {
+  return new THREE.ShaderMaterial({
+    transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, side: THREE.DoubleSide,
+    uniforms: { uOn: { value: 0 }, uColor: { value: C(PALETTE.signal) }, uTime: { value: 0 } },
+    vertexShader: `varying vec2 vUv; void main(){ vUv=uv; gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0);} `,
+    fragmentShader: `uniform float uOn,uTime; uniform vec3 uColor; varying vec2 vUv;
+      void main(){
+        float along = 1.0 - vUv.y;               // 0 at apex, 1 at base
+        float fade = (1.0-along) * smoothstep(0.0,0.08,along);
+        float scan = 0.55 + 0.45*smoothstep(0.85,1.0, sin(along*18.0 - uTime*3.0)*0.5+0.5);
+        gl_FragColor = vec4(uColor*fade*scan*0.075*uOn, 1.0);
+      }`,
+  });
+}
+
+function groundMaterial(size = 120) {
+  return new THREE.ShaderMaterial({
+    uniforms: { uSize: { value: size } },
+    vertexShader: `varying vec3 vW; void main(){ vec4 w=modelMatrix*vec4(position,1.0); vW=w.xyz; gl_Position=projectionMatrix*viewMatrix*w; }`,
+    fragmentShader: `varying vec3 vW;
+      float line(float x,float w){ float f=abs(fract(x-0.5)-0.5); return 1.0-smoothstep(0.0,w,f); }
+      void main(){
+        float d = length(vW.xz);
+        float g = max(line(vW.x/2.0,0.012), line(vW.z/2.0,0.012));
+        float fade = 1.0 - smoothstep(8.0, 26.0, d);
+        vec3 base = vec3(0.0030,0.0034,0.0041);
+        vec3 col = base + vec3(0.010)*g*fade;
+        col = mix(base*0.8, col, fade);
+        gl_FragColor = vec4(col,1.0);
+      }`,
+  });
+}
+
+/* ---------------- renderer + post ---------------- */
+function makeStage(container, { transparent, fov = 30, bloom = [0.85, 0.55, 0.78] }) {
+  const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: !!transparent, preserveDrawingBuffer: true });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.setSize(container.clientWidth, container.clientHeight);
+  renderer.toneMapping = THREE.ACESFilmicToneMapping;
+  renderer.toneMappingExposure = 1.0;
+  renderer.shadowMap.enabled = true;
+  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+  container.appendChild(renderer.domElement);
+
+  const scene = new THREE.Scene();
+  scene.background = transparent ? null : C(PALETTE.bg);
+  const pmrem = new THREE.PMREMGenerator(renderer);
+  scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
+  scene.environmentIntensity = 0.35;
+
+  const camera = new THREE.PerspectiveCamera(fov, container.clientWidth / container.clientHeight, 0.1, 400);
+  const composer = new EffectComposer(renderer);
+  composer.addPass(new RenderPass(scene, camera));
+  const bloomPass = new UnrealBloomPass(new THREE.Vector2(container.clientWidth, container.clientHeight), ...bloom);
+  composer.addPass(bloomPass);
+  composer.addPass(new OutputPass());
+
+  const onResize = () => {
+    const w = container.clientWidth, h = container.clientHeight;
+    renderer.setSize(w, h); composer.setSize(w, h); camera.aspect = w / h; camera.updateProjectionMatrix();
+  };
+  window.addEventListener('resize', onResize);
+  return { renderer, scene, camera, composer, bloomPass };
+}
+
+const box = (w, h, d, m, x = 0, y = 0, z = 0, r = 0) => {
+  const g = r ? new RoundedBoxGeometry(w, h, d, 3, r) : new THREE.BoxGeometry(w, h, d);
+  const mesh = new THREE.Mesh(g, m); mesh.position.set(x, y, z); mesh.castShadow = true; mesh.receiveShadow = true; return mesh;
+};
+
+function cable(points, mat, radius = 0.035) {
+  const curve = new THREE.CatmullRomCurve3(points.map((p) => new THREE.Vector3(...p)), false, 'catmullrom', 0.05);
+  const geo = new THREE.TubeGeometry(curve, Math.max(40, points.length * 30), radius, 8, false);
+  return new THREE.Mesh(geo, mat);
+}
+
+// A turret security camera, origin at its wall mount, looking along +Z then pitched down.
+function securityCamera(M, signalMat) {
+  const g = new THREE.Group();
+  const base = new THREE.Mesh(new THREE.CylinderGeometry(0.16, 0.16, 0.05, 32), M.white); base.rotation.x = Math.PI / 2; g.add(base);
+  const arm = new THREE.Mesh(new THREE.CylinderGeometry(0.05, 0.06, 0.22, 16), M.white); arm.rotation.x = Math.PI / 2; arm.position.z = 0.13; g.add(arm);
+  const head = new THREE.Group(); head.position.z = 0.28; g.add(head);
+  const housing = new THREE.Mesh(new THREE.SphereGeometry(0.17, 40, 24), M.white); housing.scale.set(1, 0.9, 1.15); head.add(housing);
+  const visor = new THREE.Mesh(new THREE.CylinderGeometry(0.115, 0.13, 0.08, 40), M.darkMetal); visor.rotation.x = Math.PI / 2; visor.position.z = 0.16; head.add(visor);
+  const lens = new THREE.Mesh(new THREE.SphereGeometry(0.07, 32, 16), M.lens); lens.position.z = 0.19; head.add(lens);
+  const led = new THREE.Mesh(new THREE.SphereGeometry(0.012, 12, 8), signalMat); led.position.set(0.075, 0.06, 0.19); head.add(led);
+  g.userData = { head, led };
+  g.traverse((o) => { if (o.isMesh) o.castShadow = true; });
+  return g;
+}
+
+function viewCone(length, radius) {
+  const geo = new THREE.ConeGeometry(radius, length, 48, 1, true);
+  geo.translate(0, -length / 2, 0); // apex at origin, opens toward -Y
+  geo.rotateX(-Math.PI / 2);        // now opens toward +Z
+  return new THREE.Mesh(geo, coneMaterial());
+}
+
+/* =====================================================================
+   HERO — the whole property, wired by one team. Hold to arm.
+   ===================================================================== */
+function buildHero(stage) {
+  const { scene, camera } = stage; const M = mats();
+  scene.fog = new THREE.Fog(PALETTE.bg, 24, 52);
+
+  const ground = new THREE.Mesh(new THREE.PlaneGeometry(240, 240), groundMaterial()); ground.rotation.x = -Math.PI / 2; ground.receiveShadow = true; scene.add(ground);
+  const shadowCatcher = new THREE.Mesh(new THREE.PlaneGeometry(80, 80), new THREE.ShadowMaterial({ opacity: 0.55 })); shadowCatcher.rotation.x = -Math.PI / 2; shadowCatcher.position.y = 0.005; shadowCatcher.receiveShadow = true; scene.add(shadowCatcher);
+
+  const house = new THREE.Group(); scene.add(house);
+  // plinth + lawn + driveway
+  house.add(box(17, 0.3, 12, M.slab, 0.5, 0.15, 0.5));
+  house.add(box(4.6, 0.04, 6.2, new THREE.MeshStandardMaterial({ color: 0x1e1f22, roughness: 0.9 }), 5.6, 0.32, 6.1));
+  // ground floor living
+  house.add(box(10, 3.2, 8, M.graphite, -1.5, 1.9, 0));
+  // garage
+  house.add(box(5, 2.9, 7, M.graphiteLight, 5.6, 1.75, -0.5));
+  // upper floor cantilever
+  house.add(box(9.4, 3, 7.2, M.graphite, 0.2, 4.95, -0.4));
+  const batten = new THREE.MeshStandardMaterial({ color: 0x2e2a26, roughness: 0.85 });
+  for (let i = 0; i < 26; i++) { const x = -4.45 + i * 0.36; if (x > -3.85 && x < 4.05) continue; house.add(box(0.07, 3.0, 0.08, batten, x, 4.95, 3.24)); }
+  for (let i = 0; i < 20; i++) house.add(box(0.08, 3.0, 0.07, batten, -4.5, 4.95, -3.8 + i * 0.36));
+  house.add(box(9.6, 0.08, 7.4, M.darkMetal, 0.2, 3.5, -0.4));
+  // roofs (thin overhanging slabs)
+  house.add(box(10.2, 0.22, 8.2, M.slab, 0.2, 6.56, -0.2));
+  house.add(box(5.6, 0.18, 7.6, M.slab, 5.6, 3.29, -0.4));
+  house.add(box(10.6, 0.18, 8.6, M.slab, -1.5, 3.59, 0.3));
+  // glazing — ground floor living, upper bedroom band, side
+  const g1 = box(5.6, 2.3, 0.06, windowMat(5.6, 2.3, 1), -3.6, 1.62, 4.03); house.add(g1);
+  for (let i = 0; i < 5; i++) house.add(box(0.05, 2.3, 0.08, M.darkMetal, -6.4 + i * 1.4, 1.62, 4.06));
+  const door = box(1.2, 2.5, 0.1, new THREE.MeshStandardMaterial({ color: 0x3a2c22, roughness: 0.6 }), 0.9, 1.55, 4.04); house.add(door);
+  house.add(box(0.04, 0.6, 0.05, M.metal, 1.35, 1.55, 4.12));
+  const g2 = box(7.6, 1.6, 0.06, windowMat(7.6, 1.6, 2, 0.6), 0.2, 5.0, 3.23); house.add(g2);
+  for (let i = 0; i < 6; i++) house.add(box(0.05, 1.6, 0.08, M.darkMetal, -3.6 + i * 1.52, 5.0, 3.26));
+  house.add(box(0.06, 2.0, 2.6, windowMat(2.6, 2.0, 3, 0.7), -6.53, 1.8, 1.4));
+  // garage door with grooves
+  house.add(box(4.1, 2.35, 0.08, M.graphiteLight, 5.6, 1.5, 3.03));
+  for (let i = 0; i < 6; i++) house.add(box(4.1, 0.02, 0.1, M.slab, 5.6, 0.5 + i * 0.4, 3.08));
+  // fence + gate pillar + intercom
+  for (let x = -7.6; x < -1.9; x += 0.32) house.add(box(0.14, 1.5, 0.08, M.graphite, x, 1.05, 6.4));
+  house.add(box(5.9, 0.06, 0.1, M.darkMetal, -4.75, 1.78, 6.4));
+  const pillar = box(0.55, 1.9, 0.55, M.concrete, -1.5, 1.25, 6.4); house.add(pillar);
+  const intercomPanel = box(0.22, 0.38, 0.04, M.darkMetal, -1.5, 1.45, 6.69, 0.015); house.add(intercomPanel);
+  const intercomScreen = box(0.15, 0.13, 0.01, M.signal.clone(), -1.5, 1.52, 6.715); intercomScreen.material.emissiveIntensity = 0.2; house.add(intercomScreen);
+  const intercomBtn = new THREE.Mesh(new THREE.TorusGeometry(0.035, 0.008, 8, 32), M.signal.clone()); intercomBtn.position.set(-1.5, 1.36, 6.715); intercomBtn.material.emissiveIntensity = 0.3; house.add(intercomBtn);
+  // path from gate to door
+  for (let i = 0; i < 4; i++) house.add(box(1.1, 0.04, 0.5, M.concrete, -0.4 + i * 0.35, 0.33, 5.9 - i * 0.55));
+  // switchboard on garage wall
+  const sb = box(0.6, 0.85, 0.14, M.white, 3.55, 1.6, 3.12, 0.02); house.add(sb);
+  const sbLed = new THREE.Mesh(new THREE.SphereGeometry(0.02, 12, 8), M.signal.clone()); sbLed.position.set(3.75, 1.92, 3.2); house.add(sbLed);
+  // EV charger
+  const ev = box(0.34, 0.5, 0.14, M.white, 7.55, 1.3, 3.12, 0.05); house.add(ev);
+  const evRing = new THREE.Mesh(new THREE.TorusGeometry(0.075, 0.012, 8, 40), M.signal.clone()); evRing.position.set(7.55, 1.36, 3.2); house.add(evRing);
+  // wall sconces
+  const lampMat = M.lamp;
+  const lamps = [[-0.2, 2.4, 4.08], [2.0, 2.4, 4.08], [3.25, 2.5, 3.1], [7.95, 2.5, 3.1]].map(([x, y, z]) => { const l = box(0.12, 0.3, 0.1, lampMat, x, y, z, 0.02); house.add(l); return l; });
+  const lampLights = lamps.map((l) => { const p = new THREE.PointLight(PALETTE.white, 0, 5, 1.6); p.position.copy(l.position).add(new THREE.Vector3(0, -0.2, 0.4)); scene.add(p); return p; });
+  // solar array on upper roof
+  const solar = new THREE.Group(); solar.position.set(0.4, 6.72, -0.6); house.add(solar);
+  for (let r = 0; r < 3; r++) for (let c = 0; c < 4; c++) {
+    const p = box(1.85, 0.05, 1.1, M.solar, -2.85 + c * 1.95, 0.12, -1.6 + r * 1.2); p.rotation.x = -0.12; solar.add(p);
+    const frame = new THREE.LineSegments(new THREE.EdgesGeometry(new THREE.BoxGeometry(1.85, 0.05, 1.1)), new THREE.LineBasicMaterial({ color: 0x3a4250 })); frame.position.copy(p.position); frame.rotation.copy(p.rotation); solar.add(frame);
+  }
+  // trees
+  const leaf = new THREE.MeshStandardMaterial({ color: 0x0f1213, roughness: 0.95 });
+  const tree = (x, z, s) => { const t = new THREE.Group(); const trunk = new THREE.Mesh(new THREE.CylinderGeometry(0.05 * s, 0.08 * s, 3.2 * s, 8), M.slab); trunk.position.y = 1.6 * s; t.add(trunk); const c1 = new THREE.Mesh(new THREE.SphereGeometry(0.9 * s, 32, 20), leaf); c1.scale.set(1, 1.9, 1); c1.position.y = 3.4 * s; c1.castShadow = true; t.add(c1); t.position.set(x, 0.3, z); return t; };
+  scene.add(tree(-9.2, -1.5, 1.25), tree(-10.6, -4.8, 1.0), tree(10.2, -5.2, 1.15));
+  for (let i = 0; i < 9; i++) { const s = new THREE.Mesh(new THREE.SphereGeometry(0.34 + (i % 3) * 0.07, 24, 16), leaf); s.position.set(-7.4 + i * 0.62, 0.55, 5.6); s.castShadow = true; house.add(s); }
+
+  // security cameras
+  const signalCam = M.signal.clone();
+  const cams = [
+    { pos: [-6.5, 3.3, 4.05], yaw: 0.55, pitch: 0.55 },
+    { pos: [8.1, 3.0, 2.95], yaw: -0.55, pitch: 0.5 },
+    { pos: [-1.2, 3.3, 4.05], yaw: 0.05, pitch: 0.75 },
+  ].map(({ pos, yaw, pitch }) => {
+    const cam = securityCamera(M, signalCam); cam.position.set(...pos); cam.rotation.y = yaw; cam.userData.head.rotation.x = pitch; cam.scale.setScalar(1.25); house.add(cam);
+    const cone = viewCone(6.0, 2.4); cam.userData.head.add(cone); cone.position.z = 0.2;
+    cam.userData.cone = cone; cam.userData.baseYaw = yaw; return cam;
+  });
+
+  // cables — every device traces back to the one switchboard
+  const cableMats = [];
+  const mk = (pts, off) => { const m = cableMaterial(); m.uniforms.uOffset.value = off; cableMats.push(m); const c = cable(pts, m); house.add(c); return c; };
+  const SB = [3.55, 1.6, 3.22];
+  mk([SB, [3.55, 2.6, 3.24], [3.55, 3.15, 3.3], [6.5, 3.2, 3.2], [8.1, 3.05, 3.1]], 0.0);                 // garage camera
+  mk([SB, [3.55, 1.0, 3.24], [5.0, 0.95, 3.2], [7.2, 1.0, 3.2], [7.5, 1.2, 3.2]], 0.3);                   // EV charger
+  mk([SB, [3.3, 0.36, 3.6], [1.5, 0.36, 5.2], [-0.6, 0.36, 6.2], [-1.5, 0.36, 6.75], [-1.5, 1.2, 6.72]], 0.55); // intercom (underground run)
+  mk([SB, [3.2, 2.5, 3.24], [2.6, 3.4, 4.2], [0.5, 3.45, 4.25], [-1.2, 3.35, 4.15]], 0.15);               // front camera
+  mk([[-1.2, 3.42, 4.25], [-3.8, 3.5, 4.3], [-6.5, 3.4, 4.15]], 0.7);                                      // corner camera
+  mk([SB, [3.0, 2.6, 3.24], [3.0, 4.2, 3.4], [3.6, 6.4, 3.2], [3.2, 6.7, 1.5], [2.0, 6.85, 0.6]], 0.85);   // solar
+  mk([[2.6, 3.4, 4.2], [2.0, 2.9, 4.12], [2.0, 2.5, 4.12]], 0.4);
+  mk([[0.5, 3.45, 4.25], [-0.2, 2.9, 4.12], [-0.2, 2.5, 4.12]], 0.2);
+
+  // light
+  scene.add(new THREE.HemisphereLight(0x8a96a8, 0x0a0b0d, 0.18));
+  const moon = new THREE.DirectionalLight(0xb7c4d8, 1.6); moon.position.set(-14, 22, 10); moon.castShadow = true;
+  moon.shadow.mapSize.set(2048, 2048); Object.assign(moon.shadow.camera, { left: -20, right: 20, top: 20, bottom: -20, near: 1, far: 70 }); moon.shadow.bias = -0.0004; moon.shadow.normalBias = 0.02; scene.add(moon);
+  const rim = new THREE.DirectionalLight(0xffffff, 0.5); rim.position.set(16, 10, -14); scene.add(rim);
+  const interior1 = new THREE.PointLight(PALETTE.warm, 1.4, 5, 1.8); interior1.position.set(-3.5, 0.5, 4.9); scene.add(interior1);
+  const interior2 = new THREE.PointLight(PALETTE.warm, 0.0, 6, 1.6); interior2.position.set(0.2, 5.0, 4.2); scene.add(interior2);
+  const gateGlow = new THREE.PointLight(PALETTE.signal, 0, 3, 2); gateGlow.position.set(-1.5, 1.5, 7.1); scene.add(gateGlow);
+
+  // airborne dust catching the light
+  const dustGeo = new THREE.BufferGeometry(); const N = 600; const dp = new Float32Array(N * 3);
+  for (let i = 0; i < N; i++) { dp[i * 3] = (Math.sin(i * 12.9898) * 43758.5 % 1) * 30 - 10; dp[i * 3 + 1] = Math.abs(Math.sin(i * 78.233) * 43758.5 % 1) * 9; dp[i * 3 + 2] = (Math.sin(i * 39.425) * 43758.5 % 1) * 24 - 6; }
+  dustGeo.setAttribute('position', new THREE.BufferAttribute(dp, 3));
+  const dust = new THREE.Points(dustGeo, new THREE.PointsMaterial({ color: 0xffffff, size: 0.035, transparent: true, opacity: 0.35, depthWrite: false })); scene.add(dust);
+  camera.fov = 26; camera.updateProjectionMatrix();
+  const camHome = new THREE.Vector3(-21.5, 12.5, 31.5), target = new THREE.Vector3(-5.6, 3.4, 1.2);
+  if (camera.aspect < 1) { camHome.set(-26, 16, 38); target.set(1.2, 3.4, 1.2); } // portrait: centre the house
+  camera.position.copy(camHome); camera.lookAt(target);
+
+  const pointer = { x: 0, y: 0, sx: 0, sy: 0 };
+  window.addEventListener('pointermove', (e) => { pointer.x = (e.clientX / innerWidth) * 2 - 1; pointer.y = (e.clientY / innerHeight) * 2 - 1; });
+
+  return {
+    update(t, armed) {
+      const a = armed;
+      cableMats.forEach((m) => { m.uniforms.uTime.value = t; m.uniforms.uOn.value = 0.25 + a * 0.75; });
+      cams.forEach((c, i) => { c.userData.cone.material.uniforms.uOn.value = a; c.userData.cone.material.uniforms.uTime.value = t; c.rotation.y = c.userData.baseYaw + Math.sin(t * 0.6 + i * 1.7) * 0.22 * a; });
+      signalCam.emissiveIntensity = 0.6 + a * 2.4 * (0.6 + 0.4 * Math.sin(t * 6));
+      lampMat.emissiveIntensity = a * 1.4; lampLights.forEach((l) => (l.intensity = a * 2.2));
+      intercomScreen.material.emissiveIntensity = 0.15 + a * 1.4; intercomBtn.material.emissiveIntensity = 0.2 + a * 2.5; gateGlow.intensity = a * 2.5;
+      evRing.material.emissiveIntensity = 0.3 + a * 2.2; sbLed.material.emissiveIntensity = 1 + a * 2;
+      dust.position.y = Math.sin(t * 0.2) * 0.3; dust.rotation.y = t * 0.01;
+      pointer.sx += (pointer.x - pointer.sx) * 0.05; pointer.sy += (pointer.y - pointer.sy) * 0.05;
+      camera.position.set(camHome.x + pointer.sx * 1.6, camHome.y - pointer.sy * 0.8, camHome.z);
+      camera.lookAt(target);
+    },
+    stats(a) { return { cameras: Math.round(3 * a), zones: Math.round(4 * a) }; },
+  };
+}
+
+/* =====================================================================
+   CATEGORY ILLUSTRATIONS — studio product shots of each discipline
+   ===================================================================== */
+function studio(stage, { camPos, target, fov = 30 }) {
+  const { scene, camera } = stage;
+  const floor = new THREE.Mesh(new THREE.PlaneGeometry(60, 60), groundMaterial()); floor.rotation.x = -Math.PI / 2; scene.add(floor);
+  const sc = new THREE.Mesh(new THREE.PlaneGeometry(30, 30), new THREE.ShadowMaterial({ opacity: 0.6 })); sc.rotation.x = -Math.PI / 2; sc.position.y = 0.003; sc.receiveShadow = true; scene.add(sc);
+  scene.fog = new THREE.Fog(PALETTE.bg, 8, 20);
+  scene.add(new THREE.HemisphereLight(0x9aa4b4, 0x050506, 0.22));
+  const key = new THREE.SpotLight(0xffffff, 38, 24, 0.5, 0.8, 1.4); key.position.set(-3.5, 7, 5); key.castShadow = true; key.shadow.mapSize.set(2048, 2048); key.shadow.bias = -0.0003; key.target.position.copy(target); scene.add(key, key.target);
+  const rim = new THREE.DirectionalLight(0xc9d4ff, 0.9); rim.position.set(6, 5, -4); scene.add(rim);
+  camera.fov = fov; camera.updateProjectionMatrix(); camera.position.copy(camPos); camera.lookAt(target);
+}
+// A wall "sample tile": the surface each device is mounted on.
+function tile(scene, M, w = 3.2, h = 3.6) { const t = box(w, h, 0.3, M.graphite, 0, h / 2, -0.15); scene.add(t); scene.add(box(w + 0.2, 0.12, 0.6, M.slab, 0, 0.06, 0)); return t; }
+function studioMats() { const M = mats(); M.white.color.set(0xd2cfc9); M.white.roughness = 0.5; return M; }
+
+function buildCCTV(stage) {
+  const { scene } = stage; const M = studioMats();
+  studio(stage, { camPos: new THREE.Vector3(5.2, 2.9, 8.0), target: new THREE.Vector3(0.7, 1.5, 0.9) });
+  tile(scene, M);
+  const signal = M.signal.clone();
+  const cam = securityCamera(M, signal); cam.scale.setScalar(2.6); cam.position.set(0, 2.6, 0); cam.rotation.y = 0.55; scene.add(cam);
+  const head = cam.userData.head; head.rotation.x = 0.5;
+  const cone = viewCone(2.6, 1.05); head.add(cone); cone.position.z = 0.2;
+  // detection: a target zone on the floor with corner brackets
+  const zone = new THREE.Group(); zone.position.set(1.6, 0.012, 2.6); zone.rotation.y = 0.55; scene.add(zone);
+  const lm = new THREE.LineBasicMaterial({ color: PALETTE.signal, transparent: true });
+  const L = 0.22, W = 0.55, D = 0.8; const corners = [[-W, -D, 1, 1], [W, -D, -1, 1], [W, D, -1, -1], [-W, D, 1, -1]];
+  corners.forEach(([x, z, sx, sz]) => { zone.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(x + sx * L, 0, z), new THREE.Vector3(x, 0, z), new THREE.Vector3(x, 0, z + sz * L)]), lm)); });
+  const fill = new THREE.Mesh(new THREE.PlaneGeometry(W * 2, D * 2), new THREE.MeshBasicMaterial({ color: PALETTE.signal, transparent: true, opacity: 0.06 })); fill.rotation.x = -Math.PI / 2; zone.add(fill);
+  return { update(t, a) { cone.material.uniforms.uOn.value = a * 0.9; cone.material.uniforms.uTime.value = t; signal.emissiveIntensity = 1.2 + Math.sin(t * 5) * 1.0; lm.opacity = 0.3 + 0.7 * a; head.rotation.y = Math.sin(t * 0.5) * 0.12; } };
+}
+
+function buildAlarm(stage) {
+  const { scene } = stage; const M = studioMats();
+  studio(stage, { camPos: new THREE.Vector3(3.9, 2.5, 7.4), target: new THREE.Vector3(0.25, 1.75, 0.4) });
+  tile(scene, M, 3.6, 3.8);
+  const kp = box(0.9, 1.25, 0.12, M.white, -0.7, 1.7, 0.06, 0.05); scene.add(kp);
+  const lcd = box(0.66, 0.22, 0.02, M.signal.clone(), -0.7, 2.06, 0.13, 0.01); lcd.material.emissiveIntensity = 0.7; scene.add(lcd);
+  for (let r = 0; r < 4; r++) for (let c = 0; c < 3; c++) scene.add(box(0.16, 0.11, 0.04, M.graphiteLight, -0.9 + c * 0.2, 1.82 - r * 0.17, 0.13, 0.015));
+  const pir = new THREE.Group(); pir.position.set(0.95, 3.0, 0.12); scene.add(pir);
+  pir.add(box(0.42, 0.6, 0.24, M.white, 0, 0, 0, 0.07));
+  const dome = new THREE.Mesh(new THREE.SphereGeometry(0.13, 32, 16, 0, Math.PI * 2, 0, Math.PI / 2), new THREE.MeshPhysicalMaterial({ color: 0xbfbcb6, roughness: 0.3 })); dome.rotation.x = Math.PI / 2; dome.position.set(0, -0.08, 0.12); pir.add(dome);
+  const led = new THREE.Mesh(new THREE.SphereGeometry(0.018, 12, 8), M.signal); led.position.set(0.12, 0.2, 0.125); pir.add(led);
+  // detection curtain: thin beams fanning down to the floor
+  const beamMat = new THREE.LineBasicMaterial({ color: PALETTE.signal, transparent: true, opacity: 0.4 });
+  for (let i = -7; i <= 7; i++) { const ang = i * 0.1; const end = new THREE.Vector3(0.95 + Math.sin(ang) * 3.4, 0.01, 0.12 + Math.cos(ang) * 3.4); scene.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(0.95, 2.92, 0.26), end]), beamMat)); }
+  const zones = []; for (let i = 0; i < 4; i++) { const z = new THREE.Mesh(new THREE.RingGeometry(1.1 + i * 0.75, 1.12 + i * 0.75, 96, 1, Math.PI / 2 - 0.72, 1.44), new THREE.MeshBasicMaterial({ color: PALETTE.signal, transparent: true, opacity: 0.35, side: THREE.DoubleSide })); z.rotation.x = -Math.PI / 2; z.position.set(0.95, 0.012, 0.12); scene.add(z); zones.push(z); }
+  return { update(t, a) { beamMat.opacity = 0.12 + 0.4 * a; zones.forEach((z, i) => (z.material.opacity = a * (0.2 + 0.6 * Math.max(0, Math.sin(t * 2 - i * 0.8))))); M.signal.emissiveIntensity = 1 + 1.5 * a * (0.5 + 0.5 * Math.sin(t * 4)); } };
+}
+
+function buildAccess(stage) {
+  const { scene } = stage; const M = studioMats();
+  studio(stage, { camPos: new THREE.Vector3(4.4, 2.3, 7.4), target: new THREE.Vector3(-0.7, 1.3, 0) });
+  const pillar = box(0.9, 2.6, 0.9, M.concrete, 0, 1.3, 0); scene.add(pillar);
+  for (let i = 0; i < 14; i++) scene.add(box(0.16, 2.2, 0.09, M.graphite, -0.68 - i * 0.27, 1.2, -0.1));
+  scene.add(box(4.0, 0.07, 0.12, M.darkMetal, -2.45, 2.32, -0.1));
+  const panel = box(0.4, 0.78, 0.05, M.darkMetal, 0, 1.6, 0.47, 0.03); scene.add(panel);
+  const lensI = new THREE.Mesh(new THREE.SphereGeometry(0.035, 24, 16), M.lens); lensI.position.set(0, 1.88, 0.5); scene.add(lensI);
+  const screen = box(0.28, 0.2, 0.01, M.signal.clone(), 0, 1.68, 0.5, 0.01); screen.material.emissiveIntensity = 0.45; scene.add(screen);
+  const btn = new THREE.Mesh(new THREE.TorusGeometry(0.055, 0.01, 10, 48), M.signal.clone()); btn.position.set(0, 1.42, 0.5); scene.add(btn);
+  const reader = box(0.28, 0.4, 0.05, M.graphiteLight, 0, 0.98, 0.47, 0.03); scene.add(reader);
+  const readerMark = new THREE.Mesh(new THREE.RingGeometry(0.05, 0.06, 40), M.signal.clone()); readerMark.position.set(0, 0.98, 0.5); scene.add(readerMark);
+  const fob = new THREE.Group(); fob.position.set(0.75, 1.05, 0.95); fob.rotation.set(0.15, -0.5, 0.3); scene.add(fob);
+  fob.add(box(0.22, 0.32, 0.045, M.white, 0, 0, 0, 0.09));
+  const fobDot = new THREE.Mesh(new THREE.CircleGeometry(0.03, 24), M.signal); fobDot.position.set(0, 0.08, 0.025); fob.add(fobDot);
+  const arcs = []; for (let i = 0; i < 3; i++) { const r = new THREE.Mesh(new THREE.TorusGeometry(0.12 + i * 0.08, 0.005, 6, 48, Math.PI * 0.55), new THREE.MeshBasicMaterial({ color: PALETTE.signal, transparent: true })); r.position.set(0.32, 0.98, 0.62); r.rotation.set(0, -0.9, Math.PI * 0.72); scene.add(r); arcs.push(r); }
+  return { update(t, a) { arcs.forEach((r, i) => (r.material.opacity = a * (0.35 + 0.65 * Math.max(0, Math.sin(t * 3 - i))))); btn.material.emissiveIntensity = 0.8 + a * 1.6; readerMark.material.emissiveIntensity = 1 + a * 2; fob.position.y = 1.05 + Math.sin(t * 1.2) * 0.04; } };
+}
+
+function buildPower(stage) {
+  const { scene } = stage; const M = studioMats();
+  studio(stage, { camPos: new THREE.Vector3(-2.8, 2.4, 7.4), target: new THREE.Vector3(0.6, 1.75, 0.2) });
+  tile(scene, M, 4.4, 3.9);
+  const enc = box(1.6, 2.2, 0.3, M.white, 0, 1.85, 0.15, 0.04); scene.add(enc);
+  scene.add(box(1.42, 2.02, 0.04, M.darkMetal, 0, 1.85, 0.31));
+  const hinge = new THREE.Group(); hinge.position.set(0.8, 1.85, 0.32); scene.add(hinge);
+  const door = box(1.6, 2.2, 0.05, M.white, -0.8, 0, 0.025, 0.03); hinge.add(door); hinge.rotation.y = 1.95;
+  const toggles = []; const breakerMat = new THREE.MeshStandardMaterial({ color: 0xd8d5cf, roughness: 0.5 });
+  for (let r = 0; r < 2; r++) { scene.add(box(1.3, 0.05, 0.03, M.metal, 0, 2.38 - r * 0.8, 0.34)); for (let i = 0; i < 9; i++) { const x = -0.56 + i * 0.14, y = 2.38 - r * 0.8; scene.add(box(0.125, 0.44, 0.14, breakerMat, x, y, 0.4, 0.01)); const on = !(r === 1 && i > 6); const tg = box(0.05, 0.09, 0.05, i === 3 && r === 0 ? M.signal : M.graphiteLight, x, y + (on ? 0.04 : -0.04), 0.49, 0.01); scene.add(tg); toggles.push(tg); } }
+  const mats2 = [];
+  [[-0.5, 0], [0, 1], [0.5, 2]].forEach(([x, i]) => { const m = cableMaterial(); m.uniforms.uOffset.value = i * 0.33; m.uniforms.uSpeed.value = 0.45; mats2.push(m); scene.add(cable([[x, 2.95, 0.15], [x, 3.35, 0.2], [x * 1.6, 3.7, 0.25], [x * 3.2, 3.85, 0.25]], m, 0.03)); });
+  const ev = box(0.5, 0.8, 0.2, M.white, 1.65, 1.4, 0.1, 0.1); scene.add(ev);
+  const evRing = new THREE.Mesh(new THREE.TorusGeometry(0.12, 0.016, 10, 48), M.signal.clone()); evRing.position.set(1.65, 1.5, 0.21); scene.add(evRing);
+  const evM = cableMaterial(); evM.uniforms.uOffset.value = 0.5; mats2.push(evM);
+  scene.add(cable([[0.8, 1.2, 0.15], [1.1, 1.0, 0.12], [1.4, 1.05, 0.12], [1.5, 1.2, 0.12]], evM, 0.03));
+  const plug = cableMaterial(); mats2.push(plug); scene.add(cable([[1.65, 1.0, 0.15], [1.7, 0.4, 0.4], [1.4, 0.04, 1.1], [0.4, 0.04, 1.9]], plug, 0.04));
+  return { update(t, a) { mats2.forEach((m) => { m.uniforms.uTime.value = t; m.uniforms.uOn.value = a; }); evRing.material.emissiveIntensity = 1 + 1.6 * a * (0.5 + 0.5 * Math.sin(t * 2)); } };
+}
+
+const BUILDERS = { hero: buildHero, cctv: buildCCTV, alarm: buildAlarm, access: buildAccess, power: buildPower };
+
+export function mountScene(container, { scene: name = 'hero', still = false, armed = 1, t = 2, transparent = false } = {}) {
+  const stage = makeStage(container, { transparent, bloom: name === 'hero' ? [1.05, 0.7, 0.62] : [0.7, 0.5, 0.85] });
+  const ctl = BUILDERS[name](stage);
+  let armedTarget = armed, armedNow = armed, time = t;
+  const frame = () => { ctl.update(time, armedNow); stage.composer.render(); };
+  if (still) {
+    for (let i = 0; i < 3; i++) frame();
+    window.__ready = true;
+  } else {
+    const clock = new THREE.Clock();
+    const loop = () => { time += clock.getDelta(); armedNow += (armedTarget - armedNow) * 0.06; frame(); requestAnimationFrame(loop); };
+    loop(); window.__ready = true;
+  }
+  return {
+    setArmed(v) { armedTarget = v; },
+    get armed() { return armedNow; },
+    stats: () => (ctl.stats ? ctl.stats(armedNow) : {}),
+    renderAt(tt, aa) { time = tt; armedNow = aa; frame(); },
+  };
+}
+
+
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const hero = mountScene(document.getElementById('stage'), { scene: 'hero', armed: 0, t: 0, still: reduce });
+const $ = (id) => document.getElementById(id);
+const hold = $('hold');
+let holding = false;
+const on = (e) => { e.preventDefault(); holding = true; hero.setArmed(1); };
+const off = () => { if (!holding) return; holding = false; hero.setArmed(0); };
+hold.addEventListener('pointerdown', on);
+['pointerup', 'pointerleave', 'pointercancel'].forEach((ev) => hold.addEventListener(ev, off));
+hold.addEventListener('keydown', (e) => { if ((e.key === ' ' || e.key === 'Enter') && !e.repeat) on(e); });
+hold.addEventListener('keyup', (e) => { if (e.key === ' ' || e.key === 'Enter') off(); });
+const ring = $('ring');
+(function ui() {
+  const a = hero.armed;
+  ring.setAttribute('stroke-dashoffset', (94.25 * (1 - a)).toFixed(2));
+  $('cams').textContent = Math.round(3 * a);
+  $('zones').textContent = Math.round(4 * a);
+  const st = $('state'); const armed = a > 0.95, arming = a > 0.05 && !armed;
+  st.textContent = armed ? 'ARMED' : arming ? (holding ? 'ARMING' : 'DISARMING') : 'IDLE';
+  st.classList.toggle('on', a > 0.05);
+  $('holdlabel').textContent = armed ? 'Armed. Release to disarm' : 'Hold to arm the property';
+  requestAnimationFrame(ui);
+})();
+// discipline scenes start when scrolled near
+const io = new IntersectionObserver((entries) => entries.forEach((en) => {
+  if (!en.isIntersecting || en.target.dataset.on) return;
+  en.target.dataset.on = 1; mountScene(en.target, { scene: en.target.dataset.scene, armed: 1, t: 1.5, still: reduce });
+}), { rootMargin: '200px' });
+document.querySelectorAll('[data-scene]').forEach((el) => io.observe(el));
+</script>

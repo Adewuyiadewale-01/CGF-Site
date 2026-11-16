@@ -1,0 +1,10 @@
+node_modules/
+.DS_Store
+.claude/
+
+# large or regenerable working files
+cgf-3d/renders/
+cgf-3d/*.mjs.bak
+map/lgas.json
+map/preview*.png
+photos/
