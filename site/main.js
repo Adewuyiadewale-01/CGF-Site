@@ -14,7 +14,8 @@ gsap?.registerPlugin(ScrollTrigger);
 
 /* ---------- smooth scroll ---------- */
 let lenis = null;
-if (!reduce && window.Lenis) {
+// Smooth scrolling is for mouse wheels only; touch devices keep native scrolling (and momentum).
+if (!reduce && window.Lenis && matchMedia('(hover: hover) and (pointer: fine)').matches) {
   lenis = new window.Lenis({ duration: 1.1, smoothWheel: true });
   lenis.on('scroll', ScrollTrigger.update);
   gsap.ticker.add((t) => lenis.raf(t * 1000));
@@ -192,31 +193,88 @@ const REGIONS = {
   'northern-beaches': { label: 'Northern Beaches', p: 'Manly, Dee Why, Brookvale, Mona Vale', x: 461.3, y: 198.4 },
 };
 const HQ = { x: 283.3, y: 761.5 }, VB = 600;
-const mapEl = $('#map'), mapSvg = $('#map-svg'), tip = $('#map-tip');
-let activeRegion = 'sutherland';
+const mapEl = $('#map'), mapSvg = $('#map-svg'), tip = $('#map-tip'), regionList = $('#regions');
+const mapHome = { parent: mapEl.parentNode, next: mapEl.nextSibling };
+const phoneMQ = matchMedia('(max-width: 860px)');
+let activeRegion = 'sutherland', hq = null;
+// Phones: the regions are an accordion and the one map lives under whichever region is open.
+const dock = () => {
+  if (phoneMQ.matches) { const li = $(`#regions li[data-region="${activeRegion}"]`); if (mapEl.parentNode !== li) li.appendChild(mapEl); }
+  else if (mapEl.parentNode !== mapHome.parent) mapHome.parent.insertBefore(mapEl, mapHome.next);
+};
+// Vertical pan so the open region sits mid-frame on the shorter phone map (0 on desktop).
+const panFor = (key) => {
+  if (!phoneMQ.matches) return 0;
+  const k = mapSvg.clientWidth / VB, svgH = mapSvg.firstElementChild ? mapSvg.firstElementChild.getBoundingClientRect().height : 0, H = mapEl.clientHeight;
+  const y = key === 'sutherland' ? (REGIONS[key].y + HQ.y) / 2 : REGIONS[key].y;
+  return Math.max(Math.min(0, H - 24 - svgH - 36), Math.min(0, H / 2 - 24 - y * k));
+};
 fetch('assets/sydney-dots.svg').then((r) => r.text()).then((txt) => {
   mapSvg.innerHTML = txt;
   const svg = $('svg', mapSvg); svg.removeAttribute('width'); svg.removeAttribute('height'); svg.setAttribute('role', 'img'); svg.setAttribute('aria-label', 'Dot map of Greater Sydney with CGF service regions highlighted');
-  const hq = document.createElement('div'); hq.className = 'map__hq'; hq.innerHTML = '<i></i><em>CGF HQ · Caringbah</em>'; mapEl.appendChild(hq);
-  const place = () => { const k = mapSvg.clientWidth / VB; hq.style.left = HQ.x * k + 'px'; hq.style.top = (24 + HQ.y * k) + 'px'; setRegion(activeRegion, true); };
+  hq = document.createElement('div'); hq.className = 'map__hq'; hq.innerHTML = '<i></i><em>CGF HQ · Caringbah</em>'; mapEl.appendChild(hq);
+  const place = () => { dock(); setRegion(activeRegion, true); };
   Object.keys(REGIONS).forEach((key) => {
     const g = svg.getElementById(key); if (!g) return;
     g.addEventListener('pointerenter', () => setRegion(key));
   });
-  $$('#regions li').forEach((li) => { li.addEventListener('pointerenter', () => setRegion(li.dataset.region)); li.addEventListener('click', () => setRegion(li.dataset.region)); li.tabIndex = 0; li.addEventListener('focus', () => setRegion(li.dataset.region)); });
-  window.addEventListener('resize', place); place();
+  $$('#regions li').forEach((li) => {
+    li.tabIndex = 0;
+    li.addEventListener('pointerenter', (e) => { if (e.pointerType === 'mouse') setRegion(li.dataset.region); });
+    // Phones: tapping a title opens it and brings it up under the nav so its map is in full view.
+    const pick = () => {
+      setRegion(li.dataset.region, false, li);
+      if (phoneMQ.matches) window.scrollTo({ top: li.getBoundingClientRect().top + scrollY - 84, behavior: reduce ? 'auto' : 'smooth' });
+    };
+    li.addEventListener('click', (e) => { if (!mapEl.contains(e.target)) pick(); });
+    li.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); pick(); } });
+    li.addEventListener('focus', () => { if (!phoneMQ.matches) setRegion(li.dataset.region); });
+  });
+  window.addEventListener('resize', place); phoneMQ.addEventListener('change', place); place();
   if (!reduce) gsap.from($$('g', svg), { opacity: 0, duration: 1, stagger: 0.12, scrollTrigger: { trigger: mapEl, start: 'top 75%' } });
+
+  // Phones: when scrolling settles, open the region whose title sits in the upper part of the screen.
+  let settle = 0;
+  window.addEventListener('scroll', () => {
+    if (!phoneMQ.matches) return;
+    clearTimeout(settle);
+    settle = setTimeout(() => {
+      const box = regionList.getBoundingClientRect(); if (box.bottom < 0 || box.top > innerHeight) return;
+      // A reading line at ~45% of the screen: the next region opens when its title crosses the line going down;
+      // going back up, the previous one opens once the open title has dropped well below the line (hysteresis, no flicker).
+      const line = innerHeight * 0.45;
+      for (let n = 0; n < 5; n++) {
+        const items = $$('#regions li'), i = items.findIndex((li) => li.dataset.region === activeRegion);
+        const next = items[i + 1], prev = items[i - 1];
+        let to = null;
+        if (next && next.getBoundingClientRect().top < line) to = next;
+        else if (prev && items[i].getBoundingClientRect().top > line + 80) to = prev;
+        if (!to) break;
+        setRegion(to.dataset.region, false, to);
+      }
+    }, 160);
+  }, { passive: true });
 });
-function setRegion(key, force) {
+function setRegion(key, force, keep) {
   if (!REGIONS[key] || (key === activeRegion && !force)) return;
+  const before = keep ? keep.getBoundingClientRect().top : 0;
   activeRegion = key;
   $$('#map-svg g').forEach((g) => g.classList.toggle('is-on', g.id === key));
-  $$('#regions li').forEach((li) => li.classList.toggle('is-on', li.dataset.region === key));
-  const r = REGIONS[key], k = mapSvg.clientWidth / VB;
+  $$('#regions li').forEach((li) => { const on = li.dataset.region === key; li.classList.toggle('is-on', on); li.setAttribute('aria-expanded', on); });
+  dock();
+  // keep the tapped/settled title where the visitor is looking when the region above it collapses
+  if (keep) { const d = keep.getBoundingClientRect().top - before; if (Math.abs(d) > 1) window.scrollBy(0, d); }
+  const r = REGIONS[key], k = mapSvg.clientWidth / VB, pan = panFor(key);
+  mapSvg.style.transform = pan ? `translateY(${pan}px)` : '';
+  if (hq) {
+    const hy = 24 + pan + HQ.y * k;
+    hq.style.left = HQ.x * k + 'px'; hq.style.top = hy + 'px';
+    hq.style.opacity = hy < 48 || hy > mapEl.clientHeight - 56 ? 0 : 1; // panned out of frame on phones
+  }
   $('#tip-h').textContent = r.label; $('#tip-p').textContent = r.p;
   const tw = tip.offsetWidth, th = tip.offsetHeight;
-  let x = r.x * k - tw / 2, y = 24 + r.y * k + 28;
-  if (key === 'sutherland') { x = 28; y = 24 + HQ.y * k + 56; }
+  let x = r.x * k - tw / 2, y = 24 + pan + r.y * k + 28;
+  if (key === 'sutherland') { x = 28; y = 24 + pan + HQ.y * k + 56; }
   x = Math.max(16, Math.min(mapEl.clientWidth - tw - 16, x)); y = Math.max(56, Math.min(mapEl.clientHeight - th - 40, y));
   tip.style.transform = `translate(${x}px, ${y}px)`;
 }
