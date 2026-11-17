@@ -5,20 +5,22 @@ A redesign of the cgfsecurityandelectrical.com.au homepage: dark, one accent col
 ## Run it
 
 ```bash
-node serve.mjs 4173
+npm install
+npm run dev        # http://localhost:4321
+npm run build      # static site in dist/
 ```
 
-Then open http://localhost:4173. The site is static: no build step.
+Built with Astro (static output). Three.js, GSAP and Lenis are npm dependencies, bundled at build time.
 
 ## What's here
 
 | Folder | What it is |
 | --- | --- |
-| `site/` | The website: `index.html`, `styles.css`, `main.js`, `scenes.js`, `assets/` |
+| `src/` | The website (Astro): `layouts/Base.astro`, `components/` (nav, menu, footer, icons), `pages/`, `scripts/` (`site.js` shared, `home.js` homepage, `scenes.js` 3D), `styles/global.css` |
+| `public/` | Static files served as-is: `assets/` (3D stills, photos, logos, map), favicons, manifest |
 | `cgf-3d/` | 3D scene workbench: render any scene to a still with Playwright (`node render.mjs hero:1:2.2:1440:900`) |
 | `brand/` | The CGF logo: `concepts.py` draws the cut wordmark and outlines the Michroma tagline (`python3 concepts.py --write`, needs `fonttools`) |
-| `map/` | `build_map.py` turns NSW council boundaries into the dotted Sydney map (`site/assets/sydney-dots.svg`) |
-| `serve.mjs` | Tiny static server for local preview |
+| `map/` | `build_map.py` turns NSW council boundaries into the dotted Sydney map (`public/assets/sydney-dots.svg`) |
 
 ## Highlights
 
@@ -33,7 +35,7 @@ Then open http://localhost:4173. The site is static: no build step.
 
 ## Before launch
 
-- Connect the quote form (`TODO(build)` in `site/main.js`) to CGF's enquiry endpoint.
+- Connect the quote form (`TODO(build)` in `src/scripts/home.js`) to CGF's enquiry endpoint.
 - Confirm CGF is happy to show the client reviews and team/job photos on the new site.
 
 ## Credits
