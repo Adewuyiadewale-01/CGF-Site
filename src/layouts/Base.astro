@@ -1,0 +1,60 @@
+---
+import '../styles/global.css';
+import Icons from '../components/Icons.astro';
+import Nav from '../components/Nav.astro';
+import MobileMenu from '../components/MobileMenu.astro';
+import Footer from '../components/Footer.astro';
+
+interface Props { title: string; description: string; ogTitle?: string; ogImage?: string; path?: string }
+const { title, description, ogTitle = title, ogImage = '/assets/3d/hero.jpg', path = Astro.url.pathname } = Astro.props;
+const site = 'https://cgfsecurityandelectrical.com.au';
+const localBusiness = {
+  "@context": "https://schema.org",
+  "@type": ["Electrician", "HomeAndConstructionBusiness"],
+  "name": "CGF Security & Electrical",
+  "url": "https://cgfsecurityandelectrical.com.au/",
+  "telephone": "+61 1300 243 732",
+  "email": "info@cgfsecurityandelectrical.com.au",
+  "image": "https://cgfsecurityandelectrical.com.au/assets/3d/hero.jpg",
+  "logo": "https://cgfsecurityandelectrical.com.au/assets/brand/icon-512.png",
+  "address": { "@type": "PostalAddress", "streetAddress": "First Floor, 1B/25 Captain Cook Dr", "addressLocality": "Caringbah", "addressRegion": "NSW", "postalCode": "2229", "addressCountry": "AU" },
+  "geo": { "@type": "GeoCoordinates", "latitude": -34.0446, "longitude": 151.1172 },
+  "areaServed": ["Sutherland Shire", "Eastern Suburbs", "Inner West", "North Shore", "Northern Beaches", "Sydney"],
+  "sameAs": ["https://www.facebook.com/cgfsecandelec", "https://www.instagram.com/cgfsecurityandelectrical"]
+};
+---
+<!doctype html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>{title}</title>
+<meta name="description" content={description}>
+<link rel="canonical" href={site + path}>
+<meta property="og:type" content="website">
+<meta property="og:title" content={ogTitle}>
+<meta property="og:description" content={description}>
+<meta property="og:image" content={ogImage}>
+<meta name="theme-color" content="#0A0B0D">
+<link rel="icon" href="/assets/brand/cgf-icon.svg" type="image/svg+xml">
+<link rel="icon" href="/assets/brand/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="/assets/brand/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap">
+<slot name="head" />
+<script type="application/ld+json" is:inline set:html={JSON.stringify(localBusiness)} />
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<Icons />
+<Nav />
+<MobileMenu />
+<main id="main">
+<slot />
+</main>
+<Footer />
+<script>import '../scripts/site.js';</script>
+</body>
+</html>

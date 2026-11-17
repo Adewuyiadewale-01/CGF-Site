@@ -1,0 +1,83 @@
+---
+---
+<header class="nav" id="nav" data-state="top">
+  <div class="nav__in">
+    <a class="wm" href="/" aria-label="CGF Security and Electrical, home"><img class="wm__lockup" src="/assets/brand/site-lockup.svg" alt="" width="150" height="43"></a>
+    <nav class="links" aria-label="Main">
+      <ul>
+        <li><button class="links__btn" type="button" aria-expanded="false" aria-controls="menu-security" data-menu="security">Security <svg class="ic ic--chev"><use href="#i-chev"/></svg></button></li>
+        <li><button class="links__btn" type="button" aria-expanded="false" aria-controls="menu-electrical" data-menu="electrical">Electrical <svg class="ic ic--chev"><use href="#i-chev"/></svg></button></li>
+        <li><a class="links__btn" href="#areas">Service areas</a></li>
+        <li><button class="links__btn" type="button" aria-expanded="false" aria-controls="menu-company" data-menu="company">Company <svg class="ic ic--chev"><use href="#i-chev"/></svg></button></li>
+      </ul>
+    </nav>
+    <div class="nav__r">
+      <a class="nav__tel" href="tel:1300243732"><svg class="ic"><use href="#i-phone"/></svg>1300 243 732</a>
+      <a class="btn btn--primary" href="#quote">Get a quote <span class="btn__ar"><svg class="ic"><use href="#i-arrow"/></svg></span></a>
+      <button class="nav__burger" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-menu"><svg class="ic"><use href="#i-menu"/></svg></button>
+    </div>
+  </div>
+
+  <!-- One shared dropdown panel; its content swaps between the three menus -->
+  <div class="drop" id="drop" hidden>
+    <span class="drop__caret" aria-hidden="true"></span>
+    <div class="drop__stage">
+      <div class="drop__menu" id="menu-security" data-menu="security">
+        <div class="drop__body">
+          <ul class="drop__grid">
+            <li><a href="/security/cctv/"><span class="tile"><svg class="ic"><use href="#i-cctv"/></svg></span><span><b>CCTV &amp; cameras</b><small>AI cameras with live view on your phone</small></span></a></li>
+            <li><a href="/security/alarm-system/"><span class="tile"><svg class="ic"><use href="#i-bell"/></svg></span><span><b>Alarm systems</b><small>Installs, upgrades and monitoring</small></span></a></li>
+            <li><a href="/security/intercom/"><span class="tile"><svg class="ic"><use href="#i-door"/></svg></span><span><b>Intercom &amp; access</b><small>Video intercoms, fobs and keyless entry</small></span></a></li>
+            <li><a href="/security/smoke-detectors/"><span class="tile"><svg class="ic"><use href="#i-flame"/></svg></span><span><b>Smoke alarms</b><small>Interconnected and tested to code</small></span></a></li>
+            <li><a href="/security/site-security/"><span class="tile"><svg class="ic"><use href="#i-hardhat"/></svg></span><span><b>Site security</b><small>Temporary cameras and alarms for builds</small></span></a></li>
+            <li><a href="/security/outdoor-security-lighting-installation/"><span class="tile"><svg class="ic"><use href="#i-bulb"/></svg></span><span><b>Security lighting</b><small>Sensor and flood lighting outdoors</small></span></a></li>
+          </ul>
+          <aside class="drop__card">
+            <img src="/assets/3d/cctv.jpg" alt="" width="1200" height="900" loading="lazy">
+            <span class="mono mono--sg">Not sure what you need?</span>
+            <p>We’ll walk the property and tell you what’s worth installing.</p>
+            <a class="link" href="#quote">Book a site check <svg class="ic"><use href="#i-arrow-ur"/></svg></a>
+          </aside>
+        </div>
+        <div class="drop__foot"><a class="link" href="/security/">All security services <svg class="ic"><use href="#i-arrow-ur"/></svg></a><span class="mono">Security Master Lic. 000104676</span></div>
+      </div>
+      <div class="drop__menu" id="menu-electrical" data-menu="electrical">
+        <div class="drop__body">
+          <ul class="drop__list">
+            <li><a href="/electrical/residential-services/"><span class="tile"><svg class="ic"><use href="#i-house"/></svg></span><span><b>Residential</b><small>Lighting, power, switchboards, safety</small></span></a></li>
+            <li><a href="/electrical/commercial-services/"><span class="tile"><svg class="ic"><use href="#i-store"/></svg></span><span><b>Commercial</b><small>Offices, retail and fit-outs</small></span></a></li>
+            <li><a href="/electrical/maintenance-repairs/"><span class="tile"><svg class="ic"><use href="#i-wrench"/></svg></span><span><b>Maintenance &amp; repairs</b><small>Fault-finding, testing and repairs</small></span></a></li>
+            <li><a href="/electrical/renewables-energy/"><span class="tile"><svg class="ic"><use href="#i-sun"/></svg></span><span><b>Solar, batteries &amp; EV</b><small>Systems sized to how you use power</small></span></a></li>
+          </ul>
+          <aside class="drop__card">
+            <img src="/assets/3d/power.jpg" alt="" width="1200" height="900" loading="lazy">
+            <span class="mono mono--sg">One team, both licences</span>
+            <p>The electricians who wire your cameras and intercom.</p>
+            <a class="link" href="#quote">Get an electrical quote <svg class="ic"><use href="#i-arrow-ur"/></svg></a>
+          </aside>
+        </div>
+        <div class="drop__foot"><a class="link" href="/electrical/">All electrical services <svg class="ic"><use href="#i-arrow-ur"/></svg></a><span class="mono">Electrical Contractor Lic. 487799C</span></div>
+      </div>
+      <div class="drop__menu" id="menu-company" data-menu="company">
+        <div class="drop__body">
+          <ul class="drop__list">
+            <li><a href="/about-us/"><span class="tile"><svg class="ic"><use href="#i-shield"/></svg></span><span><b>About CGF</b><small>Our founder and how we work</small></span></a></li>
+            <li><a href="#reviews"><span class="tile"><svg class="ic"><use href="#i-star"/></svg></span><span><b>Reviews</b><small>Excellent · 170 Google reviews</small></span></a></li>
+            <li><a href="/blog/"><span class="tile"><svg class="ic"><use href="#i-msg"/></svg></span><span><b>Blog &amp; guides</b><small>Costs, compliance and how-tos</small></span></a></li>
+            <li><a href="/careers/"><span class="tile"><svg class="ic"><use href="#i-cap"/></svg></span><span><b>Careers</b><small>Technicians, electricians, apprentices</small></span></a></li>
+            <li><a href="/support/"><span class="tile"><svg class="ic"><use href="#i-buoy"/></svg></span><span><b>Customer support</b><small>Help with a system we installed</small></span></a></li>
+          </ul>
+          <aside class="drop__card">
+            <img src="/assets/team/DSC06427.jpg" alt="Two CGF technicians checking equipment before an install" width="1400" height="788" loading="lazy">
+            <span class="mono mono--sg">Talk to the team</span>
+            <ul class="drop__contact">
+              <li><svg class="ic"><use href="#i-phone"/></svg><a href="tel:1300243732">1300 243 732</a></li>
+              <li><svg class="ic"><use href="#i-mail"/></svg><a href="mailto:info@cgfsecurityandelectrical.com.au">info@cgfsecurityandelectrical.com.au</a></li>
+              <li><svg class="ic"><use href="#i-pin"/></svg>1B/25 Captain Cook Dr, Caringbah</li>
+            </ul>
+          </aside>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>

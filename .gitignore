@@ -8,3 +8,7 @@ cgf-3d/*.mjs.bak
 map/lgas.json
 map/preview*.png
 photos/
+
+# astro
+dist/
+.astro/
