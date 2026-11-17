@@ -72,13 +72,11 @@ section { position: relative; }
 .nav__in { display: flex; align-items: center; justify-content: space-between; gap: 20px; max-width: 1440px; margin: 0 auto; padding: 24px max(40px, env(safe-area-inset-right, 0px)) 0 max(40px, env(safe-area-inset-left, 0px)); transition: padding .3s var(--ease); }
 .nav[data-state="solid"] { background: rgba(10, 11, 13, .82); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px); border-bottom-color: var(--line); }
 .nav[data-state="solid"] .nav__in { padding-top: 12px; padding-bottom: 12px; }
-.nav[data-state="solid"] .wm__tag, .nav[data-state="solid"] .wm i { display: none; }
 .nav.is-hidden { transform: translateY(-110%); }
-.wm { display: inline-flex; align-items: center; gap: 12px; }
-.wm__mark { display: block; height: 22px; width: auto; }
-.wm__tag { display: block; height: 9px; width: auto; }
+.wm { display: inline-flex; align-items: center; }
+/* the logo is the stacked lockup everywhere: CGF with "Security & Electrical" under it */
+.wm__lockup { display: block; width: 150px; height: auto; }
 .wm--stack img { display: block; width: 240px; height: auto; }
-.wm i { width: 1px; height: 22px; background: var(--line-2); }
 .links ul { display: flex; gap: 2px; padding: 5px; border-radius: 999px; border: 1px solid var(--line-2); background: rgba(10, 11, 13, .5); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); }
 .links__btn { display: inline-flex; align-items: center; gap: 6px; padding: 9px 16px; border-radius: 999px; font-size: 14px; color: var(--soft); transition: background .2s, color .2s; }
 button.links__btn { padding-right: 12px; }
@@ -468,7 +466,7 @@ a.tr:hover .ic { color: var(--signal); }
 
   .nav__in { padding-left: max(20px, env(safe-area-inset-left, 0px)); padding-right: max(20px, env(safe-area-inset-right, 0px)); padding-top: 16px; }
   .nav__r .btn--primary { display: none; }
-  .wm__tag, .wm i { display: none; }
+  .wm__lockup { width: 128px; }
   .marquee__in { flex-direction: column; align-items: flex-start; gap: 18px; }
   .wired__grid { grid-template-columns: minmax(0, 1fr); gap: 32px; }
   /* sticky stage sits on a solid backing that runs up under the nav, with a blurred fade below,
