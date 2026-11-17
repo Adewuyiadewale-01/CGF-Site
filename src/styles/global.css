@@ -120,7 +120,7 @@ button.links__btn { padding-right: 12px; }
 .mmenu { position: fixed; inset: 0; z-index: 60; background: var(--ink); display: flex; flex-direction: column; padding: max(20px, env(safe-area-inset-top, 0px)) max(20px, env(safe-area-inset-right, 0px)) max(24px, env(safe-area-inset-bottom, 0px)) max(20px, env(safe-area-inset-left, 0px)); overflow-y: auto; }
 .mmenu[hidden] { display: none !important; }
 .mmenu__head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-.mmenu__head b { font-weight: 600; font-size: 22px; letter-spacing: -.02em; }
+.mmenu__head img { display: block; width: 128px; height: auto; }
 .mmenu__x { width: 44px; height: 44px; border-radius: 50%; background: rgba(237, 235, 230, .08); display: grid; place-items: center; font-size: 18px; }
 .mmenu__nav { flex: 1; }
 .mmenu details, .mmenu__link { border-bottom: 1px solid var(--line); }
