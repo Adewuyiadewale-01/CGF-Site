@@ -7,7 +7,20 @@ const $$ = (s, r = document) => [...r.querySelectorAll(s)];
 const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const mobile = () => matchMedia('(max-width: 860px)').matches;
 const hasGL = (() => { try { const c = document.createElement('canvas'); return !!(c.getContext('webgl2') || c.getContext('webgl')); } catch { return false; } })();
-const live3D = hasGL && !reduce;
+// Live 3D needs a real graphics chip. Software WebGL (SwiftShader/llvmpipe: no GPU, or GPU blocked),
+// low-memory devices and data-saver mode get the rendered stills instead.
+const capable3D = (() => {
+  if (navigator.connection?.saveData) return false;
+  if (navigator.deviceMemory && navigator.deviceMemory < 4) return false;
+  try {
+    const gl = document.createElement('canvas').getContext('webgl');
+    const ext = gl && gl.getExtension('WEBGL_debug_renderer_info');
+    const r = ext ? String(gl.getParameter(ext.UNMASKED_RENDERER_WEBGL)) : '';
+    gl?.getExtension('WEBGL_lose_context')?.loseContext();
+    return !/swiftshader|llvmpipe|softpipe|software|basic render/i.test(r);
+  } catch { return false; }
+})();
+const live3D = hasGL && !reduce && capable3D;
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Lenis from 'lenis';

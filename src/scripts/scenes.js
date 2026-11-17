@@ -653,7 +653,17 @@ export function mountScene(container, { scene: name = 'hero', still = false, arm
     window.__ready = true;
   } else {
     const clock = new THREE.Clock();
-    const loop = () => { const dt = clock.getDelta(); if (!paused) { time += dt; armedNow += (armedTarget - armedNow) * Math.min(1, dt * 3.2); progN += (progT - progN) * Math.min(1, dt * 5); frame(); } requestAnimationFrame(loop); };
+    let acc = 0;
+    const loop = () => {
+      const dt = clock.getDelta();
+      if (!paused) {
+        time += dt; armedNow += (armedTarget - armedNow) * Math.min(1, dt * 3.2); progN += (progT - progN) * Math.min(1, dt * 5);
+        // settled = only ambient motion left (pulses, sweeps): 30 fps is plenty and halves the GPU work
+        const settled = Math.abs(armedTarget - armedNow) < 0.002 && Math.abs(progT - progN) < 0.001;
+        acc += dt; if (!settled || acc >= 1 / 31) { acc = 0; frame(); }
+      }
+      requestAnimationFrame(loop);
+    };
     loop(); window.__ready = true;
   }
   return {

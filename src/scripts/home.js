@@ -19,37 +19,45 @@ const heroStage = $('#hero-stage');
 let hero = null;
 let heroVisible = true;
 if (live3D) {
-  new IntersectionObserver(([en]) => { heroVisible = en.isIntersecting; hero && (heroVisible ? hero.resume() : hero.pause()); }).observe(heroStage);
+  new IntersectionObserver(([en]) => { heroVisible = en.isIntersecting; hero && (heroVisible ? hero.resume() : hero.pause()); if (heroVisible) wake(); }).observe(heroStage);
   load3D().then((mountScene) => {
     // start from wherever the hold-to-arm control already is, so the hand-off from the still is seamless
     hero = mountScene(heroStage, { scene: 'hero', armed: simA, t: 0 });
     hero.setArmed(simTarget);
     if (!heroVisible) hero.pause();
+    wake();
     requestAnimationFrame(() => requestAnimationFrame(() => heroStage.classList.add('is-live')));
   });
 }
 const hold = $('#hold'), ring = $('#hold-ring');
 let holding = false, simA = 0, simTarget = 0;
-const down = (e) => { e.preventDefault(); holding = true; hold.classList.add('is-down'); simTarget = 1; hero?.setArmed(1); };
-const up = () => { if (!holding) return; holding = false; hold.classList.remove('is-down'); simTarget = 0; hero?.setArmed(0); };
+const down = (e) => { e.preventDefault(); holding = true; hold.classList.add('is-down'); simTarget = 1; hero?.setArmed(1); wake(); };
+const up = () => { if (!holding) return; holding = false; hold.classList.remove('is-down'); simTarget = 0; hero?.setArmed(0); wake(); };
 hold.addEventListener('pointerdown', down);
 ['pointerup', 'pointerleave', 'pointercancel'].forEach((ev) => hold.addEventListener(ev, up));
 hold.addEventListener('keydown', (e) => { if ((e.key === ' ' || e.key === 'Enter') && !e.repeat) down(e); });
 hold.addEventListener('keyup', (e) => { if (e.key === ' ' || e.key === 'Enter') up(); });
 hold.addEventListener('contextmenu', (e) => e.preventDefault());
 const callouts = $$('.callout');
-(function tick() {
+const cams = $('#sim-cams'), zones = $('#sim-zones'), st = $('#sim-state'), holdLabel = $('#hold-label');
+const setText = (el, v) => { v = String(v); if (el.textContent !== v) el.textContent = v; };
+// Runs only while something is changing: arming/disarming, or the live hero is on screen (its callouts
+// track the moving camera). Otherwise it stops, so an idle page does no per-frame work.
+let ticking = false;
+function tick() {
   const a = hero ? hero.armed : (simA += (simTarget - simA) * 0.08);
   ring.style.strokeDashoffset = (94.25 * (1 - a)).toFixed(2);
-  $('#sim-cams').textContent = Math.round(3 * a);
-  $('#sim-zones').textContent = Math.round(4 * a);
-  const armed = a > 0.95, arming = a > 0.05 && !armed, st = $('#sim-state');
-  st.textContent = armed ? 'Armed' : arming ? (holding ? 'Arming' : 'Disarming') : 'Idle';
+  setText(cams, Math.round(3 * a)); setText(zones, Math.round(4 * a));
+  const armed = a > 0.95, arming = a > 0.05 && !armed;
+  setText(st, armed ? 'Armed' : arming ? (holding ? 'Arming' : 'Disarming') : 'Idle');
   st.classList.toggle('is-on', a > 0.05);
-  $('#hold-label').textContent = armed ? 'Property armed' : 'Hold to arm the property';
+  setText(holdLabel, armed ? 'Property armed' : 'Hold to arm the property');
   if (hero && !mobile()) callouts.forEach((c) => { const p = hero.project(c.dataset.anchor); if (!p) return; c.style.transform = `translate(${p.x - 3}px, ${p.y - 12}px)`; c.classList.toggle('is-on', a > 0.35); });
-  requestAnimationFrame(tick);
-})();
+  const moving = holding || Math.abs(simTarget - a) > 0.002 || (hero && heroVisible && !mobile());
+  if (moving) requestAnimationFrame(tick); else ticking = false;
+}
+const wake = () => { if (!ticking) { ticking = true; requestAnimationFrame(tick); } };
+wake();
 
 /* ---------- how it's wired: one live scene, driven by scroll ---------- */
 const steps = $$('.step'), railItems = $$('.wired__rail li'), wImg = $('#wired-img'), wTag = $('#wired-tag');
