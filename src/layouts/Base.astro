@@ -4,10 +4,11 @@ import Icons from '../components/Icons.astro';
 import Nav from '../components/Nav.astro';
 import MobileMenu from '../components/MobileMenu.astro';
 import Footer from '../components/Footer.astro';
+import { CONCEPT, SITE_URL } from '../config';
 
 interface Props { title: string; description: string; ogTitle?: string; ogImage?: string; path?: string }
 const { title, description, ogTitle = title, ogImage = '/assets/3d/hero.jpg', path = Astro.url.pathname } = Astro.props;
-const site = 'https://cgfsecurityandelectrical.com.au';
+const site = SITE_URL;
 const localBusiness = {
   "@context": "https://schema.org",
   "@type": ["Electrician", "HomeAndConstructionBusiness"],
@@ -31,6 +32,7 @@ const localBusiness = {
 <title>{title}</title>
 <meta name="description" content={description}>
 <link rel="canonical" href={site + path}>
+{CONCEPT && <meta name="robots" content="noindex, nofollow">}
 <meta property="og:type" content="website">
 <meta property="og:title" content={ogTitle}>
 <meta property="og:description" content={description}>
