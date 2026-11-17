@@ -1,14 +1,32 @@
 // CGF homepage — hero, how-it's-wired, services, map, quote form, FAQ, reviews.
-import { mountScene } from './scenes.js';
 import { $, $$, reduce, mobile, live3D, gsap, ScrollTrigger, lenis } from './site.js';
+
+/* ---------- live 3D: loaded on demand ----------
+   The page loads with the rendered stills (they match the scenes' first frame). Three.js and the
+   scenes are fetched only once the page has finished loading AND the visitor interacts, so the 3D
+   never competes with the first paint or blocks the main thread while the page is loading. */
+let mountP = null;
+const pageLoaded = new Promise((r) => (document.readyState === 'complete' ? r() : addEventListener('load', () => r(), { once: true })));
+const engaged = new Promise((r) => {
+  const evs = ['pointermove', 'pointerdown', 'touchstart', 'wheel', 'keydown', 'scroll'];
+  const go = () => { evs.forEach((e) => removeEventListener(e, go, true)); r(); };
+  evs.forEach((e) => addEventListener(e, go, { capture: true, passive: true }));
+});
+const load3D = () => (mountP ||= Promise.all([pageLoaded, engaged]).then(() => import('./scenes.js')).then((m) => m.mountScene));
 
 /* ---------- hero: live scene + hold to arm ---------- */
 const heroStage = $('#hero-stage');
 let hero = null;
+let heroVisible = true;
 if (live3D) {
-  hero = mountScene(heroStage, { scene: 'hero', armed: 0, t: 0 });
-  requestAnimationFrame(() => requestAnimationFrame(() => heroStage.classList.add('is-live')));
-  new IntersectionObserver(([en]) => (en.isIntersecting ? hero.resume() : hero.pause())).observe(heroStage);
+  new IntersectionObserver(([en]) => { heroVisible = en.isIntersecting; hero && (heroVisible ? hero.resume() : hero.pause()); }).observe(heroStage);
+  load3D().then((mountScene) => {
+    // start from wherever the hold-to-arm control already is, so the hand-off from the still is seamless
+    hero = mountScene(heroStage, { scene: 'hero', armed: simA, t: 0 });
+    hero.setArmed(simTarget);
+    if (!heroVisible) hero.pause();
+    requestAnimationFrame(() => requestAnimationFrame(() => heroStage.classList.add('is-live')));
+  });
 }
 const hold = $('#hold'), ring = $('#hold-ring');
 let holding = false, simA = 0, simTarget = 0;
@@ -40,11 +58,13 @@ const NAMES = ['The switchboard', 'Power & lighting', 'Cameras', 'Alarm & sensor
 const LAST = steps.length - 1;
 let cur = -1, wired = null, lastQ = 0;
 if (live3D) {
+  let near = false, asked = false;
   new IntersectionObserver(([en]) => {
-    if (en.isIntersecting) {
-      if (!wired) { wired = mountScene(wStage, { scene: 'wired', armed: 1, t: 0 }); wired.setProgress(lastQ); requestAnimationFrame(() => wStage.classList.add('is-live')); }
-      else wired.resume();
-    } else wired?.pause();
+    near = en.isIntersecting;
+    if (near && !wired && !asked) {
+      asked = true;
+      load3D().then((mountScene) => { wired = mountScene(wStage, { scene: 'wired', armed: 1, t: 0 }); wired.setProgress(lastQ); if (!near) wired.pause(); requestAnimationFrame(() => wStage.classList.add('is-live')); });
+    } else if (wired) near ? wired.resume() : wired.pause();
   }, { rootMargin: '300px' }).observe(wStage);
 } else steps.forEach((s) => { const i = new Image(); i.src = s.dataset.img; });
 function setStep(i) {
@@ -81,12 +101,13 @@ ScrollTrigger.matchMedia({
 /* ---------- services: live discipline scenes ---------- */
 if (live3D) {
   $$('[data-scene]').forEach((el) => {
-    let api = null;
+    let api = null, near = false, asked = false;
     new IntersectionObserver(([en]) => {
-      if (en.isIntersecting) {
-        if (!api) { api = mountScene(el, { scene: el.dataset.scene, armed: 1, t: 1.5 }); requestAnimationFrame(() => el.classList.add('is-live')); }
-        else api.resume();
-      } else api?.pause();
+      near = en.isIntersecting;
+      if (near && !api && !asked) {
+        asked = true;
+        load3D().then((mountScene) => { api = mountScene(el, { scene: el.dataset.scene, armed: 1, t: 1.5 }); if (!near) api.pause(); requestAnimationFrame(() => el.classList.add('is-live')); });
+      } else if (api) near ? api.resume() : api.pause();
     }, { rootMargin: '150px' }).observe(el);
   });
 }
