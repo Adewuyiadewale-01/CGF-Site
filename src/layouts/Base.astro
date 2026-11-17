@@ -1,4 +1,9 @@
 ---
+// Fonts are self-hosted (Fontsource): no render-blocking request to Google before text can show.
+import '@fontsource-variable/instrument-sans';
+import '@fontsource/geist-mono/400.css';
+import '@fontsource/geist-mono/500.css';
+import displayFont from '@fontsource-variable/instrument-sans/files/instrument-sans-latin-wght-normal.woff2?url';
 import '../styles/global.css';
 import Icons from '../components/Icons.astro';
 import Nav from '../components/Nav.astro';
@@ -42,9 +47,7 @@ const localBusiness = {
 <link rel="icon" href="/assets/brand/favicon-32.png" sizes="32x32" type="image/png">
 <link rel="apple-touch-icon" href="/assets/brand/apple-touch-icon.png">
 <link rel="manifest" href="/site.webmanifest">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap">
+<link rel="preload" as="font" type="font/woff2" href={displayFont} crossorigin>
 <slot name="head" />
 <script type="application/ld+json" is:inline set:html={JSON.stringify(localBusiness)} />
 </head>

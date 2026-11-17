@@ -5,7 +5,7 @@
   --signal: #FF5B2E; --signal-15: rgba(255, 91, 46, .15);
   --line: rgba(237, 235, 230, .08); --line-2: rgba(237, 235, 230, .14);
   --ink-l: #0A0B0D; --ink-l2: #3A3936; --stone-l: #6B6964; --line-l: rgba(10, 11, 13, .1);
-  --display: "Instrument Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --display: "Instrument Sans Variable", "Instrument Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
   --mono: "Geist Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
   --wrap: 1280px; --gut: clamp(20px, 5.5vw, 80px);
   --r: 24px; --ease: cubic-bezier(.2, .7, .1, 1);
