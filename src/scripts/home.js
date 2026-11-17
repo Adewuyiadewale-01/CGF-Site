@@ -60,6 +60,7 @@ const wake = () => { if (!ticking) { ticking = true; requestAnimationFrame(tick)
 wake();
 
 /* ---------- how it's wired: one live scene, driven by scroll ---------- */
+const srcsetFor = (b) => [640, 960, 1440, 2160].map((w) => `${b}-${w}.webp ${w}w`).join(', ');
 const steps = $$('.step'), railItems = $$('.wired__rail li'), wImg = $('#wired-img'), wTag = $('#wired-tag');
 const nextItems = $$('#wired-next li'), wStage = $('#wired-stage'), wNum = $('#wired-num'), wName = $('#wired-name'), wBar = $('#wired-bar');
 const NAMES = ['The switchboard', 'Power & lighting', 'Cameras', 'Alarm & sensors', 'Intercom & access', 'Support'];
@@ -74,7 +75,10 @@ if (live3D) {
       load3D().then((mountScene) => { wired = mountScene(wStage, { scene: 'wired', armed: 1, t: 0 }); wired.setProgress(lastQ); if (!near) wired.pause(); requestAnimationFrame(() => wStage.classList.add('is-live')); });
     } else if (wired) near ? wired.resume() : wired.pause();
   }, { rootMargin: '300px' }).observe(wStage);
-} else steps.forEach((s) => { const i = new Image(); i.src = s.dataset.img; });
+} else {
+  // stills mode: warm the step images only when the section gets close
+  new IntersectionObserver((es, o) => { if (!es[0].isIntersecting) return; o.disconnect(); steps.forEach((s) => { const i = new Image(); i.sizes = wImg.sizes; i.srcset = srcsetFor(s.dataset.img.replace(/\.jpg$/, '')); }); }, { rootMargin: '800px' }).observe(wStage);
+}
 function setStep(i) {
   if (i === cur) return; cur = i;
   steps.forEach((s, k) => s.classList.toggle('is-on', k === i || mobile()));
@@ -82,7 +86,7 @@ function setStep(i) {
   nextItems.forEach((li, k) => { li.classList.toggle('is-done', k + 1 <= i); li.classList.toggle('is-next', k + 1 === i + 1); });
   wNum.textContent = i === LAST ? '∞' : String(i + 1).padStart(2, '0'); wName.textContent = NAMES[i];
   wTag.textContent = steps[i].dataset.tag;
-  if (!wired) { wImg.classList.add('is-swap'); setTimeout(() => { wImg.src = steps[i].dataset.img; wImg.alt = steps[i].querySelector('h3').textContent; wImg.classList.remove('is-swap'); }, 220); }
+  if (!wired) { wImg.classList.add('is-swap'); setTimeout(() => { const b = steps[i].dataset.img.replace(/\.jpg$/, ''); wImg.srcset = srcsetFor(b); wImg.src = `${b}-1440.webp`; wImg.alt = steps[i].querySelector('h3').textContent; wImg.classList.remove('is-swap'); }, 220); }
 }
 // Dwell: hold on each station for the first part of its scroll segment, then fly to the next.
 const dwell = (p) => { const s = Math.min(LAST, p * LAST), i = Math.min(LAST - 1, Math.floor(s)), f = s - i; const g = Math.max(0, Math.min(1, (f - 0.42) / 0.58)); return (i + g * g * (3 - 2 * g)) / LAST; };
