@@ -148,6 +148,16 @@ if __name__ == '__main__':
         open(os.path.join(HERE, 'cgf-lockup.svg'), 'w').write(lockup_stacked())
         open(os.path.join(HERE, 'cgf-lockup-on-light.svg'), 'w').write(lockup_stacked(word=INK, tag=INK, amp=BLUE))
         open(os.path.join(HERE, 'cgf-tagline.svg'), 'w').write(tagline_line())
+        # Website set: one colour (bone), the '&' in the site's signal orange
+        SIGNAL = '#FF5B2E'
+        site = {
+            'site-wordmark.svg': wordmark(BONE),
+            'site-tagline.svg': tagline_line(BONE, SIGNAL),
+            'site-lockup.svg': lockup_stacked(BONE, BONE, BONE, BONE, SIGNAL),
+            'site-mark.svg': mark(BONE, BONE),
+        }
+        for name, s in site.items():
+            open(os.path.join(HERE, name), 'w').write(s)
         print('wrote SVGs to', HERE)
     else:
         print(json.dumps(OUT))
