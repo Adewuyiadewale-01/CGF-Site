@@ -28,7 +28,7 @@ const COMPANY: Record<string, string> = {
 
 export function getStaticPaths() {
   // Groups switched on so far (pages are rolled out group by group)
-  const ENABLED = new Set(['company', 'security', 'electrical', 'locations']);
+  const ENABLED = new Set(['company', 'security', 'electrical', 'locations', 'blog']);
   return (inventory.pages as Page[])
     .filter((p) => ENABLED.has(p.group))
     .map((p) => ({ params: { slug: p.path.replace(/^\/|\/$/g, '') }, props: { page: p } }));
@@ -64,6 +64,13 @@ switch (page.kind) {
     crumbs = [home, HUB.locations, { label: page.regionName!, href: `/location/${page.region}/` }, { label: page.title, href: page.path }];
     sub = `Local page for ${page.title} in the ${page.regionName}: jobs we’ve done nearby, neighbouring suburbs, and the services people here book most.`;
     break;
+  case 'post': {
+    type = 'Blog post';
+    crumbs = [home, HUB.blog, { label: page.title, href: page.path }];
+    const d = new Date(page.date + 'T00:00:00').toLocaleDateString('en-AU', { day: 'numeric', month: 'long', year: 'numeric' });
+    sub = `Article published ${d}. The post template: the guide itself, the related services, and a way to get a quote at the end.`;
+    break;
+  }
   case 'company': case 'projects': case 'reviews': case 'quote':
     type = page.kind === 'company' ? 'Company page' : page.title;
     sub = COMPANY[page.path] ?? `${page.title}.`;
