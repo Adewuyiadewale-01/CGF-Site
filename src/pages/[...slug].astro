@@ -1,0 +1,59 @@
+---
+// Every page except the homepage, generated from src/data/inventory.json (built from CGF's live sitemap
+// plus the new pages). Each renders as a concept skeleton: breadcrumb, heading, and what the page is for.
+import Skeleton from '../layouts/Skeleton.astro';
+import inventory from '../data/inventory.json';
+
+type Page = (typeof inventory.pages)[number] & { region?: string; regionName?: string; suburbs?: number; date?: string };
+
+const HUB: Record<string, { label: string; href: string }> = {
+  security: { label: 'Security', href: '/security/' },
+  electrical: { label: 'Electrical', href: '/electrical/' },
+  locations: { label: 'Service areas', href: '/location/' },
+  blog: { label: 'Blog', href: '/blog/' },
+  audiences: { label: 'Who we work with', href: '/who-we-work-with/' },
+};
+const COMPANY: Record<string, string> = {
+  '/about-us/': 'The CGF story: Chad’s motto behind the name, the team in Caringbah, both licences, and why one team for both trades.',
+  '/contact-us/': 'Phone, email and the Caringbah office, with a map, opening hours and a short enquiry form.',
+  '/careers/': 'Jobs at CGF for licensed electricians, security technicians and apprentices, and what it’s like to work here.',
+  '/support/': 'Help for existing customers: remote support, app setup guides, servicing and how to log a fault.',
+  '/blog/': 'Guides and news on security and electrical work for Sydney homes, strata and businesses, filterable by topic.',
+  '/privacy-policy/': 'How CGF collects, uses and protects personal information.',
+  '/terms-conditions/': 'The terms that apply to quotes, work and use of this website.',
+  '/projects/': 'Real CGF jobs with photos: what the client needed, what we installed, and where. Filterable by service and area.',
+  '/reviews/': 'Every Google review in one place, with the overall rating and reviews grouped by service.',
+  '/free-quote/': 'The full quote form on its own page, so ads, emails and social posts can link straight to it.',
+};
+
+export function getStaticPaths() {
+  // Groups switched on so far (pages are rolled out group by group)
+  const ENABLED = new Set(['company', 'security', 'electrical']);
+  return (inventory.pages as Page[])
+    .filter((p) => ENABLED.has(p.group))
+    .map((p) => ({ params: { slug: p.path.replace(/^\/|\/$/g, '') }, props: { page: p } }));
+}
+
+const { page } = Astro.props as { page: Page };
+const home = { label: 'Home', href: '/' };
+let crumbs = [home, { label: page.title, href: page.path }];
+let sub = '';
+let type = '';
+
+switch (page.kind) {
+  case 'service-hub':
+    type = 'Service hub';
+    sub = `Every ${page.group} service in one place: what each covers, who it’s for, and a quote form. Links down to each service page.`;
+    break;
+  case 'service':
+    type = `${page.group === 'security' ? 'Security' : 'Electrical'} service`;
+    crumbs = [home, HUB[page.group], { label: page.title, href: page.path }];
+    sub = 'Service page: what’s included, real job photos, the brands we use, typical cost, FAQs and a quote form.';
+    break;
+  case 'company': case 'projects': case 'reviews': case 'quote':
+    type = page.kind === 'company' ? 'Company page' : page.title;
+    sub = COMPANY[page.path] ?? `${page.title}.`;
+    break;
+}
+---
+<Skeleton title={page.title} sub={sub} crumbs={crumbs} status={page.status as 'existing' | 'new'} type={type} />

@@ -1,0 +1,3115 @@
+{
+ "regions": {
+  "sutherland-shire": "Sutherland Shire",
+  "eastern-suburbs": "Eastern Suburbs",
+  "inner-west": "Inner West",
+  "north-shore": "North Shore",
+  "northern-beaches": "Northern Beaches"
+ },
+ "pages": [
+  {
+   "path": "/6-signs-banksmeadow-property-needs-switchboard-upgrade/",
+   "kind": "post",
+   "title": "6 Signs Your Banksmeadow Commercial Property Needs a Switchboard Upgrade",
+   "group": "blog",
+   "status": "existing",
+   "date": "2026-10-29"
+  },
+  {
+   "path": "/7-security-features-for-coogee-construction-sites/",
+   "kind": "post",
+   "title": "7 Security Features to Consider for Coogee Construction Sites",
+   "group": "blog",
+   "status": "existing",
+   "date": "2026-10-29"
+  },
+  {
+   "path": "/about-us/",
+   "kind": "company",
+   "title": "About Us",
+   "group": "company",
+   "status": "existing"
+  },
+  {
+   "path": "/access-control-systems-types-features-benefits/",
+   "kind": "post",
+   "title": "Access Control Systems: Types, Features and Security Benefits",
+   "group": "blog",
+   "status": "existing",
+   "date": "2026-06-01"
+  },
+  {
+   "path": "/advantages-of-installing-alarm-security-systems/",
+   "kind": "post",
+   "title": "Advantages Of Installing Alarm Security Systems",
+   "group": "blog",
+   "status": "existing",
+   "date": "2026-01-30"
+  },
+  {
+   "path": "/alarm-systems-important-houses-sydney/",
+   "kind": "post",
+   "title": "Why Alarm Systems are Important for Sydney Homes",
+   "group": "blog",
+   "status": "existing",
+   "date": "2026-01-30"
+  },
+  {
+   "path": "/are-home-security-systems-effective/",
+   "kind": "post",
+   "title": "Are Home Security Systems Effective?",
+   "group": "blog",
+   "status": "existing",
+   "date": "2026-01-30"
+  },
+  {
+   "path": "/benefits-of-installing-modern-security-systems-in-kirrawee/",
+   "kind": "post",
+   "title": "Benefits of Installing Modern Security Systems in Kirrawee",
+   "group": "blog",
+   "status": "existing",
+   "date": "2026-01-14"
+  },
+  {
+   "path": "/best-places-to-install-cctv-cameras-at-home/",
+   "kind": "post",
+   "title": "Best Places to Install CCTV Cameras Around Your Home",
+   "group": "blog",
+   "status": "existing",
+   "date": "2026-08-26"
+  },
+  {
+   "path": "/blog/",
+   "kind": "company",
+   "title": "Blog",
+   "group": "company",
+   "status": "existing"
+  },
+  {
+   "path": "/build-smarter-safer-home-2026/",
+   "kind": "post",
+   "title": "How to Build a Smarter, Safer and More Secure Home in 2026",
+   "group": "blog",
+   "status": "existing",
+   "date": "2026-03-25"
+  },
+  {
+   "path": "/can-your-cctv-be-hacked-what-every-sydney-homeowner-needs-to-know-in-2026/",
+   "kind": "post",
+   "title": "Can Your CCTV Be Hacked? What Every Sydney Homeowner Needs to Know in 2026",
+   "group": "blog",
+   "status": "existing",
+   "date": "2026-05-25"
+  },
+  {
+   "path": "/careers/",
+   "kind": "company",
+   "title": "Careers",
+   "group": "company",
+   "status": "existing"
+  },
+  {
+   "path": "/choose-right-ev-charger-sydney-home/",
+   "kind": "post",
+   "title": "How to Choose the Right EV Charger for Your Sydney Home",
+   "group": "blog",
+   "status": "existing",
+   "date": "2025-10-24"
+  },
+  {
+   "path": "/commercial-cctv-compliance-guide/",
+   "kind": "post",
+   "title": "Avoid $50,000 Fine: The Commercial CCTV Compliance Handbook",
+   "group": "blog",
+   "status": "existing",
+   "date": "2026-04-10"
+  },
+  {
+   "path": "/commercial-video-surveillance-system-cost/",
+   "kind": "post",
+   "title": "How Much Does a Commercial Video Surveillance System Cost?",
+   "group": "blog",
+   "status": "existing",
+   "date": "2026-01-30"
+  },
+  {
+   "path": "/contact-us/",
+   "kind": "company",
+   "title": "Contact Us",
+   "group": "company",
+   "status": "existing"
+  },
+  {
+   "path": "/could-keyless-entry-make-your-business-more-secure/",
+   "kind": "post",
+   "title": "Could Keyless Entry Make Your Business More Secure?",
+   "group": "blog",
+   "status": "existing",
+   "date": "2026-09-09"
+  },
+  {
+   "path": "/diy-electrical-fixes-you-should-never-try/",
+   "kind": "post",
+   "title": "DIY Electrical Fixes You Should Never Try at Home",
+   "group": "blog",
+   "status": "existing",
+   "date": "2025-12-11"
+  },
+  {
+   "path": "/diy-electrical-work-risks-2026/",
+   "kind": "post",
+   "title": "Why Is DIY Electrical Work on the Rise? And Why It’s Never Been More Dangerous",
+   "group": "blog",
+   "status": "existing",
+   "date": "2026-05-02"
+  },
+  {
+   "path": "/do-you-need-an-alarm-with-cctv-petersham/",
+   "kind": "post",
+   "title": "Do You Still Need an Alarm If You Have CCTV in Petersham?",
+   "group": "blog",
+   "status": "existing",
+   "date": "2026-09-25"
+  },
+  {
+   "path": "/electrical-safety-devices-australia/",
+   "kind": "post",
+   "title": "The Most Overlooked Electrical Safety Devices in Australian Homes",
+   "group": "blog",
+   "status": "existing",
+   "date": "2026-02-20"
+  },
+  {
+   "path": "/electrical/",
+   "kind": "service-hub",
+   "title": "Electrical services",
+   "group": "electrical",
+   "status": "existing"
+  },
+  {
+   "path": "/electrical/battery-storage-systems/",
+   "kind": "service",
+   "title": "Battery Storage Systems",
+   "group": "electrical",
+   "status": "existing"
+  },
+  {
+   "path": "/electrical/commercial-electrical-inspections/",
+   "kind": "service",
+   "title": "Commercial Electrical Inspections",
+   "group": "electrical",
+   "status": "existing"
+  },
+  {
+   "path": "/electrical/commercial-electrician/",
+   "kind": "service",
+   "title": "Commercial Electrician",
+   "group": "electrical",
+   "status": "existing"
+  },
+  {
+   "path": "/electrical/commercial-services/",
+   "kind": "service",
+   "title": "Commercial Services",
+   "group": "electrical",
+   "status": "existing"
+  },
+  {
+   "path": "/electrical/commercial-switchboard-upgrades/",
+   "kind": "service",
+   "title": "Commercial Switchboard Upgrades",
+   "group": "electrical",
+   "status": "existing"
+  },
+  {
+   "path": "/electrical/data-communications-cabling/",
+   "kind": "service",
+   "title": "Data Communications Cabling",
+   "group": "electrical",
+   "status": "existing"
+  },
+  {
+   "path": "/electrical/electric-car-charger-installations/",
+   "kind": "service",
+   "title": "EV Charger Installation",
+   "group": "electrical",
+   "status": "existing"
+  },
+  {
+   "path": "/electrical/electrical-fit-outs/",
+   "kind": "service",
+   "title": "Electrical Fit Outs",
+   "group": "electrical",
+   "status": "existing"
+  },
+  {
+   "path": "/electrical/fault-finding/",
+   "kind": "service",
+   "title": "Fault Finding",
+   "group": "electrical",
+   "status": "existing"
+  },
+  {
+   "path": "/electrical/internet-wifi-setup/",
+   "kind": "service",
+   "title": "Internet & WiFi Setup",
+   "group": "electrical",
+   "status": "existing"
+  },
+  {
+   "path": "/electrical/maintenance-repairs/",
+   "kind": "service",
+   "title": "Maintenance Repairs",
+   "group": "electrical",
+   "status": "existing"
+  },
+  {
+   "path": "/electrical/ongoing-maintenance-services/",
+   "kind": "service",
+   "title": "Ongoing Maintenance Services",
+   "group": "electrical",
+   "status": "existing"
+  },
+  {
+   "path": "/electrical/rcd-switches/",
+   "kind": "service",
+   "title": "RCD Switches",
+   "group": "electrical",
+   "status": "existing"
+  },
+  {
+   "path": "/electrical/renewables-energy/",
+   "kind": "service",
+   "title": "Solar & EV Charges",
+   "group": "electrical",
+   "status": "existing"
+  },
+  {
+   "path": "/electrical/residential-electrical-inspections/",
+   "kind": "service",
+   "title": "Residential Electrical Inspections",
+   "group": "electrical",
+   "status": "existing"
+  },
+  {
+   "path": "/electrical/residential-electrical-services/",
+   "kind": "service",
+   "title": "Residential Electrical Services",
+   "group": "electrical",
+   "status": "existing"
+  },
+  {
+   "path": "/electrical/residential-services/",
+   "kind": "service",
+   "title": "Residential Services",
+   "group": "electrical",
+   "status": "existing"
+  },
+  {
+   "path": "/electrical/residential-switchboard-upgrades/",
+   "kind": "service",
+   "title": "Residential Switchboard Upgrades",
+   "group": "electrical",
+   "status": "existing"
+  },
+  {
+   "path": "/electrical/solar-panel-installation/",
+   "kind": "service",
+   "title": "Solar Panel Installation",
+   "group": "electrical",
+   "status": "existing"
+  },
+  {
+   "path": "/electrical/tripped-circuits-power-restorations/",
+   "kind": "service",
+   "title": "Tripped Circuits Power Restorations",
+   "group": "electrical",
+   "status": "existing"
+  },
+  {
+   "path": "/everything-to-know-about-access-control/",
+   "kind": "post",
+   "title": "Everything to know about access control",
+   "group": "blog",
+   "status": "existing",
+   "date": "2026-01-30"
+  },
+  {
+   "path": "/features-of-commercial-cctv-2/",
+   "kind": "post",
+   "title": "Understanding the Features of Commercial CCTV",
+   "group": "blog",
+   "status": "existing",
+   "date": "2026-01-30"
+  },
+  {
+   "path": "/festival-season-home-preparation-sydney/",
+   "kind": "post",
+   "title": "Festival Season Is Coming to Sydney | Is Your Home Actually Ready?",
+   "group": "blog",
+   "status": "existing",
+   "date": "2026-02-23"
+  },
+  {
+   "path": "/free-quote/",
+   "kind": "quote",
+   "title": "Free quote",
+   "group": "company",
+   "status": "new"
+  },
+  {
+   "path": "/front-yard-home-security/",
+   "kind": "post",
+   "title": "Is Your Front Yard Helping or Hurting Your Home’s Security?",
+   "group": "blog",
+   "status": "existing",
+   "date": "2026-07-05"
+  },
+  {
+   "path": "/future-of-smart-home-security/",
+   "kind": "post",
+   "title": "Beyond Cameras: The Future of Smart Home Security",
+   "group": "blog",
+   "status": "existing",
+   "date": "2026-06-20"
+  },
+  {
+   "path": "/home-alarm-systems-guide-202/",
+   "kind": "post",
+   "title": "The Homeowner’s Guide to Alarm Systems in 2026",
+   "group": "blog",
+   "status": "existing",
+   "date": "2026-03-20"
+  },
+  {
+   "path": "/home-ev-charging-2026/",
+   "kind": "post",
+   "title": "Home EV Charging 2026: Costs, Setup and Smart Features",
+   "group": "blog",
+   "status": "existing",
+   "date": "2026-05-25"
+  },
+  {
+   "path": "/home-security-lighting-tips/",
+   "kind": "post",
+   "title": "The Security Lighting Spots Most Homeowners Miss",
+   "group": "blog",
+   "status": "existing",
+   "date": "2026-07-28"
+  },
+  {
+   "path": "/how-4g-and-5g-cctv-works-on-construction-sites/",
+   "kind": "post",
+   "title": "How Does 4G and 5G CCTV Work on Construction Sites?",
+   "group": "blog",
+   "status": "existing",
+   "date": "2026-10-13"
+  },
+  {
+   "path": "/how-burglars-choose-homes/",
+   "kind": "post",
+   "title": "How Burglars Choose Homes to Target (And How to Avoid Being One)",
+   "group": "blog",
+   "status": "existing",
+   "date": "2026-05-10"
+  },
+  {
+   "path": "/how-to-deactivate-an-alarm-system/",
+   "kind": "post",
+   "title": "How to deactivate an alarm system?",
+   "group": "blog",
+   "status": "existing",
+   "date": "2022-11-26"
+  },
+  {
+   "path": "/how-to-secure-your-home-from-a-break-in/",
+   "kind": "post",
+   "title": "How to secure your home from a break-in?",
+   "group": "blog",
+   "status": "existing",
+   "date": "2026-01-30"
+  },
+  {
+   "path": "/legal-considerations-for-commercial-cctv-installation/",
+   "kind": "post",
+   "title": "Legal Considerations for Commercial CCTV Installation",
+   "group": "blog",
+   "status": "existing",
+   "date": "2026-01-30"
+  },
+  {
+   "path": "/location/",
+   "kind": "location-hub",
+   "title": "Service areas",
+   "group": "locations",
+   "status": "existing"
+  },
+  {
+   "path": "/location/eastern-suburbs/",
+   "kind": "region",
+   "title": "Eastern Suburbs",
+   "group": "locations",
+   "status": "new",
+   "region": "eastern-suburbs",
+   "suburbs": 48
+  },
+  {
+   "path": "/location/eastern-suburbs/banksmeadow/",
+   "kind": "suburb",
+   "title": "Banksmeadow",
+   "group": "locations",
+   "status": "existing",
+   "region": "eastern-suburbs",
+   "regionName": "Eastern Suburbs"
+  },
+  {
+   "path": "/location/eastern-suburbs/bellevue-hill/",
+   "kind": "suburb",
+   "title": "Bellevue Hill",
+   "group": "locations",
+   "status": "existing",
+   "region": "eastern-suburbs",
+   "regionName": "Eastern Suburbs"
+  },
+  {
+   "path": "/location/eastern-suburbs/bondi-beach/",
+   "kind": "suburb",
+   "title": "Bondi Beach",
+   "group": "locations",
+   "status": "existing",
+   "region": "eastern-suburbs",
+   "regionName": "Eastern Suburbs"
+  },
+  {
+   "path": "/location/eastern-suburbs/bondi-junction/",
+   "kind": "suburb",
+   "title": "Bondi Junction",
+   "group": "locations",
+   "status": "existing",
+   "region": "eastern-suburbs",
+   "regionName": "Eastern Suburbs"
+  },
+  {
+   "path": "/location/eastern-suburbs/bondi/",
+   "kind": "suburb",
+   "title": "Bondi",
+   "group": "locations",
+   "status": "existing",
+   "region": "eastern-suburbs",
+   "regionName": "Eastern Suburbs"
+  },
+  {
+   "path": "/location/eastern-suburbs/botany/",
+   "kind": "suburb",
+   "title": "Botany",
+   "group": "locations",
+   "status": "existing",
+   "region": "eastern-suburbs",
+   "regionName": "Eastern Suburbs"
+  },
+  {
+   "path": "/location/eastern-suburbs/bronte/",
+   "kind": "suburb",
+   "title": "Bronte",
+   "group": "locations",
+   "status": "existing",
+   "region": "eastern-suburbs",
+   "regionName": "Eastern Suburbs"
+  },
+  {
+   "path": "/location/eastern-suburbs/centennial-park/",
+   "kind": "suburb",
+   "title": "Centennial Park",
+   "group": "locations",
+   "status": "existing",
+   "region": "eastern-suburbs",
+   "regionName": "Eastern Suburbs"
+  },
+  {
+   "path": "/location/eastern-suburbs/chifley/",
+   "kind": "suburb",
+   "title": "Chifley",
+   "group": "locations",
+   "status": "existing",
+   "region": "eastern-suburbs",
+   "regionName": "Eastern Suburbs"
+  },
+  {
+   "path": "/location/eastern-suburbs/clovelly/",
+   "kind": "suburb",
+   "title": "Clovelly",
+   "group": "locations",
+   "status": "existing",
+   "region": "eastern-suburbs",
+   "regionName": "Eastern Suburbs"
+  },
+  {
+   "path": "/location/eastern-suburbs/coogee/",
+   "kind": "suburb",
+   "title": "Coogee",
+   "group": "locations",
+   "status": "existing",
+   "region": "eastern-suburbs",
+   "regionName": "Eastern Suburbs"
+  },
+  {
+   "path": "/location/eastern-suburbs/daceyville/",
+   "kind": "suburb",
+   "title": "Daceyville",
+   "group": "locations",
+   "status": "existing",
+   "region": "eastern-suburbs",
+   "regionName": "Eastern Suburbs"
+  },
+  {
+   "path": "/location/eastern-suburbs/darling-point/",
+   "kind": "suburb",
+   "title": "Darling Point",
+   "group": "locations",
+   "status": "existing",
+   "region": "eastern-suburbs",
+   "regionName": "Eastern Suburbs"
+  },
+  {
+   "path": "/location/eastern-suburbs/darlinghurst/",
+   "kind": "suburb",
+   "title": "Darlinghurst",
+   "group": "locations",
+   "status": "existing",
+   "region": "eastern-suburbs",
+   "regionName": "Eastern Suburbs"
+  },
+  {
+   "path": "/location/eastern-suburbs/double-bay/",
+   "kind": "suburb",
+   "title": "Double Bay",
+   "group": "locations",
+   "status": "existing",
+   "region": "eastern-suburbs",
+   "regionName": "Eastern Suburbs"
+  },
+  {
+   "path": "/location/eastern-suburbs/dover-heights/",
+   "kind": "suburb",
+   "title": "Dover Heights",
+   "group": "locations",
+   "status": "existing",
+   "region": "eastern-suburbs",
+   "regionName": "Eastern Suburbs"
+  },
+  {
+   "path": "/location/eastern-suburbs/eastgardens/",
+   "kind": "suburb",
+   "title": "Eastgardens",
+   "group": "locations",
+   "status": "existing",
+   "region": "eastern-suburbs",
+   "regionName": "Eastern Suburbs"
+  },
+  {
+   "path": "/location/eastern-suburbs/eastlakes/",
+   "kind": "suburb",
+   "title": "Eastlakes",
+   "group": "locations",
+   "status": "existing",
+   "region": "eastern-suburbs",
+   "regionName": "Eastern Suburbs"
+  },
+  {
+   "path": "/location/eastern-suburbs/edgecliff/",
+   "kind": "suburb",
+   "title": "Edgecliff",
+   "group": "locations",
+   "status": "existing",
+   "region": "eastern-suburbs",
+   "regionName": "Eastern Suburbs"
+  },
+  {
+   "path": "/location/eastern-suburbs/elizabeth-bay/",
+   "kind": "suburb",
+   "title": "Elizabeth Bay",
+   "group": "locations",
+   "status": "existing",
+   "region": "eastern-suburbs",
+   "regionName": "Eastern Suburbs"
+  },
+  {
+   "path": "/location/eastern-suburbs/hillsdale/",
+   "kind": "suburb",
+   "title": "Hillsdale",
+   "group": "locations",
+   "status": "existing",
+   "region": "eastern-suburbs",
+   "regionName": "Eastern Suburbs"
+  },
+  {
+   "path": "/location/eastern-suburbs/kensington/",
+   "kind": "suburb",
+   "title": "Kensington",
+   "group": "locations",
+   "status": "existing",
+   "region": "eastern-suburbs",
+   "regionName": "Eastern Suburbs"
+  },
+  {
+   "path": "/location/eastern-suburbs/kingsford/",
+   "kind": "suburb",
+   "title": "Kingsford",
+   "group": "locations",
+   "status": "existing",
+   "region": "eastern-suburbs",
+   "regionName": "Eastern Suburbs"
+  },
+  {
+   "path": "/location/eastern-suburbs/la-perouse/",
+   "kind": "suburb",
+   "title": "La Perouse",
+   "group": "locations",
+   "status": "existing",
+   "region": "eastern-suburbs",
+   "regionName": "Eastern Suburbs"
+  },
+  {
+   "path": "/location/eastern-suburbs/little-bay/",
+   "kind": "suburb",
+   "title": "Little Bay",
+   "group": "locations",
+   "status": "existing",
+   "region": "eastern-suburbs",
+   "regionName": "Eastern Suburbs"
+  },
+  {
+   "path": "/location/eastern-suburbs/malabar/",
+   "kind": "suburb",
+   "title": "Malabar",
+   "group": "locations",
+   "status": "existing",
+   "region": "eastern-suburbs",
+   "regionName": "Eastern Suburbs"
+  },
+  {
+   "path": "/location/eastern-suburbs/maroubra/",
+   "kind": "suburb",
+   "title": "Maroubra",
+   "group": "locations",
+   "status": "existing",
+   "region": "eastern-suburbs",
+   "regionName": "Eastern Suburbs"
+  },
+  {
+   "path": "/location/eastern-suburbs/matraville/",
+   "kind": "suburb",
+   "title": "Matraville",
+   "group": "locations",
+   "status": "existing",
+   "region": "eastern-suburbs",
+   "regionName": "Eastern Suburbs"
+  },
+  {
+   "path": "/location/eastern-suburbs/moore-park/",
+   "kind": "suburb",
+   "title": "Moore Park",
+   "group": "locations",
+   "status": "existing",
+   "region": "eastern-suburbs",
+   "regionName": "Eastern Suburbs"
+  },
+  {
+   "path": "/location/eastern-suburbs/north-bondi/",
+   "kind": "suburb",
+   "title": "North Bondi",
+   "group": "locations",
+   "status": "existing",
+   "region": "eastern-suburbs",
+   "regionName": "Eastern Suburbs"
+  },
+  {
+   "path": "/location/eastern-suburbs/paddington/",
+   "kind": "suburb",
+   "title": "Paddington",
+   "group": "locations",
+   "status": "existing",
+   "region": "eastern-suburbs",
+   "regionName": "Eastern Suburbs"
+  },
+  {
+   "path": "/location/eastern-suburbs/pagewood/",
+   "kind": "suburb",
+   "title": "Pagewood",
+   "group": "locations",
+   "status": "existing",
+   "region": "eastern-suburbs",
+   "regionName": "Eastern Suburbs"
+  },
+  {
+   "path": "/location/eastern-suburbs/phillip-bay/",
+   "kind": "suburb",
+   "title": "Phillip Bay",
+   "group": "locations",
+   "status": "existing",
+   "region": "eastern-suburbs",
+   "regionName": "Eastern Suburbs"
+  },
+  {
+   "path": "/location/eastern-suburbs/point-piper/",
+   "kind": "suburb",
+   "title": "Point Piper",
+   "group": "locations",
+   "status": "existing",
+   "region": "eastern-suburbs",
+   "regionName": "Eastern Suburbs"
+  },
+  {
+   "path": "/location/eastern-suburbs/port-botany/",
+   "kind": "suburb",
+   "title": "Port Botany",
+   "group": "locations",
+   "status": "existing",
+   "region": "eastern-suburbs",
+   "regionName": "Eastern Suburbs"
+  },
+  {
+   "path": "/location/eastern-suburbs/potts-point/",
+   "kind": "suburb",
+   "title": "Potts Point",
+   "group": "locations",
+   "status": "existing",
+   "region": "eastern-suburbs",
+   "regionName": "Eastern Suburbs"
+  },
+  {
+   "path": "/location/eastern-suburbs/queens-park/",
+   "kind": "suburb",
+   "title": "Queens Park",
+   "group": "locations",
+   "status": "existing",
+   "region": "eastern-suburbs",
+   "regionName": "Eastern Suburbs"
+  },
+  {
+   "path": "/location/eastern-suburbs/randwick/",
+   "kind": "suburb",
+   "title": "Randwick",
+   "group": "locations",
+   "status": "existing",
+   "region": "eastern-suburbs",
+   "regionName": "Eastern Suburbs"
+  },
+  {
+   "path": "/location/eastern-suburbs/rose-bay/",
+   "kind": "suburb",
+   "title": "Rose Bay",
+   "group": "locations",
+   "status": "existing",
+   "region": "eastern-suburbs",
+   "regionName": "Eastern Suburbs"
+  },
+  {
+   "path": "/location/eastern-suburbs/rushcutters-bay/",
+   "kind": "suburb",
+   "title": "Rushcutters Bay",
+   "group": "locations",
+   "status": "existing",
+   "region": "eastern-suburbs",
+   "regionName": "Eastern Suburbs"
+  },
+  {
+   "path": "/location/eastern-suburbs/south-coogee/",
+   "kind": "suburb",
+   "title": "South Coogee",
+   "group": "locations",
+   "status": "existing",
+   "region": "eastern-suburbs",
+   "regionName": "Eastern Suburbs"
+  },
+  {
+   "path": "/location/eastern-suburbs/surry-hills/",
+   "kind": "suburb",
+   "title": "Surry Hills",
+   "group": "locations",
+   "status": "existing",
+   "region": "eastern-suburbs",
+   "regionName": "Eastern Suburbs"
+  },
+  {
+   "path": "/location/eastern-suburbs/tamarama/",
+   "kind": "suburb",
+   "title": "Tamarama",
+   "group": "locations",
+   "status": "existing",
+   "region": "eastern-suburbs",
+   "regionName": "Eastern Suburbs"
+  },
+  {
+   "path": "/location/eastern-suburbs/vaucluse/",
+   "kind": "suburb",
+   "title": "Vaucluse",
+   "group": "locations",
+   "status": "existing",
+   "region": "eastern-suburbs",
+   "regionName": "Eastern Suburbs"
+  },
+  {
+   "path": "/location/eastern-suburbs/watsons-bay/",
+   "kind": "suburb",
+   "title": "Watsons Bay",
+   "group": "locations",
+   "status": "existing",
+   "region": "eastern-suburbs",
+   "regionName": "Eastern Suburbs"
+  },
+  {
+   "path": "/location/eastern-suburbs/waverley/",
+   "kind": "suburb",
+   "title": "Waverley",
+   "group": "locations",
+   "status": "existing",
+   "region": "eastern-suburbs",
+   "regionName": "Eastern Suburbs"
+  },
+  {
+   "path": "/location/eastern-suburbs/woollahra/",
+   "kind": "suburb",
+   "title": "Woollahra",
+   "group": "locations",
+   "status": "existing",
+   "region": "eastern-suburbs",
+   "regionName": "Eastern Suburbs"
+  },
+  {
+   "path": "/location/eastern-suburbs/woolloomooloo/",
+   "kind": "suburb",
+   "title": "Woolloomooloo",
+   "group": "locations",
+   "status": "existing",
+   "region": "eastern-suburbs",
+   "regionName": "Eastern Suburbs"
+  },
+  {
+   "path": "/location/inner-west/",
+   "kind": "region",
+   "title": "Inner West",
+   "group": "locations",
+   "status": "new",
+   "region": "inner-west",
+   "suburbs": 53
+  },
+  {
+   "path": "/location/inner-west/abbotsford/",
+   "kind": "suburb",
+   "title": "Abbotsford",
+   "group": "locations",
+   "status": "existing",
+   "region": "inner-west",
+   "regionName": "Inner West"
+  },
+  {
+   "path": "/location/inner-west/annandale/",
+   "kind": "suburb",
+   "title": "Annandale",
+   "group": "locations",
+   "status": "existing",
+   "region": "inner-west",
+   "regionName": "Inner West"
+  },
+  {
+   "path": "/location/inner-west/ashbury/",
+   "kind": "suburb",
+   "title": "Ashbury",
+   "group": "locations",
+   "status": "existing",
+   "region": "inner-west",
+   "regionName": "Inner West"
+  },
+  {
+   "path": "/location/inner-west/ashfield/",
+   "kind": "suburb",
+   "title": "Ashfield",
+   "group": "locations",
+   "status": "existing",
+   "region": "inner-west",
+   "regionName": "Inner West"
+  },
+  {
+   "path": "/location/inner-west/balmain-east/",
+   "kind": "suburb",
+   "title": "Balmain East",
+   "group": "locations",
+   "status": "existing",
+   "region": "inner-west",
+   "regionName": "Inner West"
+  },
+  {
+   "path": "/location/inner-west/balmain/",
+   "kind": "suburb",
+   "title": "Balmain",
+   "group": "locations",
+   "status": "existing",
+   "region": "inner-west",
+   "regionName": "Inner West"
+  },
+  {
+   "path": "/location/inner-west/birchgrove/",
+   "kind": "suburb",
+   "title": "Birchgrove",
+   "group": "locations",
+   "status": "existing",
+   "region": "inner-west",
+   "regionName": "Inner West"
+  },
+  {
+   "path": "/location/inner-west/breakfast-point/",
+   "kind": "suburb",
+   "title": "Breakfast Point",
+   "group": "locations",
+   "status": "existing",
+   "region": "inner-west",
+   "regionName": "Inner West"
+  },
+  {
+   "path": "/location/inner-west/burwood-heights/",
+   "kind": "suburb",
+   "title": "Burwood Heights",
+   "group": "locations",
+   "status": "existing",
+   "region": "inner-west",
+   "regionName": "Inner West"
+  },
+  {
+   "path": "/location/inner-west/burwood/",
+   "kind": "suburb",
+   "title": "Burwood",
+   "group": "locations",
+   "status": "existing",
+   "region": "inner-west",
+   "regionName": "Inner West"
+  },
+  {
+   "path": "/location/inner-west/cabarita/",
+   "kind": "suburb",
+   "title": "Cabarita",
+   "group": "locations",
+   "status": "existing",
+   "region": "inner-west",
+   "regionName": "Inner West"
+  },
+  {
+   "path": "/location/inner-west/camperdown/",
+   "kind": "suburb",
+   "title": "Camperdown",
+   "group": "locations",
+   "status": "existing",
+   "region": "inner-west",
+   "regionName": "Inner West"
+  },
+  {
+   "path": "/location/inner-west/canada-bay/",
+   "kind": "suburb",
+   "title": "Canada Bay",
+   "group": "locations",
+   "status": "existing",
+   "region": "inner-west",
+   "regionName": "Inner West"
+  },
+  {
+   "path": "/location/inner-west/chiswick/",
+   "kind": "suburb",
+   "title": "Chiswick",
+   "group": "locations",
+   "status": "existing",
+   "region": "inner-west",
+   "regionName": "Inner West"
+  },
+  {
+   "path": "/location/inner-west/concord-west/",
+   "kind": "suburb",
+   "title": "Concord West",
+   "group": "locations",
+   "status": "existing",
+   "region": "inner-west",
+   "regionName": "Inner West"
+  },
+  {
+   "path": "/location/inner-west/concord/",
+   "kind": "suburb",
+   "title": "Concord",
+   "group": "locations",
+   "status": "existing",
+   "region": "inner-west",
+   "regionName": "Inner West"
+  },
+  {
+   "path": "/location/inner-west/croydon-park/",
+   "kind": "suburb",
+   "title": "Croydon Park",
+   "group": "locations",
+   "status": "existing",
+   "region": "inner-west",
+   "regionName": "Inner West"
+  },
+  {
+   "path": "/location/inner-west/croydon/",
+   "kind": "suburb",
+   "title": "Croydon",
+   "group": "locations",
+   "status": "existing",
+   "region": "inner-west",
+   "regionName": "Inner West"
+  },
+  {
+   "path": "/location/inner-west/dobroyd-point/",
+   "kind": "suburb",
+   "title": "Dobroyd Point",
+   "group": "locations",
+   "status": "existing",
+   "region": "inner-west",
+   "regionName": "Inner West"
+  },
+  {
+   "path": "/location/inner-west/drummoyne/",
+   "kind": "suburb",
+   "title": "Drummoyne",
+   "group": "locations",
+   "status": "existing",
+   "region": "inner-west",
+   "regionName": "Inner West"
+  },
+  {
+   "path": "/location/inner-west/dulwich-hill/",
+   "kind": "suburb",
+   "title": "Dulwich Hill",
+   "group": "locations",
+   "status": "existing",
+   "region": "inner-west",
+   "regionName": "Inner West"
+  },
+  {
+   "path": "/location/inner-west/enfield/",
+   "kind": "suburb",
+   "title": "Enfield",
+   "group": "locations",
+   "status": "existing",
+   "region": "inner-west",
+   "regionName": "Inner West"
+  },
+  {
+   "path": "/location/inner-west/enmore/",
+   "kind": "suburb",
+   "title": "Enmore",
+   "group": "locations",
+   "status": "existing",
+   "region": "inner-west",
+   "regionName": "Inner West"
+  },
+  {
+   "path": "/location/inner-west/erskineville/",
+   "kind": "suburb",
+   "title": "Erskineville",
+   "group": "locations",
+   "status": "existing",
+   "region": "inner-west",
+   "regionName": "Inner West"
+  },
+  {
+   "path": "/location/inner-west/five-dock/",
+   "kind": "suburb",
+   "title": "Five Dock",
+   "group": "locations",
+   "status": "existing",
+   "region": "inner-west",
+   "regionName": "Inner West"
+  },
+  {
+   "path": "/location/inner-west/flemington/",
+   "kind": "suburb",
+   "title": "Flemington",
+   "group": "locations",
+   "status": "existing",
+   "region": "inner-west",
+   "regionName": "Inner West"
+  },
+  {
+   "path": "/location/inner-west/forest-lodge/",
+   "kind": "suburb",
+   "title": "Forest Lodge",
+   "group": "locations",
+   "status": "existing",
+   "region": "inner-west",
+   "regionName": "Inner West"
+  },
+  {
+   "path": "/location/inner-west/glebe/",
+   "kind": "suburb",
+   "title": "Glebe",
+   "group": "locations",
+   "status": "existing",
+   "region": "inner-west",
+   "regionName": "Inner West"
+  },
+  {
+   "path": "/location/inner-west/haberfield/",
+   "kind": "suburb",
+   "title": "Haberfield",
+   "group": "locations",
+   "status": "existing",
+   "region": "inner-west",
+   "regionName": "Inner West"
+  },
+  {
+   "path": "/location/inner-west/homebush/",
+   "kind": "suburb",
+   "title": "Homebush",
+   "group": "locations",
+   "status": "existing",
+   "region": "inner-west",
+   "regionName": "Inner West"
+  },
+  {
+   "path": "/location/inner-west/hurlstone-park/",
+   "kind": "suburb",
+   "title": "Hurlstone Park",
+   "group": "locations",
+   "status": "existing",
+   "region": "inner-west",
+   "regionName": "Inner West"
+  },
+  {
+   "path": "/location/inner-west/leichhardt/",
+   "kind": "suburb",
+   "title": "Leichhardt",
+   "group": "locations",
+   "status": "existing",
+   "region": "inner-west",
+   "regionName": "Inner West"
+  },
+  {
+   "path": "/location/inner-west/lewisham/",
+   "kind": "suburb",
+   "title": "Lewisham",
+   "group": "locations",
+   "status": "existing",
+   "region": "inner-west",
+   "regionName": "Inner West"
+  },
+  {
+   "path": "/location/inner-west/liberty-grove/",
+   "kind": "suburb",
+   "title": "Liberty Grove",
+   "group": "locations",
+   "status": "existing",
+   "region": "inner-west",
+   "regionName": "Inner West"
+  },
+  {
+   "path": "/location/inner-west/lilyfield/",
+   "kind": "suburb",
+   "title": "Lilyfield",
+   "group": "locations",
+   "status": "existing",
+   "region": "inner-west",
+   "regionName": "Inner West"
+  },
+  {
+   "path": "/location/inner-west/marrickville/",
+   "kind": "suburb",
+   "title": "Marrickville",
+   "group": "locations",
+   "status": "existing",
+   "region": "inner-west",
+   "regionName": "Inner West"
+  },
+  {
+   "path": "/location/inner-west/mortlake/",
+   "kind": "suburb",
+   "title": "Mortlake",
+   "group": "locations",
+   "status": "existing",
+   "region": "inner-west",
+   "regionName": "Inner West"
+  },
+  {
+   "path": "/location/inner-west/newington/",
+   "kind": "suburb",
+   "title": "Newington",
+   "group": "locations",
+   "status": "existing",
+   "region": "inner-west",
+   "regionName": "Inner West"
+  },
+  {
+   "path": "/location/inner-west/newtown/",
+   "kind": "suburb",
+   "title": "Newtown",
+   "group": "locations",
+   "status": "existing",
+   "region": "inner-west",
+   "regionName": "Inner West"
+  },
+  {
+   "path": "/location/inner-west/north-strathfield/",
+   "kind": "suburb",
+   "title": "North Strathfield",
+   "group": "locations",
+   "status": "existing",
+   "region": "inner-west",
+   "regionName": "Inner West"
+  },
+  {
+   "path": "/location/inner-west/petersham/",
+   "kind": "suburb",
+   "title": "Petersham",
+   "group": "locations",
+   "status": "existing",
+   "region": "inner-west",
+   "regionName": "Inner West"
+  },
+  {
+   "path": "/location/inner-west/rhodes/",
+   "kind": "suburb",
+   "title": "Rhodes",
+   "group": "locations",
+   "status": "existing",
+   "region": "inner-west",
+   "regionName": "Inner West"
+  },
+  {
+   "path": "/location/inner-west/rodd-point/",
+   "kind": "suburb",
+   "title": "Rodd Point",
+   "group": "locations",
+   "status": "existing",
+   "region": "inner-west",
+   "regionName": "Inner West"
+  },
+  {
+   "path": "/location/inner-west/rozelle/",
+   "kind": "suburb",
+   "title": "Rozelle",
+   "group": "locations",
+   "status": "existing",
+   "region": "inner-west",
+   "regionName": "Inner West"
+  },
+  {
+   "path": "/location/inner-west/russell-lea/",
+   "kind": "suburb",
+   "title": "Russell Lea",
+   "group": "locations",
+   "status": "existing",
+   "region": "inner-west",
+   "regionName": "Inner West"
+  },
+  {
+   "path": "/location/inner-west/st-peters/",
+   "kind": "suburb",
+   "title": "St Peters",
+   "group": "locations",
+   "status": "existing",
+   "region": "inner-west",
+   "regionName": "Inner West"
+  },
+  {
+   "path": "/location/inner-west/stanmore/",
+   "kind": "suburb",
+   "title": "Stanmore",
+   "group": "locations",
+   "status": "existing",
+   "region": "inner-west",
+   "regionName": "Inner West"
+  },
+  {
+   "path": "/location/inner-west/strathfield-south/",
+   "kind": "suburb",
+   "title": "Strathfield South",
+   "group": "locations",
+   "status": "existing",
+   "region": "inner-west",
+   "regionName": "Inner West"
+  },
+  {
+   "path": "/location/inner-west/strathfield/",
+   "kind": "suburb",
+   "title": "Strathfield",
+   "group": "locations",
+   "status": "existing",
+   "region": "inner-west",
+   "regionName": "Inner West"
+  },
+  {
+   "path": "/location/inner-west/summer-hill/",
+   "kind": "suburb",
+   "title": "Summer Hill",
+   "group": "locations",
+   "status": "existing",
+   "region": "inner-west",
+   "regionName": "Inner West"
+  },
+  {
+   "path": "/location/inner-west/sydenham/",
+   "kind": "suburb",
+   "title": "Sydenham",
+   "group": "locations",
+   "status": "existing",
+   "region": "inner-west",
+   "regionName": "Inner West"
+  },
+  {
+   "path": "/location/inner-west/tempe/",
+   "kind": "suburb",
+   "title": "Tempe",
+   "group": "locations",
+   "status": "existing",
+   "region": "inner-west",
+   "regionName": "Inner West"
+  },
+  {
+   "path": "/location/inner-west/wareemba/",
+   "kind": "suburb",
+   "title": "Wareemba",
+   "group": "locations",
+   "status": "existing",
+   "region": "inner-west",
+   "regionName": "Inner West"
+  },
+  {
+   "path": "/location/north-shore/",
+   "kind": "region",
+   "title": "North Shore",
+   "group": "locations",
+   "status": "new",
+   "region": "north-shore",
+   "suburbs": 62
+  },
+  {
+   "path": "/location/north-shore/artarmon/",
+   "kind": "suburb",
+   "title": "Artarmon",
+   "group": "locations",
+   "status": "existing",
+   "region": "north-shore",
+   "regionName": "North Shore"
+  },
+  {
+   "path": "/location/north-shore/asquith/",
+   "kind": "suburb",
+   "title": "Asquith",
+   "group": "locations",
+   "status": "existing",
+   "region": "north-shore",
+   "regionName": "North Shore"
+  },
+  {
+   "path": "/location/north-shore/berowra-heights/",
+   "kind": "suburb",
+   "title": "Berowra Heights",
+   "group": "locations",
+   "status": "existing",
+   "region": "north-shore",
+   "regionName": "North Shore"
+  },
+  {
+   "path": "/location/north-shore/berowra/",
+   "kind": "suburb",
+   "title": "Berowra",
+   "group": "locations",
+   "status": "existing",
+   "region": "north-shore",
+   "regionName": "North Shore"
+  },
+  {
+   "path": "/location/north-shore/cammeray/",
+   "kind": "suburb",
+   "title": "Cammeray",
+   "group": "locations",
+   "status": "existing",
+   "region": "north-shore",
+   "regionName": "North Shore"
+  },
+  {
+   "path": "/location/north-shore/castle-cove/",
+   "kind": "suburb",
+   "title": "Castle Cove",
+   "group": "locations",
+   "status": "existing",
+   "region": "north-shore",
+   "regionName": "North Shore"
+  },
+  {
+   "path": "/location/north-shore/castlecrag/",
+   "kind": "suburb",
+   "title": "Castlecrag",
+   "group": "locations",
+   "status": "existing",
+   "region": "north-shore",
+   "regionName": "North Shore"
+  },
+  {
+   "path": "/location/north-shore/chatswood-west/",
+   "kind": "suburb",
+   "title": "Chatswood West",
+   "group": "locations",
+   "status": "existing",
+   "region": "north-shore",
+   "regionName": "North Shore"
+  },
+  {
+   "path": "/location/north-shore/chatswood/",
+   "kind": "suburb",
+   "title": "Chatswood",
+   "group": "locations",
+   "status": "existing",
+   "region": "north-shore",
+   "regionName": "North Shore"
+  },
+  {
+   "path": "/location/north-shore/cremorne-point/",
+   "kind": "suburb",
+   "title": "Cremorne Point",
+   "group": "locations",
+   "status": "existing",
+   "region": "north-shore",
+   "regionName": "North Shore"
+  },
+  {
+   "path": "/location/north-shore/cremorne/",
+   "kind": "suburb",
+   "title": "Cremorne",
+   "group": "locations",
+   "status": "existing",
+   "region": "north-shore",
+   "regionName": "North Shore"
+  },
+  {
+   "path": "/location/north-shore/crows-nest/",
+   "kind": "suburb",
+   "title": "Crows Nest",
+   "group": "locations",
+   "status": "existing",
+   "region": "north-shore",
+   "regionName": "North Shore"
+  },
+  {
+   "path": "/location/north-shore/east-killara/",
+   "kind": "suburb",
+   "title": "East Killara",
+   "group": "locations",
+   "status": "existing",
+   "region": "north-shore",
+   "regionName": "North Shore"
+  },
+  {
+   "path": "/location/north-shore/east-lindfield/",
+   "kind": "suburb",
+   "title": "East Lindfield",
+   "group": "locations",
+   "status": "existing",
+   "region": "north-shore",
+   "regionName": "North Shore"
+  },
+  {
+   "path": "/location/north-shore/gladesville/",
+   "kind": "suburb",
+   "title": "Gladesville",
+   "group": "locations",
+   "status": "existing",
+   "region": "north-shore",
+   "regionName": "North Shore"
+  },
+  {
+   "path": "/location/north-shore/gordon/",
+   "kind": "suburb",
+   "title": "Gordon",
+   "group": "locations",
+   "status": "existing",
+   "region": "north-shore",
+   "regionName": "North Shore"
+  },
+  {
+   "path": "/location/north-shore/greenwich/",
+   "kind": "suburb",
+   "title": "Greenwich",
+   "group": "locations",
+   "status": "existing",
+   "region": "north-shore",
+   "regionName": "North Shore"
+  },
+  {
+   "path": "/location/north-shore/hornsby-heights/",
+   "kind": "suburb",
+   "title": "Hornsby Heights",
+   "group": "locations",
+   "status": "existing",
+   "region": "north-shore",
+   "regionName": "North Shore"
+  },
+  {
+   "path": "/location/north-shore/hornsby/",
+   "kind": "suburb",
+   "title": "Hornsby",
+   "group": "locations",
+   "status": "existing",
+   "region": "north-shore",
+   "regionName": "North Shore"
+  },
+  {
+   "path": "/location/north-shore/hunters-hill/",
+   "kind": "suburb",
+   "title": "Hunters Hill",
+   "group": "locations",
+   "status": "existing",
+   "region": "north-shore",
+   "regionName": "North Shore"
+  },
+  {
+   "path": "/location/north-shore/killara/",
+   "kind": "suburb",
+   "title": "Killara",
+   "group": "locations",
+   "status": "existing",
+   "region": "north-shore",
+   "regionName": "North Shore"
+  },
+  {
+   "path": "/location/north-shore/kirribilli/",
+   "kind": "suburb",
+   "title": "Kirribilli",
+   "group": "locations",
+   "status": "existing",
+   "region": "north-shore",
+   "regionName": "North Shore"
+  },
+  {
+   "path": "/location/north-shore/lane-cove-north/",
+   "kind": "suburb",
+   "title": "Lane Cove North",
+   "group": "locations",
+   "status": "existing",
+   "region": "north-shore",
+   "regionName": "North Shore"
+  },
+  {
+   "path": "/location/north-shore/lane-cove-west/",
+   "kind": "suburb",
+   "title": "Lane Cove West",
+   "group": "locations",
+   "status": "existing",
+   "region": "north-shore",
+   "regionName": "North Shore"
+  },
+  {
+   "path": "/location/north-shore/lane-cove/",
+   "kind": "suburb",
+   "title": "Lane Cove",
+   "group": "locations",
+   "status": "existing",
+   "region": "north-shore",
+   "regionName": "North Shore"
+  },
+  {
+   "path": "/location/north-shore/lavender-bay/",
+   "kind": "suburb",
+   "title": "Lavender Bay",
+   "group": "locations",
+   "status": "existing",
+   "region": "north-shore",
+   "regionName": "North Shore"
+  },
+  {
+   "path": "/location/north-shore/lindfield/",
+   "kind": "suburb",
+   "title": "Lindfield",
+   "group": "locations",
+   "status": "existing",
+   "region": "north-shore",
+   "regionName": "North Shore"
+  },
+  {
+   "path": "/location/north-shore/longueville/",
+   "kind": "suburb",
+   "title": "Longueville",
+   "group": "locations",
+   "status": "existing",
+   "region": "north-shore",
+   "regionName": "North Shore"
+  },
+  {
+   "path": "/location/north-shore/mcmahons-point/",
+   "kind": "suburb",
+   "title": "McMahons Point",
+   "group": "locations",
+   "status": "existing",
+   "region": "north-shore",
+   "regionName": "North Shore"
+  },
+  {
+   "path": "/location/north-shore/middle-cove/",
+   "kind": "suburb",
+   "title": "Middle Cove",
+   "group": "locations",
+   "status": "existing",
+   "region": "north-shore",
+   "regionName": "North Shore"
+  },
+  {
+   "path": "/location/north-shore/milsons-point/",
+   "kind": "suburb",
+   "title": "Milsons Point",
+   "group": "locations",
+   "status": "existing",
+   "region": "north-shore",
+   "regionName": "North Shore"
+  },
+  {
+   "path": "/location/north-shore/mosman/",
+   "kind": "suburb",
+   "title": "Mosman",
+   "group": "locations",
+   "status": "existing",
+   "region": "north-shore",
+   "regionName": "North Shore"
+  },
+  {
+   "path": "/location/north-shore/mount-colah/",
+   "kind": "suburb",
+   "title": "Mount Colah",
+   "group": "locations",
+   "status": "existing",
+   "region": "north-shore",
+   "regionName": "North Shore"
+  },
+  {
+   "path": "/location/north-shore/mount-ku-ring-gai/",
+   "kind": "suburb",
+   "title": "Mount Ku-ring-gai",
+   "group": "locations",
+   "status": "existing",
+   "region": "north-shore",
+   "regionName": "North Shore"
+  },
+  {
+   "path": "/location/north-shore/naremburn/",
+   "kind": "suburb",
+   "title": "Naremburn",
+   "group": "locations",
+   "status": "existing",
+   "region": "north-shore",
+   "regionName": "North Shore"
+  },
+  {
+   "path": "/location/north-shore/neutral-bay/",
+   "kind": "suburb",
+   "title": "Neutral Bay",
+   "group": "locations",
+   "status": "existing",
+   "region": "north-shore",
+   "regionName": "North Shore"
+  },
+  {
+   "path": "/location/north-shore/normanhurst/",
+   "kind": "suburb",
+   "title": "Normanhurst",
+   "group": "locations",
+   "status": "existing",
+   "region": "north-shore",
+   "regionName": "North Shore"
+  },
+  {
+   "path": "/location/north-shore/north-ryde/",
+   "kind": "suburb",
+   "title": "North Ryde",
+   "group": "locations",
+   "status": "existing",
+   "region": "north-shore",
+   "regionName": "North Shore"
+  },
+  {
+   "path": "/location/north-shore/north-sydney/",
+   "kind": "suburb",
+   "title": "North Sydney",
+   "group": "locations",
+   "status": "existing",
+   "region": "north-shore",
+   "regionName": "North Shore"
+  },
+  {
+   "path": "/location/north-shore/north-turramurra/",
+   "kind": "suburb",
+   "title": "North Turramurra",
+   "group": "locations",
+   "status": "existing",
+   "region": "north-shore",
+   "regionName": "North Shore"
+  },
+  {
+   "path": "/location/north-shore/north-wahroonga/",
+   "kind": "suburb",
+   "title": "North Wahroonga",
+   "group": "locations",
+   "status": "existing",
+   "region": "north-shore",
+   "regionName": "North Shore"
+  },
+  {
+   "path": "/location/north-shore/north-willoughby/",
+   "kind": "suburb",
+   "title": "North Willoughby",
+   "group": "locations",
+   "status": "existing",
+   "region": "north-shore",
+   "regionName": "North Shore"
+  },
+  {
+   "path": "/location/north-shore/northbridge/",
+   "kind": "suburb",
+   "title": "Northbridge",
+   "group": "locations",
+   "status": "existing",
+   "region": "north-shore",
+   "regionName": "North Shore"
+  },
+  {
+   "path": "/location/north-shore/northwood/",
+   "kind": "suburb",
+   "title": "Northwood",
+   "group": "locations",
+   "status": "existing",
+   "region": "north-shore",
+   "regionName": "North Shore"
+  },
+  {
+   "path": "/location/north-shore/pymble/",
+   "kind": "suburb",
+   "title": "Pymble",
+   "group": "locations",
+   "status": "existing",
+   "region": "north-shore",
+   "regionName": "North Shore"
+  },
+  {
+   "path": "/location/north-shore/riverview/",
+   "kind": "suburb",
+   "title": "Riverview",
+   "group": "locations",
+   "status": "existing",
+   "region": "north-shore",
+   "regionName": "North Shore"
+  },
+  {
+   "path": "/location/north-shore/roseville-chase/",
+   "kind": "suburb",
+   "title": "Roseville Chase",
+   "group": "locations",
+   "status": "existing",
+   "region": "north-shore",
+   "regionName": "North Shore"
+  },
+  {
+   "path": "/location/north-shore/roseville/",
+   "kind": "suburb",
+   "title": "Roseville",
+   "group": "locations",
+   "status": "existing",
+   "region": "north-shore",
+   "regionName": "North Shore"
+  },
+  {
+   "path": "/location/north-shore/south-turramurra/",
+   "kind": "suburb",
+   "title": "South Turramurra",
+   "group": "locations",
+   "status": "existing",
+   "region": "north-shore",
+   "regionName": "North Shore"
+  },
+  {
+   "path": "/location/north-shore/st-ives-chase/",
+   "kind": "suburb",
+   "title": "St Ives Chase",
+   "group": "locations",
+   "status": "existing",
+   "region": "north-shore",
+   "regionName": "North Shore"
+  },
+  {
+   "path": "/location/north-shore/st-ives/",
+   "kind": "suburb",
+   "title": "St Ives",
+   "group": "locations",
+   "status": "existing",
+   "region": "north-shore",
+   "regionName": "North Shore"
+  },
+  {
+   "path": "/location/north-shore/st-leonards/",
+   "kind": "suburb",
+   "title": "St Leonards",
+   "group": "locations",
+   "status": "existing",
+   "region": "north-shore",
+   "regionName": "North Shore"
+  },
+  {
+   "path": "/location/north-shore/turramurra/",
+   "kind": "suburb",
+   "title": "Turramurra",
+   "group": "locations",
+   "status": "existing",
+   "region": "north-shore",
+   "regionName": "North Shore"
+  },
+  {
+   "path": "/location/north-shore/wahroonga/",
+   "kind": "suburb",
+   "title": "Wahroonga",
+   "group": "locations",
+   "status": "existing",
+   "region": "north-shore",
+   "regionName": "North Shore"
+  },
+  {
+   "path": "/location/north-shore/waitara/",
+   "kind": "suburb",
+   "title": "Waitara",
+   "group": "locations",
+   "status": "existing",
+   "region": "north-shore",
+   "regionName": "North Shore"
+  },
+  {
+   "path": "/location/north-shore/warrawee/",
+   "kind": "suburb",
+   "title": "Warrawee",
+   "group": "locations",
+   "status": "existing",
+   "region": "north-shore",
+   "regionName": "North Shore"
+  },
+  {
+   "path": "/location/north-shore/waverton/",
+   "kind": "suburb",
+   "title": "Waverton",
+   "group": "locations",
+   "status": "existing",
+   "region": "north-shore",
+   "regionName": "North Shore"
+  },
+  {
+   "path": "/location/north-shore/west-pymble/",
+   "kind": "suburb",
+   "title": "West Pymble",
+   "group": "locations",
+   "status": "existing",
+   "region": "north-shore",
+   "regionName": "North Shore"
+  },
+  {
+   "path": "/location/north-shore/willoughby-east/",
+   "kind": "suburb",
+   "title": "Willoughby East",
+   "group": "locations",
+   "status": "existing",
+   "region": "north-shore",
+   "regionName": "North Shore"
+  },
+  {
+   "path": "/location/north-shore/willoughby/",
+   "kind": "suburb",
+   "title": "Willoughby",
+   "group": "locations",
+   "status": "existing",
+   "region": "north-shore",
+   "regionName": "North Shore"
+  },
+  {
+   "path": "/location/north-shore/wollstonecraft/",
+   "kind": "suburb",
+   "title": "Wollstonecraft",
+   "group": "locations",
+   "status": "existing",
+   "region": "north-shore",
+   "regionName": "North Shore"
+  },
+  {
+   "path": "/location/north-shore/woolwich/",
+   "kind": "suburb",
+   "title": "Woolwich",
+   "group": "locations",
+   "status": "existing",
+   "region": "north-shore",
+   "regionName": "North Shore"
+  },
+  {
+   "path": "/location/northern-beaches/",
+   "kind": "region",
+   "title": "Northern Beaches",
+   "group": "locations",
+   "status": "new",
+   "region": "northern-beaches",
+   "suburbs": 45
+  },
+  {
+   "path": "/location/northern-beaches/allambie-heights/",
+   "kind": "suburb",
+   "title": "Allambie Heights",
+   "group": "locations",
+   "status": "existing",
+   "region": "northern-beaches",
+   "regionName": "Northern Beaches"
+  },
+  {
+   "path": "/location/northern-beaches/avalon-beach/",
+   "kind": "suburb",
+   "title": "Avalon Beach",
+   "group": "locations",
+   "status": "existing",
+   "region": "northern-beaches",
+   "regionName": "Northern Beaches"
+  },
+  {
+   "path": "/location/northern-beaches/balgowlah-heights/",
+   "kind": "suburb",
+   "title": "Balgowlah Heights",
+   "group": "locations",
+   "status": "existing",
+   "region": "northern-beaches",
+   "regionName": "Northern Beaches"
+  },
+  {
+   "path": "/location/northern-beaches/balgowlah/",
+   "kind": "suburb",
+   "title": "Balgowlah",
+   "group": "locations",
+   "status": "existing",
+   "region": "northern-beaches",
+   "regionName": "Northern Beaches"
+  },
+  {
+   "path": "/location/northern-beaches/bayview/",
+   "kind": "suburb",
+   "title": "Bayview",
+   "group": "locations",
+   "status": "existing",
+   "region": "northern-beaches",
+   "regionName": "Northern Beaches"
+  },
+  {
+   "path": "/location/northern-beaches/beacon-hill/",
+   "kind": "suburb",
+   "title": "Beacon Hill",
+   "group": "locations",
+   "status": "existing",
+   "region": "northern-beaches",
+   "regionName": "Northern Beaches"
+  },
+  {
+   "path": "/location/northern-beaches/belrose/",
+   "kind": "suburb",
+   "title": "Belrose",
+   "group": "locations",
+   "status": "existing",
+   "region": "northern-beaches",
+   "regionName": "Northern Beaches"
+  },
+  {
+   "path": "/location/northern-beaches/bilgola-beach/",
+   "kind": "suburb",
+   "title": "Bilgola Beach",
+   "group": "locations",
+   "status": "existing",
+   "region": "northern-beaches",
+   "regionName": "Northern Beaches"
+  },
+  {
+   "path": "/location/northern-beaches/bilgola-plateau/",
+   "kind": "suburb",
+   "title": "Bilgola Plateau",
+   "group": "locations",
+   "status": "existing",
+   "region": "northern-beaches",
+   "regionName": "Northern Beaches"
+  },
+  {
+   "path": "/location/northern-beaches/brookvale/",
+   "kind": "suburb",
+   "title": "Brookvale",
+   "group": "locations",
+   "status": "existing",
+   "region": "northern-beaches",
+   "regionName": "Northern Beaches"
+  },
+  {
+   "path": "/location/northern-beaches/church-point/",
+   "kind": "suburb",
+   "title": "Church Point",
+   "group": "locations",
+   "status": "existing",
+   "region": "northern-beaches",
+   "regionName": "Northern Beaches"
+  },
+  {
+   "path": "/location/northern-beaches/clareville/",
+   "kind": "suburb",
+   "title": "Clareville",
+   "group": "locations",
+   "status": "existing",
+   "region": "northern-beaches",
+   "regionName": "Northern Beaches"
+  },
+  {
+   "path": "/location/northern-beaches/clontarf/",
+   "kind": "suburb",
+   "title": "Clontarf",
+   "group": "locations",
+   "status": "existing",
+   "region": "northern-beaches",
+   "regionName": "Northern Beaches"
+  },
+  {
+   "path": "/location/northern-beaches/collaroy-plateau/",
+   "kind": "suburb",
+   "title": "Collaroy Plateau",
+   "group": "locations",
+   "status": "existing",
+   "region": "northern-beaches",
+   "regionName": "Northern Beaches"
+  },
+  {
+   "path": "/location/northern-beaches/collaroy/",
+   "kind": "suburb",
+   "title": "Collaroy",
+   "group": "locations",
+   "status": "existing",
+   "region": "northern-beaches",
+   "regionName": "Northern Beaches"
+  },
+  {
+   "path": "/location/northern-beaches/cromer/",
+   "kind": "suburb",
+   "title": "Cromer",
+   "group": "locations",
+   "status": "existing",
+   "region": "northern-beaches",
+   "regionName": "Northern Beaches"
+  },
+  {
+   "path": "/location/northern-beaches/curl-curl/",
+   "kind": "suburb",
+   "title": "Curl Curl",
+   "group": "locations",
+   "status": "existing",
+   "region": "northern-beaches",
+   "regionName": "Northern Beaches"
+  },
+  {
+   "path": "/location/northern-beaches/davidson/",
+   "kind": "suburb",
+   "title": "Davidson",
+   "group": "locations",
+   "status": "existing",
+   "region": "northern-beaches",
+   "regionName": "Northern Beaches"
+  },
+  {
+   "path": "/location/northern-beaches/dee-why/",
+   "kind": "suburb",
+   "title": "Dee Why",
+   "group": "locations",
+   "status": "existing",
+   "region": "northern-beaches",
+   "regionName": "Northern Beaches"
+  },
+  {
+   "path": "/location/northern-beaches/duffys-forest/",
+   "kind": "suburb",
+   "title": "Duffys Forest",
+   "group": "locations",
+   "status": "existing",
+   "region": "northern-beaches",
+   "regionName": "Northern Beaches"
+  },
+  {
+   "path": "/location/northern-beaches/elanora-heights/",
+   "kind": "suburb",
+   "title": "Elanora Heights",
+   "group": "locations",
+   "status": "existing",
+   "region": "northern-beaches",
+   "regionName": "Northern Beaches"
+  },
+  {
+   "path": "/location/northern-beaches/fairlight/",
+   "kind": "suburb",
+   "title": "Fairlight",
+   "group": "locations",
+   "status": "existing",
+   "region": "northern-beaches",
+   "regionName": "Northern Beaches"
+  },
+  {
+   "path": "/location/northern-beaches/forestville/",
+   "kind": "suburb",
+   "title": "Forestville",
+   "group": "locations",
+   "status": "existing",
+   "region": "northern-beaches",
+   "regionName": "Northern Beaches"
+  },
+  {
+   "path": "/location/northern-beaches/frenchs-forest/",
+   "kind": "suburb",
+   "title": "Frenchs Forest",
+   "group": "locations",
+   "status": "existing",
+   "region": "northern-beaches",
+   "regionName": "Northern Beaches"
+  },
+  {
+   "path": "/location/northern-beaches/freshwater/",
+   "kind": "suburb",
+   "title": "Freshwater",
+   "group": "locations",
+   "status": "existing",
+   "region": "northern-beaches",
+   "regionName": "Northern Beaches"
+  },
+  {
+   "path": "/location/northern-beaches/ingleside/",
+   "kind": "suburb",
+   "title": "Ingleside",
+   "group": "locations",
+   "status": "existing",
+   "region": "northern-beaches",
+   "regionName": "Northern Beaches"
+  },
+  {
+   "path": "/location/northern-beaches/killarney-heights/",
+   "kind": "suburb",
+   "title": "Killarney Heights",
+   "group": "locations",
+   "status": "existing",
+   "region": "northern-beaches",
+   "regionName": "Northern Beaches"
+  },
+  {
+   "path": "/location/northern-beaches/manly-vale/",
+   "kind": "suburb",
+   "title": "Manly Vale",
+   "group": "locations",
+   "status": "existing",
+   "region": "northern-beaches",
+   "regionName": "Northern Beaches"
+  },
+  {
+   "path": "/location/northern-beaches/manly/",
+   "kind": "suburb",
+   "title": "Manly",
+   "group": "locations",
+   "status": "existing",
+   "region": "northern-beaches",
+   "regionName": "Northern Beaches"
+  },
+  {
+   "path": "/location/northern-beaches/mona-vale/",
+   "kind": "suburb",
+   "title": "Mona Vale",
+   "group": "locations",
+   "status": "existing",
+   "region": "northern-beaches",
+   "regionName": "Northern Beaches"
+  },
+  {
+   "path": "/location/northern-beaches/narrabeen/",
+   "kind": "suburb",
+   "title": "Narrabeen",
+   "group": "locations",
+   "status": "existing",
+   "region": "northern-beaches",
+   "regionName": "Northern Beaches"
+  },
+  {
+   "path": "/location/northern-beaches/narraweena/",
+   "kind": "suburb",
+   "title": "Narraweena",
+   "group": "locations",
+   "status": "existing",
+   "region": "northern-beaches",
+   "regionName": "Northern Beaches"
+  },
+  {
+   "path": "/location/northern-beaches/newport/",
+   "kind": "suburb",
+   "title": "Newport",
+   "group": "locations",
+   "status": "existing",
+   "region": "northern-beaches",
+   "regionName": "Northern Beaches"
+  },
+  {
+   "path": "/location/northern-beaches/north-balgowlah/",
+   "kind": "suburb",
+   "title": "North Balgowlah",
+   "group": "locations",
+   "status": "existing",
+   "region": "northern-beaches",
+   "regionName": "Northern Beaches"
+  },
+  {
+   "path": "/location/northern-beaches/north-curl-curl/",
+   "kind": "suburb",
+   "title": "North Curl Curl",
+   "group": "locations",
+   "status": "existing",
+   "region": "northern-beaches",
+   "regionName": "Northern Beaches"
+  },
+  {
+   "path": "/location/northern-beaches/north-manly/",
+   "kind": "suburb",
+   "title": "North Manly",
+   "group": "locations",
+   "status": "existing",
+   "region": "northern-beaches",
+   "regionName": "Northern Beaches"
+  },
+  {
+   "path": "/location/northern-beaches/north-narrabeen/",
+   "kind": "suburb",
+   "title": "North Narrabeen",
+   "group": "locations",
+   "status": "existing",
+   "region": "northern-beaches",
+   "regionName": "Northern Beaches"
+  },
+  {
+   "path": "/location/northern-beaches/oxford-falls/",
+   "kind": "suburb",
+   "title": "Oxford Falls",
+   "group": "locations",
+   "status": "existing",
+   "region": "northern-beaches",
+   "regionName": "Northern Beaches"
+  },
+  {
+   "path": "/location/northern-beaches/palm-beach/",
+   "kind": "suburb",
+   "title": "Palm Beach",
+   "group": "locations",
+   "status": "existing",
+   "region": "northern-beaches",
+   "regionName": "Northern Beaches"
+  },
+  {
+   "path": "/location/northern-beaches/queenscliff/",
+   "kind": "suburb",
+   "title": "Queenscliff",
+   "group": "locations",
+   "status": "existing",
+   "region": "northern-beaches",
+   "regionName": "Northern Beaches"
+  },
+  {
+   "path": "/location/northern-beaches/seaforth/",
+   "kind": "suburb",
+   "title": "Seaforth",
+   "group": "locations",
+   "status": "existing",
+   "region": "northern-beaches",
+   "regionName": "Northern Beaches"
+  },
+  {
+   "path": "/location/northern-beaches/terrey-hills/",
+   "kind": "suburb",
+   "title": "Terrey Hills",
+   "group": "locations",
+   "status": "existing",
+   "region": "northern-beaches",
+   "regionName": "Northern Beaches"
+  },
+  {
+   "path": "/location/northern-beaches/warriewood/",
+   "kind": "suburb",
+   "title": "Warriewood",
+   "group": "locations",
+   "status": "existing",
+   "region": "northern-beaches",
+   "regionName": "Northern Beaches"
+  },
+  {
+   "path": "/location/northern-beaches/whale-beach/",
+   "kind": "suburb",
+   "title": "Whale Beach",
+   "group": "locations",
+   "status": "existing",
+   "region": "northern-beaches",
+   "regionName": "Northern Beaches"
+  },
+  {
+   "path": "/location/northern-beaches/wheeler-heights/",
+   "kind": "suburb",
+   "title": "Wheeler Heights",
+   "group": "locations",
+   "status": "existing",
+   "region": "northern-beaches",
+   "regionName": "Northern Beaches"
+  },
+  {
+   "path": "/location/sutherland-shire/",
+   "kind": "region",
+   "title": "Sutherland Shire",
+   "group": "locations",
+   "status": "new",
+   "region": "sutherland-shire",
+   "suburbs": 42
+  },
+  {
+   "path": "/location/sutherland-shire/alfords-point/",
+   "kind": "suburb",
+   "title": "Alfords Point",
+   "group": "locations",
+   "status": "existing",
+   "region": "sutherland-shire",
+   "regionName": "Sutherland Shire"
+  },
+  {
+   "path": "/location/sutherland-shire/bangor/",
+   "kind": "suburb",
+   "title": "Bangor",
+   "group": "locations",
+   "status": "existing",
+   "region": "sutherland-shire",
+   "regionName": "Sutherland Shire"
+  },
+  {
+   "path": "/location/sutherland-shire/barden-ridge/",
+   "kind": "suburb",
+   "title": "Barden Ridge",
+   "group": "locations",
+   "status": "existing",
+   "region": "sutherland-shire",
+   "regionName": "Sutherland Shire"
+  },
+  {
+   "path": "/location/sutherland-shire/bonnet-bay/",
+   "kind": "suburb",
+   "title": "Bonnet Bay",
+   "group": "locations",
+   "status": "existing",
+   "region": "sutherland-shire",
+   "regionName": "Sutherland Shire"
+  },
+  {
+   "path": "/location/sutherland-shire/bundeena/",
+   "kind": "suburb",
+   "title": "Bundeena",
+   "group": "locations",
+   "status": "existing",
+   "region": "sutherland-shire",
+   "regionName": "Sutherland Shire"
+  },
+  {
+   "path": "/location/sutherland-shire/burraneer/",
+   "kind": "suburb",
+   "title": "Burraneer",
+   "group": "locations",
+   "status": "existing",
+   "region": "sutherland-shire",
+   "regionName": "Sutherland Shire"
+  },
+  {
+   "path": "/location/sutherland-shire/caringbah-south/",
+   "kind": "suburb",
+   "title": "Caringbah South",
+   "group": "locations",
+   "status": "existing",
+   "region": "sutherland-shire",
+   "regionName": "Sutherland Shire"
+  },
+  {
+   "path": "/location/sutherland-shire/caringbah/",
+   "kind": "suburb",
+   "title": "Caringbah",
+   "group": "locations",
+   "status": "existing",
+   "region": "sutherland-shire",
+   "regionName": "Sutherland Shire"
+  },
+  {
+   "path": "/location/sutherland-shire/como/",
+   "kind": "suburb",
+   "title": "Como",
+   "group": "locations",
+   "status": "existing",
+   "region": "sutherland-shire",
+   "regionName": "Sutherland Shire"
+  },
+  {
+   "path": "/location/sutherland-shire/cronulla/",
+   "kind": "suburb",
+   "title": "Cronulla",
+   "group": "locations",
+   "status": "existing",
+   "region": "sutherland-shire",
+   "regionName": "Sutherland Shire"
+  },
+  {
+   "path": "/location/sutherland-shire/dolans-bay/",
+   "kind": "suburb",
+   "title": "Dolans Bay",
+   "group": "locations",
+   "status": "existing",
+   "region": "sutherland-shire",
+   "regionName": "Sutherland Shire"
+  },
+  {
+   "path": "/location/sutherland-shire/engadine/",
+   "kind": "suburb",
+   "title": "Engadine",
+   "group": "locations",
+   "status": "existing",
+   "region": "sutherland-shire",
+   "regionName": "Sutherland Shire"
+  },
+  {
+   "path": "/location/sutherland-shire/grays-point/",
+   "kind": "suburb",
+   "title": "Grays Point",
+   "group": "locations",
+   "status": "existing",
+   "region": "sutherland-shire",
+   "regionName": "Sutherland Shire"
+  },
+  {
+   "path": "/location/sutherland-shire/greenhills-beach/",
+   "kind": "suburb",
+   "title": "Greenhills Beach",
+   "group": "locations",
+   "status": "existing",
+   "region": "sutherland-shire",
+   "regionName": "Sutherland Shire"
+  },
+  {
+   "path": "/location/sutherland-shire/gymea-bay/",
+   "kind": "suburb",
+   "title": "Gymea Bay",
+   "group": "locations",
+   "status": "existing",
+   "region": "sutherland-shire",
+   "regionName": "Sutherland Shire"
+  },
+  {
+   "path": "/location/sutherland-shire/gymea/",
+   "kind": "suburb",
+   "title": "Gymea",
+   "group": "locations",
+   "status": "existing",
+   "region": "sutherland-shire",
+   "regionName": "Sutherland Shire"
+  },
+  {
+   "path": "/location/sutherland-shire/heathcote/",
+   "kind": "suburb",
+   "title": "Heathcote",
+   "group": "locations",
+   "status": "existing",
+   "region": "sutherland-shire",
+   "regionName": "Sutherland Shire"
+  },
+  {
+   "path": "/location/sutherland-shire/illawong/",
+   "kind": "suburb",
+   "title": "Illawong",
+   "group": "locations",
+   "status": "existing",
+   "region": "sutherland-shire",
+   "regionName": "Sutherland Shire"
+  },
+  {
+   "path": "/location/sutherland-shire/jannali/",
+   "kind": "suburb",
+   "title": "Jannali",
+   "group": "locations",
+   "status": "existing",
+   "region": "sutherland-shire",
+   "regionName": "Sutherland Shire"
+  },
+  {
+   "path": "/location/sutherland-shire/kangaroo-point/",
+   "kind": "suburb",
+   "title": "Kangaroo Point",
+   "group": "locations",
+   "status": "existing",
+   "region": "sutherland-shire",
+   "regionName": "Sutherland Shire"
+  },
+  {
+   "path": "/location/sutherland-shire/kareela/",
+   "kind": "suburb",
+   "title": "Kareela",
+   "group": "locations",
+   "status": "existing",
+   "region": "sutherland-shire",
+   "regionName": "Sutherland Shire"
+  },
+  {
+   "path": "/location/sutherland-shire/kirrawee/",
+   "kind": "suburb",
+   "title": "Kirrawee",
+   "group": "locations",
+   "status": "existing",
+   "region": "sutherland-shire",
+   "regionName": "Sutherland Shire"
+  },
+  {
+   "path": "/location/sutherland-shire/kurnell/",
+   "kind": "suburb",
+   "title": "Kurnell",
+   "group": "locations",
+   "status": "existing",
+   "region": "sutherland-shire",
+   "regionName": "Sutherland Shire"
+  },
+  {
+   "path": "/location/sutherland-shire/lilli-pilli/",
+   "kind": "suburb",
+   "title": "Lilli Pilli",
+   "group": "locations",
+   "status": "existing",
+   "region": "sutherland-shire",
+   "regionName": "Sutherland Shire"
+  },
+  {
+   "path": "/location/sutherland-shire/loftus/",
+   "kind": "suburb",
+   "title": "Loftus",
+   "group": "locations",
+   "status": "existing",
+   "region": "sutherland-shire",
+   "regionName": "Sutherland Shire"
+  },
+  {
+   "path": "/location/sutherland-shire/lucas-heights/",
+   "kind": "suburb",
+   "title": "Lucas Heights",
+   "group": "locations",
+   "status": "existing",
+   "region": "sutherland-shire",
+   "regionName": "Sutherland Shire"
+  },
+  {
+   "path": "/location/sutherland-shire/maianbar/",
+   "kind": "suburb",
+   "title": "Maianbar",
+   "group": "locations",
+   "status": "existing",
+   "region": "sutherland-shire",
+   "regionName": "Sutherland Shire"
+  },
+  {
+   "path": "/location/sutherland-shire/menai/",
+   "kind": "suburb",
+   "title": "Menai",
+   "group": "locations",
+   "status": "existing",
+   "region": "sutherland-shire",
+   "regionName": "Sutherland Shire"
+  },
+  {
+   "path": "/location/sutherland-shire/miranda/",
+   "kind": "suburb",
+   "title": "Miranda",
+   "group": "locations",
+   "status": "existing",
+   "region": "sutherland-shire",
+   "regionName": "Sutherland Shire"
+  },
+  {
+   "path": "/location/sutherland-shire/oyster-bay/",
+   "kind": "suburb",
+   "title": "Oyster Bay",
+   "group": "locations",
+   "status": "existing",
+   "region": "sutherland-shire",
+   "regionName": "Sutherland Shire"
+  },
+  {
+   "path": "/location/sutherland-shire/port-hacking/",
+   "kind": "suburb",
+   "title": "Port Hacking",
+   "group": "locations",
+   "status": "existing",
+   "region": "sutherland-shire",
+   "regionName": "Sutherland Shire"
+  },
+  {
+   "path": "/location/sutherland-shire/sandy-point/",
+   "kind": "suburb",
+   "title": "Sandy Point",
+   "group": "locations",
+   "status": "existing",
+   "region": "sutherland-shire",
+   "regionName": "Sutherland Shire"
+  },
+  {
+   "path": "/location/sutherland-shire/sutherland/",
+   "kind": "suburb",
+   "title": "Sutherland",
+   "group": "locations",
+   "status": "existing",
+   "region": "sutherland-shire",
+   "regionName": "Sutherland Shire"
+  },
+  {
+   "path": "/location/sutherland-shire/sylvania-waters/",
+   "kind": "suburb",
+   "title": "Sylvania Waters",
+   "group": "locations",
+   "status": "existing",
+   "region": "sutherland-shire",
+   "regionName": "Sutherland Shire"
+  },
+  {
+   "path": "/location/sutherland-shire/sylvania/",
+   "kind": "suburb",
+   "title": "Sylvania",
+   "group": "locations",
+   "status": "existing",
+   "region": "sutherland-shire",
+   "regionName": "Sutherland Shire"
+  },
+  {
+   "path": "/location/sutherland-shire/taren-point/",
+   "kind": "suburb",
+   "title": "Taren Point",
+   "group": "locations",
+   "status": "existing",
+   "region": "sutherland-shire",
+   "regionName": "Sutherland Shire"
+  },
+  {
+   "path": "/location/sutherland-shire/waterfall/",
+   "kind": "suburb",
+   "title": "Waterfall",
+   "group": "locations",
+   "status": "existing",
+   "region": "sutherland-shire",
+   "regionName": "Sutherland Shire"
+  },
+  {
+   "path": "/location/sutherland-shire/woolooware/",
+   "kind": "suburb",
+   "title": "Woolooware",
+   "group": "locations",
+   "status": "existing",
+   "region": "sutherland-shire",
+   "regionName": "Sutherland Shire"
+  },
+  {
+   "path": "/location/sutherland-shire/woronora-heights/",
+   "kind": "suburb",
+   "title": "Woronora Heights",
+   "group": "locations",
+   "status": "existing",
+   "region": "sutherland-shire",
+   "regionName": "Sutherland Shire"
+  },
+  {
+   "path": "/location/sutherland-shire/woronora/",
+   "kind": "suburb",
+   "title": "Woronora",
+   "group": "locations",
+   "status": "existing",
+   "region": "sutherland-shire",
+   "regionName": "Sutherland Shire"
+  },
+  {
+   "path": "/location/sutherland-shire/yarrawarrah/",
+   "kind": "suburb",
+   "title": "Yarrawarrah",
+   "group": "locations",
+   "status": "existing",
+   "region": "sutherland-shire",
+   "regionName": "Sutherland Shire"
+  },
+  {
+   "path": "/location/sutherland-shire/yowie-bay/",
+   "kind": "suburb",
+   "title": "Yowie Bay",
+   "group": "locations",
+   "status": "existing",
+   "region": "sutherland-shire",
+   "regionName": "Sutherland Shire"
+  },
+  {
+   "path": "/major-events-business-security-sydney/",
+   "kind": "post",
+   "title": "How Major Events Impact Business Security in Sydney",
+   "group": "blog",
+   "status": "existing",
+   "date": "2026-06-19"
+  },
+  {
+   "path": "/outdated-switchboards-impact-safety-insurance-property-value/",
+   "kind": "post",
+   "title": "How Do Outdated Switchboards Impact Insurance, Safety, and Property Value?",
+   "group": "blog",
+   "status": "existing",
+   "date": "2026-03-06"
+  },
+  {
+   "path": "/overloaded-circuits-in-homes/",
+   "kind": "post",
+   "title": "Can Your Home Handle Modern Power Demand? The Truth About Overloaded Circuits",
+   "group": "blog",
+   "status": "existing",
+   "date": "2026-04-17"
+  },
+  {
+   "path": "/power-point-planning-bondi-homes/",
+   "kind": "post",
+   "title": "How Many Power Points Should a Modern Bondi Home Have?",
+   "group": "blog",
+   "status": "existing",
+   "date": "2026-09-25"
+  },
+  {
+   "path": "/preventive-electrical-maintenance/",
+   "kind": "post",
+   "title": "Why Prevention Beats Panic in Electrical Maintenance",
+   "group": "blog",
+   "status": "existing",
+   "date": "2026-07-27"
+  },
+  {
+   "path": "/privacy-policy/",
+   "kind": "company",
+   "title": "Privacy Policy",
+   "group": "company",
+   "status": "existing"
+  },
+  {
+   "path": "/projects/",
+   "kind": "projects",
+   "title": "Projects",
+   "group": "company",
+   "status": "new"
+  },
+  {
+   "path": "/public-vs-home-ev-charging/",
+   "kind": "post",
+   "title": "Are Public Power Stations Enough, or Should You Install One at Home?",
+   "group": "blog",
+   "status": "existing",
+   "date": "2026-02-13"
+  },
+  {
+   "path": "/questions-before-buying-a-solar-battery/",
+   "kind": "post",
+   "title": "Thinking About a Solar Battery? Ask These Questions First",
+   "group": "blog",
+   "status": "existing",
+   "date": "2026-08-25"
+  },
+  {
+   "path": "/rcbo-safety-switch-installation-sydney/",
+   "kind": "post",
+   "title": "Choosing the Right Electrician for RCD Safety Switch Installation in Sydney",
+   "group": "blog",
+   "status": "existing",
+   "date": "2025-10-15"
+  },
+  {
+   "path": "/rental-property-smoke-alarm-inspection-failure/",
+   "kind": "post",
+   "title": "What Happens If Your Rental Property Fails a Smoke Alarm Inspection?",
+   "group": "blog",
+   "status": "existing",
+   "date": "2026-03-06"
+  },
+  {
+   "path": "/residential-electrical-inspections-for-homeowner/",
+   "kind": "post",
+   "title": "Residential Electrical Inspections: Why Every Homeowner Should Get One",
+   "group": "blog",
+   "status": "existing",
+   "date": "2026-01-26"
+  },
+  {
+   "path": "/reviews/",
+   "kind": "reviews",
+   "title": "Reviews",
+   "group": "company",
+   "status": "new"
+  },
+  {
+   "path": "/security/",
+   "kind": "service-hub",
+   "title": "Security services",
+   "group": "security",
+   "status": "existing"
+  },
+  {
+   "path": "/security/access-control/",
+   "kind": "service",
+   "title": "Access control",
+   "group": "security",
+   "status": "new"
+  },
+  {
+   "path": "/security/alarm-system/",
+   "kind": "service",
+   "title": "Alarm System",
+   "group": "security",
+   "status": "existing"
+  },
+  {
+   "path": "/security/cctv/",
+   "kind": "service",
+   "title": "CCTV",
+   "group": "security",
+   "status": "existing"
+  },
+  {
+   "path": "/security/intercom/",
+   "kind": "service",
+   "title": "Intercom",
+   "group": "security",
+   "status": "existing"
+  },
+  {
+   "path": "/security/outdoor-security-lighting-installation/",
+   "kind": "service",
+   "title": "Outdoor Security Lighting Installation",
+   "group": "security",
+   "status": "existing"
+  },
+  {
+   "path": "/security/site-security/",
+   "kind": "service",
+   "title": "Site Security",
+   "group": "security",
+   "status": "existing"
+  },
+  {
+   "path": "/security/smoke-detectors/",
+   "kind": "service",
+   "title": "Smoke Detectors",
+   "group": "security",
+   "status": "existing"
+  },
+  {
+   "path": "/simple-solar-installation-guide/",
+   "kind": "post",
+   "title": "Tired of Rising Power Bills? Your Simple Guide to Solar Panel Installation in Sydney",
+   "group": "blog",
+   "status": "existing",
+   "date": "2025-09-10"
+  },
+  {
+   "path": "/smart-home-security-2026-what-works/",
+   "kind": "post",
+   "title": "Smart Home Security in 2026: What Actually Works vs What’s Just Marketing",
+   "group": "blog",
+   "status": "existing",
+   "date": "2026-03-01"
+  },
+  {
+   "path": "/solar-batteries-bondi-installation-guide/",
+   "kind": "post",
+   "title": "What You Need to Know Before Installing Solar Batteries in Bondi",
+   "group": "blog",
+   "status": "existing",
+   "date": "2025-11-06"
+  },
+  {
+   "path": "/solar-battery-storage-guide-2026/",
+   "kind": "post",
+   "title": "The Homeowner’s Guide to Solar and Battery Storage in 2026",
+   "group": "blog",
+   "status": "existing",
+   "date": "2026-06-03"
+  },
+  {
+   "path": "/solar-panels-wasting-energy/",
+   "kind": "post",
+   "title": "Your Solar Panels Could Be Wasting More Energy Than You Think",
+   "group": "blog",
+   "status": "existing",
+   "date": "2026-07-04"
+  },
+  {
+   "path": "/solar-roi-australia-2026/",
+   "kind": "post",
+   "title": "Is Solar Worth It in 2026? Real ROI for Australian Homes & Businesses",
+   "group": "blog",
+   "status": "existing",
+   "date": "2026-04-01"
+  },
+  {
+   "path": "/support/",
+   "kind": "company",
+   "title": "Support",
+   "group": "company",
+   "status": "existing"
+  },
+  {
+   "path": "/switchboard-ready-for-ev-charger-installation/",
+   "kind": "post",
+   "title": "Do I Need a Switchboard Upgrade for EV Charger Installation?",
+   "group": "blog",
+   "status": "existing",
+   "date": "2026-08-10"
+  },
+  {
+   "path": "/sydney-battery-storage-rules-2026/",
+   "kind": "post",
+   "title": "Why 2026 Is the Year for Sydney Homes to Consider Battery Storage",
+   "group": "blog",
+   "status": "existing",
+   "date": "2026-05-08"
+  },
+  {
+   "path": "/sydney-business-security-major-events/",
+   "kind": "post",
+   "title": "Busy Streets, Busy Nights: Keeping Your Sydney Business Safe During Major Events",
+   "group": "blog",
+   "status": "existing",
+   "date": "2026-03-01"
+  },
+  {
+   "path": "/sydney-mardi-gras-security-system-upgrades/",
+   "kind": "post",
+   "title": "Sydney Mardi Gras Season: Why Homes & Businesses Upgrade Security Systems Now",
+   "group": "blog",
+   "status": "existing",
+   "date": "2026-02-17"
+  },
+  {
+   "path": "/sydneys-eastern-suburbs-alarm-systems/",
+   "kind": "post",
+   "title": "Why You Need a Security Alarm System in Sydney’s Eastern Suburbs",
+   "group": "blog",
+   "status": "existing",
+   "date": "2025-05-27"
+  },
+  {
+   "path": "/terms-conditions/",
+   "kind": "company",
+   "title": "Terms & Conditions",
+   "group": "company",
+   "status": "existing"
+  },
+  {
+   "path": "/the-function-of-security-alarm-systems/",
+   "kind": "post",
+   "title": "The Function of Security Alarm Systems",
+   "group": "blog",
+   "status": "existing",
+   "date": "2022-12-05"
+  },
+  {
+   "path": "/what-are-the-3-types-of-access-control/",
+   "kind": "post",
+   "title": "Understanding the Basics: What Are the 3 Types of Access Control?",
+   "group": "blog",
+   "status": "existing",
+   "date": "2026-01-30"
+  },
+  {
+   "path": "/what-is-an-intercom-system/",
+   "kind": "post",
+   "title": "What is an intercom system?",
+   "group": "blog",
+   "status": "existing",
+   "date": "2026-01-30"
+  },
+  {
+   "path": "/what-to-plan-electrically-before-renovating-home/",
+   "kind": "post",
+   "title": "What Should You Plan Electrically Before Renovating Your Home?",
+   "group": "blog",
+   "status": "existing",
+   "date": "2026-09-08"
+  },
+  {
+   "path": "/where-to-install-smoke-alarms/",
+   "kind": "post",
+   "title": "Where Should You Install Smoke Alarms? Room-by-Room Placement Guide",
+   "group": "blog",
+   "status": "existing",
+   "date": "2026-08-11"
+  },
+  {
+   "path": "/who-we-work-with/",
+   "kind": "audience-hub",
+   "title": "Who we work with",
+   "group": "audiences",
+   "status": "new"
+  },
+  {
+   "path": "/who-we-work-with/businesses/",
+   "kind": "audience",
+   "title": "Businesses & retail",
+   "group": "audiences",
+   "status": "new"
+  },
+  {
+   "path": "/who-we-work-with/construction-sites/",
+   "kind": "audience",
+   "title": "Construction sites",
+   "group": "audiences",
+   "status": "new"
+  },
+  {
+   "path": "/who-we-work-with/homes/",
+   "kind": "audience",
+   "title": "Homes",
+   "group": "audiences",
+   "status": "new"
+  },
+  {
+   "path": "/who-we-work-with/strata-apartments/",
+   "kind": "audience",
+   "title": "Strata & apartments",
+   "group": "audiences",
+   "status": "new"
+  },
+  {
+   "path": "/why-do-you-need-to-install-a-cctv-camera-system-at-your-home/",
+   "kind": "post",
+   "title": "Why Do You Need To Install A CCTV Camera System At Your Home?",
+   "group": "blog",
+   "status": "existing",
+   "date": "2023-01-16"
+  },
+  {
+   "path": "/why-does-my-safety-switch-keep-tripping/",
+   "kind": "post",
+   "title": "Why Does My Safety Switch Keep Tripping?",
+   "group": "blog",
+   "status": "existing",
+   "date": "2026-02-20"
+  },
+  {
+   "path": "/why-sydney-homeowners-are-investing-in-battery-storage-systems/",
+   "kind": "post",
+   "title": "Why Sydney Homeowners Are Investing in Battery Storage Systems",
+   "group": "blog",
+   "status": "existing",
+   "date": "2025-12-17"
+  },
+  {
+   "path": "/wired-or-wireless-home-alarm-system-2/",
+   "kind": "post",
+   "title": "Wired vs. Wireless Home Alarm Systems",
+   "group": "blog",
+   "status": "existing",
+   "date": "2026-01-30"
+  }
+ ],
+ "retired": [
+  {
+   "path": "/home/v2/",
+   "to": "/"
+  }
+ ]
+}

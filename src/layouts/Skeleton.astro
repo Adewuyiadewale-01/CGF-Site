@@ -1,0 +1,53 @@
+---
+// Concept skeleton: the real layout (nav, footer, breadcrumb) with just the page's heading and
+// a line on what the page is for. Used for every page that isn't the designed homepage.
+import Base from './Base.astro';
+
+interface Crumb { label: string; href: string }
+interface Props { title: string; sub: string; crumbs: Crumb[]; status: 'existing' | 'new'; type: string; metaTitle?: string }
+const { title, sub, crumbs, status, type, metaTitle = `${title} | CGF Security & Electrical` } = Astro.props;
+
+const ld = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: crumbs.map((c, i) => ({ '@type': 'ListItem', position: i + 1, name: c.label, item: 'https://cgfsecurityandelectrical.com.au' + c.href })),
+};
+---
+<Base title={metaTitle} description={sub}>
+  <script slot="head" type="application/ld+json" is:inline set:html={JSON.stringify(ld)} />
+  <section class="skel">
+    <div class="wrap">
+      <nav class="skel__crumbs mono" aria-label="Breadcrumb">
+        <ol>
+          {crumbs.map((c, i) => (
+            <li>{i < crumbs.length - 1 ? <a href={c.href}>{c.label}</a> : <span aria-current="page">{c.label}</span>}</li>
+          ))}
+        </ol>
+      </nav>
+      <p class="skel__tags mono">
+        <span class="skel__tag">Concept page</span>
+        <span class={`skel__tag skel__tag--${status}`}>{status === 'new' ? 'New page' : 'Existing URL, kept'}</span>
+        <span class="skel__type">{type}</span>
+      </p>
+      <h1>{title}</h1>
+      <p class="skel__sub">{sub}</p>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .skel { min-height: 72svh; display: flex; align-items: flex-end; padding: 180px 0 120px; border-bottom: 1px solid var(--line); background: radial-gradient(120% 80% at 80% 0%, rgba(255, 91, 46, .06), transparent 60%), var(--ink); }
+  .skel h1 { max-width: 15em; font-size: clamp(40px, 6vw, 84px); line-height: 1; letter-spacing: -.04em; text-wrap: balance; }
+  .skel__sub { max-width: 40em; margin-top: 28px; font-size: clamp(17px, 1.6vw, 20px); line-height: 1.55; color: var(--soft); text-wrap: pretty; }
+  .skel__crumbs ol { display: flex; flex-wrap: wrap; gap: 8px; list-style: none; margin: 0 0 28px; padding: 0; font-size: 11px; letter-spacing: .06em; text-transform: uppercase; color: var(--dim); }
+  .skel__crumbs li + li::before { content: "›"; margin-right: 8px; color: var(--dim); }
+  .skel__crumbs a { color: var(--stone); }
+  .skel__crumbs a:hover { color: var(--bone); }
+  .skel__crumbs [aria-current] { color: var(--soft); }
+  .skel__tags { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-bottom: 24px; font-size: 10px; letter-spacing: .08em; text-transform: uppercase; }
+  .skel__tag { padding: 5px 9px; border-radius: 6px; border: 1px solid var(--line-2); color: var(--stone); }
+  .skel__tag--new { border-color: rgba(255, 91, 46, .45); color: var(--signal); background: rgba(255, 91, 46, .08); }
+  .skel__tag--existing { color: var(--soft); }
+  .skel__type { margin-left: 4px; color: var(--dim); }
+  @media (max-width: 860px) { .skel { min-height: 60svh; padding: 140px 0 72px; } }
+</style>
