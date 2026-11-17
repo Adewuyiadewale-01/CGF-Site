@@ -16,6 +16,7 @@ Then open http://localhost:4173. The site is static: no build step.
 | --- | --- |
 | `site/` | The website: `index.html`, `styles.css`, `main.js`, `scenes.js`, `assets/` |
 | `cgf-3d/` | 3D scene workbench: render any scene to a still with Playwright (`node render.mjs hero:1:2.2:1440:900`) |
+| `brand/` | The CGF logo: `concepts.py` draws the cut wordmark and outlines the Michroma tagline (`python3 concepts.py --write`, needs `fonttools`) |
 | `map/` | `build_map.py` turns NSW council boundaries into the dotted Sydney map (`site/assets/sydney-dots.svg`) |
 | `serve.mjs` | Tiny static server for local preview |
 
@@ -40,4 +41,5 @@ Then open http://localhost:4173. The site is static: no build step.
 - Map data: NSW LGA boundaries, Geoscape Administrative Boundaries via data.gov.au (CC BY 4.0). Rebuild with the GeoJSON from `https://ahdap-public-data.s3.ap-southeast-2.amazonaws.com/CityData/LGAs_Sydney_and_surrounds.json` saved as `map/lgas.json`.
 - Team and job photos: CGF Security & Electrical's own photos (from their current site).
 - Brand logos (Dahua, Ajax, Bosch, Vimar, Akuvox, Inner Range): trademarks of their owners, taken from each brand's own site or Wikimedia Commons and shown in mono.
+- Logo tagline font: Michroma, SIL Open Font License (`brand/fonts/OFL.txt`); outlined into the SVGs, not loaded on the site.
 - Libraries (CDN): three.js r170, GSAP 3.12.5 + ScrollTrigger, Lenis 1.1.18.
