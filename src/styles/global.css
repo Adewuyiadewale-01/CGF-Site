@@ -1,7 +1,7 @@
 /* CGF — homepage v2. Dark, one accent (Signal), one light surface (the quote panel). */
 :root {
   --ink: #0A0B0D; --night: #0E0F12; --surface: #131417; --surface-2: #1A1B1F;
-  --bone: #EDEBE6; --soft: #BDBAB4; --stone: #8C8A85; --dim: #55534F;
+  --bone: #EDEBE6; --soft: #BDBAB4; --stone: #9C9993; --dim: #86847F;
   --signal: #FF5B2E; --signal-15: rgba(255, 91, 46, .15);
   --line: rgba(237, 235, 230, .08); --line-2: rgba(237, 235, 230, .14);
   --ink-l: #0A0B0D; --ink-l2: #3A3936; --stone-l: #6B6964; --line-l: rgba(10, 11, 13, .1);
@@ -277,6 +277,7 @@ a.tr:hover .ic { color: var(--signal); }
 .ph--e { grid-template-rows: 1fr auto; }
 .reveal img { clip-path: inset(0 0 0 0 round 18px); }
 .ppl-strip { display: flex; flex-wrap: wrap; align-items: center; gap: 20px 48px; margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--line); }
+.ppl-facts { display: flex; flex-wrap: wrap; align-items: center; gap: 20px 48px; margin: 0; }
 .ppl-strip dt { font-size: 9px; color: var(--dim); }
 .ppl-strip dd { margin-top: 6px; }
 
@@ -419,7 +420,7 @@ a.tr:hover .ic { color: var(--signal); }
 .foot__brand p { color: var(--stone); font-size: 14px; max-width: 30ch; }
 .foot__brand .mono { font-size: 9px; line-height: 1.8; }
 .foot nav, .foot address { display: grid; gap: 12px; align-content: start; font-style: normal; font-size: 15px; color: var(--soft); min-width: 0; }
-.foot h3 { margin-bottom: 4px; font-size: 11px; }
+.foot h2 { margin-bottom: 4px; font-size: 11px; font-weight: 400; }
 .foot nav a:hover, .foot address a:hover { color: var(--bone); }
 .foot address a, .foot address span { display: flex; gap: 10px; align-items: flex-start; overflow-wrap: anywhere; font-size: 14px; }
 .foot address .ic { margin-top: 4px; color: var(--stone); }
