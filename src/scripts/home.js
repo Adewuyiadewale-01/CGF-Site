@@ -7,10 +7,13 @@ import { $, $$, reduce, mobile, live3D, gsap, ScrollTrigger, lenis } from './sit
    never competes with the first paint or blocks the main thread while the page is loading. */
 let mountP = null;
 const pageLoaded = new Promise((r) => (document.readyState === 'complete' ? r() : addEventListener('load', () => r(), { once: true })));
+// Start as soon as the page has loaded and the browser is idle, or on the first interaction if that's sooner.
+// (Devices that can't run it well never get here: live3D is false for them, see site.js.)
 const engaged = new Promise((r) => {
   const evs = ['pointermove', 'pointerdown', 'touchstart', 'wheel', 'keydown', 'scroll'];
   const go = () => { evs.forEach((e) => removeEventListener(e, go, true)); r(); };
   evs.forEach((e) => addEventListener(e, go, { capture: true, passive: true }));
+  pageLoaded.then(() => (window.requestIdleCallback ? requestIdleCallback(go, { timeout: 1200 }) : setTimeout(go, 300)));
 });
 const load3D = () => (mountP ||= Promise.all([pageLoaded, engaged]).then(() => import('./scenes.js')).then((m) => m.mountScene));
 
@@ -31,7 +34,7 @@ if (live3D) {
 }
 const hold = $('#hold'), ring = $('#hold-ring');
 let holding = false, simA = 0, simTarget = 0;
-const down = (e) => { e.preventDefault(); holding = true; hold.classList.add('is-down'); simTarget = 1; hero?.setArmed(1); wake(); };
+const down = (e) => { e.preventDefault(); if (!armedStill.srcset) armedStill.srcset = armedStill.dataset.srcset; holding = true; hold.classList.add('is-down'); simTarget = 1; hero?.setArmed(1); wake(); };
 const up = () => { if (!holding) return; holding = false; hold.classList.remove('is-down'); simTarget = 0; hero?.setArmed(0); wake(); };
 hold.addEventListener('pointerdown', down);
 ['pointerup', 'pointerleave', 'pointercancel'].forEach((ev) => hold.addEventListener(ev, up));
@@ -41,12 +44,14 @@ hold.addEventListener('contextmenu', (e) => e.preventDefault());
 const callouts = $$('.callout');
 const cams = $('#sim-cams'), zones = $('#sim-zones'), st = $('#sim-state'), holdLabel = $('#hold-label');
 const setText = (el, v) => { v = String(v); if (el.textContent !== v) el.textContent = v; };
+const armedStill = $('.hero__poster--armed');
 // Runs only while something is changing: arming/disarming, or the live hero is on screen (its callouts
 // track the moving camera). Otherwise it stops, so an idle page does no per-frame work.
 let ticking = false;
 function tick() {
   const a = hero ? hero.armed : (simA += (simTarget - simA) * 0.08);
   ring.style.strokeDashoffset = (94.25 * (1 - a)).toFixed(2);
+  if (!hero) armedStill.style.opacity = a < 0.005 ? 0 : a.toFixed(3); // stills mode: show the armed render as you hold
   setText(cams, Math.round(3 * a)); setText(zones, Math.round(4 * a));
   const armed = a > 0.95, arming = a > 0.05 && !armed;
   setText(st, armed ? 'Armed' : arming ? (holding ? 'Arming' : 'Disarming') : 'Idle');
