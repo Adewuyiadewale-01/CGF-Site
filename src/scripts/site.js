@@ -24,8 +24,10 @@ if (!reduce && matchMedia('(hover: hover) and (pointer: fine)').matches) {
 }
 const scrollToHash = (hash) => { const el = hash && hash.length > 1 && document.getElementById(hash.slice(1)); if (!el) return false; lenis ? lenis.scrollTo(el, { offset: -70 }) : el.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth' }); return true; };
 document.addEventListener('click', (e) => {
-  const a = e.target.closest('a[href^="#"]'); if (!a) return;
-  if (scrollToHash(a.getAttribute('href'))) { e.preventDefault(); closeDrop(); closeMobile(); }
+  const a = e.target.closest('a[href^="#"], a[href^="/#"]'); if (!a) return;
+  const href = a.getAttribute('href');
+  if (href.startsWith('/#') && location.pathname !== '/') return; // another page: let the browser go to the homepage section
+  if (scrollToHash(href.replace(/^\//, ''))) { e.preventDefault(); closeDrop(); closeMobile(); }
 });
 
 /* ---------- nav: one shared dropdown ---------- */
@@ -89,4 +91,4 @@ $('.mmenu__x', mm).addEventListener('click', () => { closeMobile(); burger.focus
 mm.addEventListener('keydown', (e) => { if (e.key === 'Escape') { closeMobile(); burger.focus(); } });
 
 
-export { $, $$, reduce, mobile, hasGL, live3D, gsap, ScrollTrigger, lenis, closeDrop, closeMobile };
+export { $, $$, reduce, mobile, hasGL, live3D, gsap, ScrollTrigger, lenis, closeDrop, closeMobile, scrollToHash };

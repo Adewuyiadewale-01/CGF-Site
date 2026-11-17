@@ -164,7 +164,8 @@ function buildPhoneRegions(txt) {
   const check = () => {
     ticking = false;
     if (!phoneMQ.matches || next >= items.length || performance.now() - last < 650) return;
-    if (items[next].getBoundingClientRect().top < innerHeight * 0.7) {
+    const t = items[next].getBoundingClientRect().top;
+    if (t > 0 && t < innerHeight * 0.7) { // only while its title is on screen (not when jumping past)
       open(items[next]); next++; last = performance.now();
       setTimeout(() => { if (!ticking) { ticking = true; requestAnimationFrame(check); } }, 700); // keep going if they're already in view
     }
@@ -268,3 +269,11 @@ window.addEventListener('load', () => ScrollTrigger.refresh());
 if (!reduce) $$('.quotes__track').forEach((track) => {
   [...track.children].forEach((card) => { const c = card.cloneNode(true); c.setAttribute('aria-hidden', 'true'); track.appendChild(c); });
 });
+
+/* ---------- arriving from another page at /#section: re-scroll once pinned sections have laid out ---------- */
+if (location.hash) addEventListener('load', () => setTimeout(() => {
+  const el = document.getElementById(location.hash.slice(1)); if (!el) return;
+  ScrollTrigger.refresh(); lenis?.resize();
+  // jump (no animation): the page was just opened at this section
+  lenis ? lenis.scrollTo(el, { offset: -70, immediate: true, force: true }) : el.scrollIntoView();
+}, 80));
