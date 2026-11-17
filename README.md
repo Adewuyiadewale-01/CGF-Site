@@ -30,7 +30,7 @@ Built with Astro (static output). Three.js, GSAP and Lenis are npm dependencies,
   "Existing URL, kept" or "New page". The inventory was built from CGF's live sitemap and page titles,
   so all 347 existing URLs (services, 250 suburbs, 61 blog posts, company pages) keep their address;
   14 pages are new (region hubs, audience pages, Access control, Projects, Reviews, Free quote).
-- The whole concept is `noindex` (`CONCEPT` in `src/config.ts` plus an `X-Robots-Tag` header in `vercel.json`).
+- Search indexing is controlled by `CONCEPT` in `src/config.ts` (true adds `noindex` to every page). It is currently off.
 - The visual sitemap for the proposal is on the "Sitemap" page of the Figma file.
 
 ## Highlights
