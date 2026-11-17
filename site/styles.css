@@ -63,8 +63,7 @@ section { position: relative; }
 .sec-head > div { flex: 1 1 520px; min-width: 0; }
 .sec-head > p, .sec-head .ppl-copy { flex: 0 1 430px; color: var(--stone); font-size: 17px; line-height: 1.6; }
 .eyebrow { display: flex; align-items: center; gap: 12px; font: 400 11px/1 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--stone); margin-bottom: 28px; }
-.eyebrow span { color: var(--signal); }
-.eyebrow span::after { content: ""; display: inline-block; width: 24px; height: 1px; background: var(--line-2); margin-left: 12px; vertical-align: middle; }
+.eyebrow::before { content: ""; width: 18px; height: 1px; background: var(--signal); flex: none; }
 .services, .who, .process, .people, .reviews, .areas, .faq { padding-block: clamp(96px, 11vw, 150px); }
 
 /* ================= NAV ================= */
@@ -76,6 +75,8 @@ section { position: relative; }
 .wm { display: inline-flex; align-items: center; }
 /* the logo is the stacked lockup everywhere: CGF with "Security & Electrical" under it */
 .wm__lockup { display: block; width: 150px; height: auto; }
+.cta-us { display: none; }
+@media (max-width: 400px) { .cta-num { display: none; } .cta-us { display: inline; } }
 .wm--stack img { display: block; width: 240px; height: auto; }
 .links ul { display: flex; gap: 2px; padding: 5px; border-radius: 999px; border: 1px solid var(--line-2); background: rgba(10, 11, 13, .5); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); }
 .links__btn { display: inline-flex; align-items: center; gap: 6px; padding: 9px 16px; border-radius: 999px; font-size: 14px; color: var(--soft); transition: background .2s, color .2s; }
@@ -348,7 +349,6 @@ a.tr:hover .ic { color: var(--signal); }
 .quote__bg::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(237, 235, 230, .94) 0%, rgba(237, 235, 230, .58) 30%, rgba(237, 235, 230, 0) 56%), linear-gradient(90deg, rgba(237, 235, 230, .92) 0%, rgba(237, 235, 230, .6) 30%, rgba(237, 235, 230, 0) 54%); }
 .quote { isolation: isolate; }
 .quote .eyebrow { color: var(--stone-l); }
-.quote .eyebrow span::after { background: var(--line-l); }
 .quote__grid { display: grid; grid-template-columns: minmax(0, 440px) minmax(0, 1fr); gap: 64px; align-items: start; }
 .quote__l { display: grid; gap: 28px; }
 .quote__l .eyebrow { margin-bottom: 0; }
