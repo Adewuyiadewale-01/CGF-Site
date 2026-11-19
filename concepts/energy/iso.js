@@ -565,7 +565,9 @@ addEventListener('resize', resize); resize();
 
 const tmp = new THREE.Vector3(), white = new THREE.Color();
 const clock = new THREE.Clock();
+let heroOn = true; new IntersectionObserver(([e]) => { heroOn = e.isIntersecting; }).observe(canvas);
 function frame() {
+  if (!heroOn && !EXPORT) { requestAnimationFrame(frame); return; }
   const t = clock.getElapsedTime(), dt = Math.min(0.05, t - (frame.last ?? t)); frame.last = t;
   for (const f of tickers) f(t, dt);
   eased.x += (pointer.x - eased.x) * 0.04; eased.y += (pointer.y - eased.y) * 0.04;

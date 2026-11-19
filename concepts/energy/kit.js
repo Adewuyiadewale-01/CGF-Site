@@ -306,13 +306,19 @@ export function makeStage(canvas, { viewH = 30, look = V(0, 0, 0), az = Math.PI 
     camera.position.set(l.x + Math.sin(a) * Math.cos(e) * dist, l.y + Math.sin(e) * dist, l.z + Math.cos(a) * Math.cos(e) * dist);
     camera.lookAt(l);
   }
-  function resize() {
-    const W = canvas.clientWidth || canvas.width, H = canvas.clientHeight || canvas.height, aspect = W / H;
-    renderer.setSize(W, H, false);
+  let W = 1, H = 1;
+  // project: re-fit the camera to view.viewH (cheap, call every frame); resize: also re-size the drawing buffer
+  function project() {
+    const aspect = W / H;
     camera.top = view.viewH / 2; camera.bottom = -view.viewH / 2; camera.left = -view.viewH * aspect / 2; camera.right = view.viewH * aspect / 2;
     camera.updateProjectionMatrix();
+  }
+  function resize() {
+    W = canvas.clientWidth || canvas.width; H = canvas.clientHeight || canvas.height;
+    renderer.setSize(W, H, false);
     resolution.set(W * renderer.getPixelRatio(), H * renderer.getPixelRatio());
+    project();
   }
   resize(); place();
-  return { renderer, scene, camera, resolution, view, place, resize, render: () => { place(); renderer.render(scene, camera); } };
+  return { renderer, scene, camera, resolution, view, place, project, resize, render: () => { place(); renderer.render(scene, camera); } };
 }
