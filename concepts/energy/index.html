@@ -9,7 +9,8 @@
   // ?scene=city adds the city below the network (combine freely: ?v=2&scene=city)
   const q = new URLSearchParams(location.search);
   if (q.get('v') === '1' || q.get('v') === '2') document.documentElement.dataset.theme = 'v' + q.get('v');
-  if (q.get('scene') === 'city') document.documentElement.dataset.scene = 'city';
+  // ?scene=grid: the network rises out of a neighbourhood street grid that fills the background
+  if (q.get('scene') === 'city' || q.get('scene') === 'grid') document.documentElement.dataset.scene = q.get('scene');
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
