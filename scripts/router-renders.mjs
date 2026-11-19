@@ -11,6 +11,7 @@ const sharp = require('sharp');
 // name: [query, width, height, trim]
 const JOBS = {
   hero:            ['asset=hero', 1600, 1000],
+  'hero-wide':     ['asset=hero&dist=8.2&lookY=1.3&camY=1.9&lookX=-1.55', 1600, 1000],
   'hero-turn':     ['asset=hero&spin=1.1&tilt=0.35&t=3.1', 1600, 1000],
   studio:          ['asset=studio', 1600, 900],
   'single-graphite': ['asset=single&f=graphite', 900, 1100],

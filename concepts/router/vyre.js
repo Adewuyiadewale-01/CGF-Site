@@ -122,7 +122,7 @@ function streakMat(color, { speed = 1, len = 0.18, offset = 0, opacity = 1 } = {
 }
 
 /* ---------- hero: the column on a dark floor, packets streaming through it ---------- */
-export function heroScene(st, { finish = 'graphite' } = {}) {
+export function heroScene(st, { finish = 'graphite', dist = 7, lookY = 1.2, camY = 1.8, lookX = 0 } = {}) {
   const { scene, camera } = st;
   scene.fog = new THREE.Fog('#0B0A10', 12, 34); scene.environmentIntensity = 0.35;
   const r = vyreOne(finish); scene.add(r);
@@ -143,14 +143,14 @@ export function heroScene(st, { finish = 'graphite' } = {}) {
     const m = streakMat(i % 6 === 0 ? '#C9C8FF' : '#3D38FF', { speed: 0.1 + rnd() * 0.16, len: 0.12 + rnd() * 0.22, offset: rnd(), opacity: 0.3 + rnd() * 0.7 });
     const mesh = new THREE.Mesh(new THREE.PlaneGeometry(10 + far * 18, w), m); mesh.position.set(0, y, z); scene.add(mesh); streaks.push(m);
   }
-  const D = 7; camera.position.set(0, 1.8, D); camera.lookAt(0, 1.2, 0);
-  const look = V(0, 1.2, 0);
+  const D = dist; camera.position.set(lookX, camY, D); camera.lookAt(lookX, lookY, 0);
+  const look = V(lookX, lookY, 0);
   return {
     router: r,
     set(t, { spin = 0, tilt = 0, light = 1 } = {}) {
       streaks.forEach((m) => { m.uniforms.uTime.value = t; });
       r.rotation.y = -0.55 + spin; r.setLight(light);
-      camera.position.set(Math.sin(tilt) * D, 1.8 + tilt * 1.2, Math.cos(tilt) * D); camera.lookAt(look);
+      camera.position.set(look.x + Math.sin(tilt) * D, camY + tilt * 1.2, Math.cos(tilt) * D); camera.lookAt(look);
     },
   };
 }
@@ -162,13 +162,13 @@ export function studioScene(st, finishes = ['graphite', 'bone', 'cobalt']) {
   key.shadow.mapSize.set(2048, 2048); key.shadow.camera.left = -6; key.shadow.camera.right = 6; key.shadow.camera.top = 6; key.shadow.camera.bottom = -6; key.shadow.radius = 8; key.shadow.bias = -0.0005;
   scene.add(key); scene.add(new THREE.HemisphereLight('#ffffff', '#cfc6b8', 0.45)); const fill = new THREE.DirectionalLight('#B9B6FF', 0.8); fill.position.set(6, 2, -3); scene.add(fill);
   st.renderer.shadowMap.enabled = true; st.renderer.shadowMap.type = THREE.PCFSoftShadowMap; key.shadow.radius = 4;
-  const floor = new THREE.Mesh(new THREE.PlaneGeometry(60, 60), new THREE.MeshStandardMaterial({ color: '#E3DDD2', roughness: 0.95 }));
+  const floor = new THREE.Mesh(new THREE.PlaneGeometry(200, 200), new THREE.MeshStandardMaterial({ color: '#E3DDD2', roughness: 0.95 }));
   floor.rotation.x = -Math.PI / 2; floor.receiveShadow = true; scene.add(floor);
   const units = finishes.map((f, i) => {
     const r = vyreOne(f); r.position.x = (i - (finishes.length - 1) / 2) * 1.9; r.rotation.y = -0.35 + i * 0.12;
     r.traverse((o) => { if (o.isMesh) { o.castShadow = true; } }); scene.add(r); return r;
   });
-  camera.position.set(0, 2.6, 9.5); camera.lookAt(0, 1.05, 0);
+  camera.position.set(0, 6.2, 11.5); camera.lookAt(0, 0.95, 0);
   return { units };
 }
 
@@ -254,7 +254,7 @@ export function planScene(st, { dark = false } = {}) {
   const halo = new THREE.Sprite(new THREE.SpriteMaterial({ map: glowTex(), color: COBALT, transparent: true, opacity: dark ? 0.9 : 0.35, blending: dark ? THREE.AdditiveBlending : THREE.NormalBlending, depthWrite: false }));
   halo.scale.set(3, 3, 1); halo.position.copy(anchors.router); scene.add(halo);
   // isometric-ish view
-  camera.position.set(14, 15.5, 17); camera.lookAt(0.2, 0, 0.4);
+  camera.position.set(17, 19, 21); camera.lookAt(0.4, -0.4, 0.4);
   return {
     anchors, wires, caps, router: r,
     set(t, focus = null) {

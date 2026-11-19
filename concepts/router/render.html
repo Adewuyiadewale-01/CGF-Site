@@ -21,7 +21,7 @@
   let st;
   if (asset === 'hero') {
     st = makeStage(c, { bg: '#0B0A10', bloom: 1.1, fov: 30, preserve: true });
-    const h = heroScene(st); h.set(t, { spin: +(q.get('spin') ?? 0), tilt: +(q.get('tilt') ?? 0) });
+    const h = heroScene(st, { dist: +(q.get('dist') ?? 7), lookY: +(q.get('lookY') ?? 1.2), camY: +(q.get('camY') ?? 1.8), lookX: +(q.get('lookX') ?? 0) }); h.set(t, { spin: +(q.get('spin') ?? 0), tilt: +(q.get('tilt') ?? 0) });
   } else if (asset === 'studio' || asset === 'single') {
     st = makeStage(c, { bg: '#E3DDD2', bloom: 0, fov: 26, preserve: true, exposure: 0.82 });
     const s = studioScene(st, asset === 'single' ? [q.get('f') || 'graphite'] : undefined);
