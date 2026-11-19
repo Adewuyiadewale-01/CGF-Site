@@ -290,7 +290,66 @@ export function makeKit(scene, pal = PAL) {
     const geo = new THREE.BufferGeometry(); const l = new THREE.LineSegments(geo, mat); group.add(l);
     return (y0, y1) => { const p = []; for (const [x, z] of corners) p.push(V(x, y0, z), V(x, y1, z)); geo.setFromPoints(p); l.computeLineDistances(); };
   }
-  return { M, E, INK, VOLT, edge, lines, box, windowsZ, windowsX, pitched, plinth, house, strata, shop, battery, panelStack, batteryStack, current, tray, ring, glowTex };
+  /* ---------- street infrastructure ---------- */
+  // a hanging cable from a to b (parabolic sag). Idle it is a slim dark conductor; live, light streaks run
+  // along it in `dir` (+1 a->b, -1 b->a) and a soft sleeve glows around it. Returns { set(level, dir, time) }.
+  function wire(a, b, { sag = 0.45, r = 0.038, idle = '#59615C', spacing = 5.5, speed = 5.5, offset = 0 } = {}) {
+    const pts = []; for (let i = 0; i <= 32; i++) { const t = i / 32; const p = a.clone().lerp(b, t); p.y -= sag * 4 * t * (1 - t); pts.push(p); }
+    const curve = new THREE.CatmullRomCurve3(pts), len = curve.getLength();
+    const U = { uTime: { value: 0 }, uLevel: { value: 0 }, uDir: { value: 1 }, uLen: { value: len }, uOff: { value: offset }, uSpacing: { value: spacing }, uSpeed: { value: speed },
+      uIdle: { value: col(idle) }, uLive: { value: VOLT.clone() }, uHot: { value: VOLT.clone().lerp(new THREE.Color(1, 1, 1), 0.6) } };
+    const vs = `varying float vD; varying vec3 vN; varying vec3 vV; uniform float uLen;
+      void main() { vD = uv.x * uLen; vec4 mv = modelViewMatrix * vec4(position, 1.0); vN = normalize(normalMatrix * normal); vV = normalize(-mv.xyz); gl_Position = projectionMatrix * mv; }`;
+    const streak = `float f = fract((vD * uDir - uTime * uSpeed + uOff) / uSpacing); float s = pow(f, 16.0) * (1.0 - smoothstep(0.985, 1.0, f));`;
+    const core = new THREE.ShaderMaterial({ uniforms: U, vertexShader: vs, fragmentShader: `varying float vD; varying vec3 vN; varying vec3 vV;
+      uniform float uTime, uLevel, uDir, uSpacing, uSpeed, uOff; uniform vec3 uIdle, uLive, uHot;
+      void main() { ${streak}
+        float rim = 0.55 + 0.45 * abs(dot(vN, vV));
+        vec3 c = mix(uIdle, uLive, uLevel * 0.55) * rim; c = mix(c, uHot, uLevel * min(1.0, s * 1.6));
+        gl_FragColor = vec4(c, 1.0);
+#include <colorspace_fragment>
+
+      }` });
+    const sleeve = new THREE.ShaderMaterial({ uniforms: U, transparent: true, depthWrite: false, vertexShader: vs, fragmentShader: `varying float vD; varying vec3 vN; varying vec3 vV;
+      uniform float uTime, uLevel, uDir, uSpacing, uSpeed, uOff; uniform vec3 uLive;
+      void main() { ${streak}
+        float edge = pow(abs(dot(vN, vV)), 2.2);
+        gl_FragColor = vec4(uLive, uLevel * edge * (0.06 + 0.7 * s));
+#include <colorspace_fragment>
+
+      }` });
+    const m = new THREE.Mesh(new THREE.TubeGeometry(curve, 64, r, 8), core);
+    const g = new THREE.Mesh(new THREE.TubeGeometry(curve, 64, r * 4.5, 10), sleeve);
+    scene.add(m, g);
+    return { mesh: m, curve, len, set(level, dir, time) { U.uLevel.value = level; U.uDir.value = dir; U.uTime.value = time; g.visible = level > 0.01; } };
+  }
+  // a timber power pole with a crossarm (along z) and two insulators; returns the conductor attachment points
+  function pole(parent, x, y, z, h = 7.5, { lamp = false } = {}) {
+    const g = new THREE.Group(); parent.add(g);
+    box(g, 0.3, h, 0.3, x, y, z, { edges: E.main });
+    box(g, 0.22, 0.22, 2.0, x, y + h - 0.65, z, { edges: E.main });
+    for (const dz of [-0.75, 0.75]) box(g, 0.14, 0.32, 0.14, x, y + h - 0.43, z + dz, { edges: E.mid });
+    let light = null;
+    if (lamp) { // a street light on an arm reaching over the street (+z)
+      box(g, 0.12, 0.12, 1.6, x, y + h - 2.2, z + 0.95, { edges: E.main });
+      box(g, 0.5, 0.18, 0.7, x, y + h - 2.35, z + 1.75, { edges: E.main });
+      const lm = new THREE.MeshBasicMaterial({ color: col(pal.right) }); const lens = new THREE.Mesh(new THREE.PlaneGeometry(0.42, 0.6), lm); lens.rotation.x = Math.PI / 2; lens.position.set(x, y + h - 2.36, z + 1.75); g.add(lens);
+      const halo = new THREE.Sprite(new THREE.SpriteMaterial({ map: glowTex, color: VOLT, transparent: true, opacity: 0, depthWrite: false })); halo.scale.set(3.2, 3.2, 1); halo.position.set(x, y + h - 2.6, z + 1.75); g.add(halo);
+      const pool = new THREE.Mesh(new THREE.CircleGeometry(1.9, 40), new THREE.MeshBasicMaterial({ map: glowTex, color: VOLT, transparent: true, opacity: 0, depthWrite: false })); pool.rotation.x = -Math.PI / 2; pool.position.set(x, y + 0.03, z + 1.75); g.add(pool);
+      light = (v) => { lm.color.copy(col(pal.right)).lerp(col(pal.voltSoft), v); halo.material.opacity = v * 0.55; pool.material.opacity = v * 0.35; };
+    }
+    const top = y + h - 0.27;
+    return { group: g, a: V(x, top, z - 0.75), b: V(x, top, z + 0.75), light };
+  }
+  // a low-poly street tree
+  function tree(parent, x, y, z, s = 1) {
+    const g = new THREE.Group(); parent.add(g);
+    box(g, 0.18 * s, 1.4 * s, 0.18 * s, x, y, z, { edges: E.main });
+    const geo = new THREE.IcosahedronGeometry(1.15 * s, 0); const m = new THREE.Mesh(geo, M.left);   // shares the street's faces, so it dims at dusk
+    m.position.set(x, y + 1.4 * s + 0.9 * s, z); m.add(new THREE.LineSegments(new THREE.EdgesGeometry(geo), E.main)); g.add(m);
+    return g;
+  }
+  return { M, E, INK, VOLT, col, edge, lines, box, windowsZ, windowsX, pitched, plinth, house, strata, shop, battery, panelStack, batteryStack, current, tray, ring, glowTex, wire, pole, tree };
 }
 
 /** An isometric stage on a canvas: renderer + ortho camera framed on a box. */
