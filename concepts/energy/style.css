@@ -92,7 +92,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 .cap:not(.on) svg, .cap:not(.on) b { display: none; }
 .cap:not(.on):hover { border-color: var(--volt); background: var(--volt-soft); }
 
-.copy { position: absolute; left: 48px; top: 164px; z-index: 4; max-width: 780px; }
+.copy { position: absolute; left: 48px; top: 164px; z-index: 4; max-width: 540px; }
 .eyebrow { display: flex; align-items: center; gap: 10px; font: 500 12px/1 "Geist Mono", monospace; letter-spacing: .08em; text-transform: uppercase; color: var(--mu); }
 .eyebrow i { width: 8px; height: 8px; background: var(--volt); box-shadow: 0 0 0 4px var(--volt-soft); }
 h1 { margin-top: 26px; font-weight: 500; font-size: clamp(44px, 4.5vw, 68px); line-height: 1.02; letter-spacing: -.035em; white-space: nowrap; }
