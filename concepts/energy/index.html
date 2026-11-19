@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CGF Energy — concept</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@1&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./style.css">
+<script type="importmap">
+{ "imports": {
+  "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js",
+  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"
+} }
+</script>
+</head>
+<body>
+
+<header class="nav">
+  <a class="logo" href="#" aria-label="CGF Energy home">
+    <svg viewBox="0 0 28 28" aria-hidden="true"><path d="M4 18h9l-3 6 14-14h-9l3-6z"/></svg>
+    CGF<span>Energy</span>
+  </a>
+  <nav aria-label="Main">
+    <a href="#" aria-current="page">Network</a><a href="#">Solar &amp; batteries</a><a href="#">Business</a><a href="#">Apartments</a><a href="#">About</a>
+  </nav>
+  <div class="live" aria-label="Sydney grid right now: 64 percent renewable">
+    <svg viewBox="0 0 64 18" aria-hidden="true"><polyline id="spark" points=""/></svg>
+    <span><b id="pct">64%</b> renewable now</span>
+  </div>
+  <a class="nav-cta" href="#">Check my address</a>
+</header>
+
+<main>
+<section class="hero" aria-labelledby="h1">
+  <canvas id="iso" aria-hidden="true"></canvas>
+  <div class="overlay" id="overlay"></div>
+
+  <div class="copy">
+    <p class="eyebrow"><i></i>Sydney’s community energy network</p>
+    <h1 id="h1">Power that flows <em>both ways.</em></h1>
+    <p class="lede">Your solar feeds your street. Your battery backs up the grid. We connect homes, apartments and businesses into one local network, and pay you for the energy you share.</p>
+    <div class="actions">
+      <a class="btn" href="#">Check my address</a>
+      <a class="link" href="#">How it works <span>↗</span></a>
+    </div>
+  </div>
+
+  <div class="legend" role="group" aria-label="Show the energy flow">
+    <p>Pick a property. Watch the energy move.</p>
+    <div class="chips" id="chips"></div>
+  </div>
+</section>
+</main>
+
+<script type="module" src="./iso.js"></script>
+<script>
+  // live readout in the nav: a gently moving sparkline (illustrative values)
+  (() => {
+    const pts = Array.from({ length: 16 }, (_, i) => 55 + Math.sin(i / 2) * 6 + Math.random() * 4);
+    const el = document.getElementById('spark'), pct = document.getElementById('pct');
+    const draw = () => { el.setAttribute('points', pts.map((v, i) => `${(i * 64) / 15},${18 - ((v - 44) / 28) * 18}`).join(' ')); pct.textContent = Math.round(pts.at(-1)) + '%'; };
+    draw();
+    if (!matchMedia('(prefers-reduced-motion: reduce)').matches) setInterval(() => { pts.shift(); pts.push(Math.max(48, Math.min(70, pts.at(-1) + (Math.random() - 0.48) * 4))); draw(); }, 1600);
+  })();
+</script>
+</body>
+</html>

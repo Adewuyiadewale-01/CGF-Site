@@ -1,5 +1,5 @@
-// Isometric hero: Sydney properties on white plinths, all wired back to the CGF depot.
-// Pick a property and current runs along its cable to it.
+// Isometric hero: a local energy network. Homes, apartments and businesses on white plinths,
+// all connected to a community battery. Pick one and watch the energy move (solar flows back).
 import * as THREE from 'three';
 import { Line2 } from 'three/addons/lines/Line2.js';
 import { LineMaterial } from 'three/addons/lines/LineMaterial.js';
@@ -132,14 +132,16 @@ function shop(x, y, z) {
   boxAt(g, 1.6, 0.6, 1.2, x + 2, y + 2.8, z - 1, { edges: e });                             // AC units
   return [e];
 }
-function depot(x, y, z) {
+function battery(x, y, z) {
+  // community battery: two cabinets on a pad, ribbed doors, a small transformer
   const e = liveEdges(), f = new THREE.LineBasicMaterial({ color: INK.clone(), transparent: true, opacity: 0.4 });
   const g = new THREE.Group(); scene.add(g);
-  boxAt(g, 4.2, 2.4, 3.4, x, y, z, { edges: e });
-  const s = []; for (let i = 0; i <= 6; i++) { const yy = y + 0.2 + i * 0.28; s.push(V(x - 1.7, yy, z + 1.71), V(x + 0.3, yy, z + 1.71)); } lines(g, s, f);  // roller door
-  boxAt(g, 1.8, 0.5, 0.1, x + 1.0, y + 2.4, z + 1.2, { edges: e });                         // sign
-  // van
-  boxAt(g, 1.2, 0.9, 2.4, x + 3.2, y, z + 2.2, { edges: e }); boxAt(g, 1.1, 0.5, 0.9, x + 3.2, y + 0.9, z + 1.6, { edges: e });
+  boxAt(g, 6.4, 0.25, 4.4, x + 0.6, y, z + 0.4, { edges: e });                              // pad
+  for (const dx of [-0.9, 1.9]) {
+    boxAt(g, 2.4, 2.6, 2.6, x + dx, y + 0.25, z, { edges: e });
+    const s = []; for (let i = 1; i < 6; i++) { const xx = x + dx - 1.2 + i * 0.4; s.push(V(xx, y + 0.5, z + 1.31), V(xx, y + 2.6, z + 1.31)); } lines(g, s, f);
+  }
+  boxAt(g, 1.2, 1.4, 1.2, x + 3.4, y + 0.25, z + 1.6, { edges: e });                         // transformer
   return [e];
 }
 
@@ -155,7 +157,7 @@ for (const k in P) plinth(P[k].c[0], P[k].c[1], P[k].size, P[k].top, k !== 'stra
 
 const S = 1.35;
 const live = {
-  depot: depot(0.6, P.depot.top, -2.4),
+  depot: battery(0.2, P.depot.top, -2.0),
   homes: house(-2.4, P.homes.top, 17.6, S),
   strata: strata(16.1, P.strata.top, -30.9),
   business: shop(17.8, P.business.top, -8),
@@ -224,30 +226,23 @@ function pointAt(c, t) { const d = t * c.total; let i = 1; while (i < c.lens.len
 /* ---------- capsules + italic tags (HTML, anchored to scene points) ---------- */
 const overlay = document.getElementById('overlay');
 const ITEMS = [
-  { k: 'homes',    name: 'Homes',      stat: '1,200+', at: V(-2.4, 12, 17.6),  leader: 30 },
-  { k: 'business', name: 'Business',   stat: '24/7',   at: V(17.8, 14, -8),    leader: 30 },
-  { k: 'strata',   name: 'Strata',     stat: '60',     at: V(16.1, 36, -30.9), leader: 30 },
-  { k: 'solar',    name: 'Solar + EV', stat: '6.6 kW', at: V(-19.4, 9, 26.1),  leader: 30 },
+  { k: 'homes',    name: 'Homes',         stat: '3.2 kWh', at: V(-2.4, 12, 17.6) },
+  { k: 'business', name: 'Business',      stat: '96 kWh',  at: V(17.8, 14, -8) },
+  { k: 'strata',   name: 'Apartments',    stat: '41 kWh',  at: V(16.1, 36, -30.9) },
+  { k: 'solar',    name: 'Rooftop solar', stat: '+6.6 kW', at: V(-19.4, 9, 26.1) },
 ];
 const figure = '<svg viewBox="0 0 26 40" aria-hidden="true"><path class="a" d="M13 1a5 5 0 1 1 0 10a5 5 0 1 1 0-10zM5 13h16a3 3 0 0 1 3 3v11h-4v12h-5V27h-4v12H6V27H2V16a3 3 0 0 1 3-3z"/><path class="b" d="M13 20h-8v7h1v12h5V27h2zm0 0h8v7h-1v12h-5V27h-2z" opacity=".95"/></svg>';
 const bolt = '<svg viewBox="0 0 26 40" aria-hidden="true"><path class="a" d="M16 1L3 23h9l-2 16 13-22h-9z"/><path class="b" d="M12 23l-2 16 13-22h-6z"/></svg>';
+const LEADER = 30;
 const caps = ITEMS.map((it) => {
   const b = document.createElement('button'); b.className = 'cap'; b.type = 'button';
   b.setAttribute('aria-label', `Show the circuit to ${it.name}`);
   b.innerHTML = (it.k === 'solar' ? bolt : figure) + `<b>${it.stat}</b>`;
-  b.style.setProperty('--leader', it.leader + 'px');
+  b.style.setProperty('--leader', LEADER + 'px');
   b.addEventListener('click', () => select(it.k, true));
   overlay.appendChild(b); return { ...it, el: b };
 });
-const TAGS = [
-  { text: 'Within 30 min', at: V(1.4 + 9.9, 6, -1.4 + 9.9) },
-  { text: 'Within 60 min', at: V(1.4 + 19, 6, -1.4 + 19) },
-  { text: 'CGF depot', at: V(-3.2, 6, 3.6) },
-  { text: 'Solar + EV homes', at: V(-23.4, -2.5, 32.4), slant: true },
-  { text: 'Homes', at: V(-6.4, 0.5, 23.9), slant: true },
-  { text: 'Shops & offices', at: V(13, 1.5, -1.6), slant: true },
-  { text: 'Strata buildings', at: V(11, 13, -24.9), slant: true },
-];
+const TAGS = []; // labels kept to the capsules only
 const tags = TAGS.map((t) => { const s = document.createElement('span'); s.className = 'tag' + (t.slant ? ' slant' : ''); s.textContent = t.text; overlay.appendChild(s); return { ...t, el: s }; });
 
 const chipsEl = document.getElementById('chips');
@@ -298,7 +293,7 @@ function frame() {
     c.mat.opacity = c.level;
     for (const p of c.pulses) {
       if (c.level < 0.02 || reduced) { p.m.opacity = 0; continue; }
-      const u = (p.off + t * (9 / c.total)) % 1; p.s.position.copy(pointAt(c, u)); p.m.opacity = c.level * Math.sin(u * Math.PI);
+      const f = (p.off + t * (9 / c.total)) % 1, u = k === 'solar' ? 1 - f : f; p.s.position.copy(pointAt(c, u)); p.m.opacity = c.level * Math.sin(u * Math.PI);
     }
   }
   for (const [k, mats] of Object.entries(live)) {
@@ -308,8 +303,9 @@ function frame() {
 
   for (const c of caps) {
     tmp.copy(c.at).project(camera);
-    const lift = c.k === active ? -6 : 0;
-    c.el.style.transform = `translate(${((tmp.x + 1) / 2) * W - 29}px, ${((1 - tmp.y) / 2) * H - 90 + lift}px)`;
+    // capsule bottom sits LEADER px above the anchor; inactive ones collapse to a dot
+    const x = ((tmp.x + 1) / 2) * W, y = ((1 - tmp.y) / 2) * H + 30;
+    c.el.style.transform = `translate(${x - c.el.offsetWidth / 2}px, ${y - c.el.offsetHeight - LEADER}px)`;
   }
   for (const g of tags) { tmp.copy(g.at).project(camera); g.el.style.transform = `translate(${((tmp.x + 1) / 2) * W}px, ${((1 - tmp.y) / 2) * H}px) rotate(${g.slant ? 30 : 0}deg)`; }
 
