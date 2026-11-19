@@ -64,3 +64,51 @@ function pick(f) {
 }
 pick('graphite');
 $$('.car', range).forEach((c) => c.addEventListener('click', () => pick(c.dataset.f)));
+
+/* inside Vyre One: the router comes apart as you scroll through the section, captions on leader lines */
+const insideSec = $('#inside');
+if (insideSec) new IntersectionObserver(async ([e], o) => {
+  if (!e.isIntersecting) return; o.disconnect();
+  let mods; try { mods = await Promise.all([import('./vyre.js'), import('./inside.js')]); } catch { document.documentElement.classList.add('no-webgl'); return; }
+  const [{ makeStage, THREE }, { vyreInside }] = mods, canvas = $('#inside3d'), stage = $('#insideStage'), svg = $('#leaders');
+  // the background is pre-brightened so that, after filmic tone mapping, it lands exactly on the panel's #262322
+  let st; try { st = makeStage(canvas, { bg: '#363432', bloom: 0.7, fov: 26 }); } catch { document.documentElement.classList.add('no-webgl'); return; }
+  const v = vyreInside(st), parts = $$('#parts li'), NS = 'http://www.w3.org/2000/svg', pv = new THREE.Vector3(), box = new THREE.Box3(), right = new THREE.Vector3();
+  const lines = parts.map(() => { const l = document.createElementNS(NS, 'line'), c = document.createElementNS(NS, 'circle'); c.setAttribute('r', 4); svg.append(l, c); return { l, c }; });
+  const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x)), ease = (x) => x * x * (3 - 2 * x);
+  let t = 0, px = 0, tx = 0, on = true;
+  addEventListener('pointermove', (ev) => { tx = ev.clientX / innerWidth * 2 - 1; });
+  new IntersectionObserver(([en]) => { on = en.isIntersecting; }).observe(insideSec);
+  addEventListener('resize', () => st.resize());
+  const tick = (now) => {
+    requestAnimationFrame(tick); if (!on) return;
+    const r = insideSec.getBoundingClientRect(), p = clamp(-r.top / Math.max(1, r.height - innerHeight));
+    t += ((reduced ? 0.85 : ease(clamp((p - 0.06) / 0.72))) - t) * 0.1; px += (tx - px) * 0.05;
+    const aspect = canvas.clientWidth / Math.max(1, canvas.clientHeight);
+    // a gentle orbit that keeps the shell halves parting sideways, never toward the camera
+    v.set(t, { az: -0.25 + p * 0.6 + px * 0.1, time: now / 1000, aspect }); st.render();
+    // captions: each part is labelled once it has come apart; leaders run to its outer edge
+    const ox = canvas.offsetLeft, narrow = stage.clientWidth < 700;
+    right.set(1, 0, 0).applyQuaternion(st.camera.quaternion);
+    const cur = parts.filter((li, i) => t > 0.1 + i * 0.12).at(-1);
+    // where each part's outer edge lands on screen, then caption tops that never overlap on a side
+    const anchors = parts.map((li, i) => {
+      box.setFromObject(v.layers[i]); box.getCenter(pv);
+      const half = Math.max(box.max.x - box.min.x, box.max.z - box.min.z) / 2;
+      pv.addScaledVector(right, li.dataset.side === 'l' ? -half : half); pv.project(st.camera);
+      return [ox + (pv.x + 1) / 2 * canvas.clientWidth, (1 - pv.y) / 2 * canvas.clientHeight];
+    });
+    const tops = []; const lastBottom = { l: -1e9, r: -1e9 };
+    parts.forEach((li, i) => { const sd = li.dataset.side, want = clamp(anchors[i][1] - 22, 0, stage.clientHeight - li.offsetHeight); tops[i] = Math.max(want, lastBottom[sd] + 14); lastBottom[sd] = tops[i] + li.offsetHeight; });
+    for (const sd of ['l', 'r']) { const over = lastBottom[sd] - stage.clientHeight; if (over > 0) parts.forEach((li, i) => { if (li.dataset.side === sd) tops[i] = Math.max(0, tops[i] - over); }); }
+    parts.forEach((li, i) => {
+      const left = li.dataset.side === 'l', shown = t > 0.1 + i * 0.12, [x, y] = anchors[i];
+      li.classList.toggle('in', shown); li.classList.toggle('cur', li === cur);
+      const top = tops[i]; li.style.top = top + 'px';
+      const ex = left ? li.offsetLeft + li.offsetWidth + 18 : li.offsetLeft - 18, L = lines[i];
+      L.l.setAttribute('x1', ex); L.l.setAttribute('y1', top + 22); L.l.setAttribute('x2', x); L.l.setAttribute('y2', y); L.c.setAttribute('cx', x); L.c.setAttribute('cy', y);
+      L.l.style.opacity = L.c.style.opacity = shown && !narrow ? 1 : 0;
+    });
+  };
+  st.resize(); requestAnimationFrame(tick);
+}, { rootMargin: '800px' }).observe(insideSec);

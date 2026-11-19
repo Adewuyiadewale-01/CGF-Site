@@ -340,3 +340,39 @@ h1, h2, blockquote { font-family: var(--serif); font-weight: 400; }
   .car img { height: 150px; } .c1 { left: 19%; } .c3 { left: 81%; } .car.on .nm { transform: translateY(-20px); }
   .range { height: 400px; }
 }
+
+/* ---------- 6b inside vyre one: a sticky dark panel; the router comes apart as you scroll ---------- */
+.inside { position: relative; height: 300vh; margin-top: var(--gap); }
+.inside-panel { position: sticky; top: 72px; height: calc(100svh - 80px); min-height: 720px; margin-top: 0; display: grid; grid-template-rows: auto 1fr auto; padding: 56px 72px 32px; }
+.inside-head { text-align: center; }
+.inside-head h2 { margin-top: 4px; font-size: 48px; line-height: 48px; letter-spacing: -.01em; }
+.inside-stage { position: relative; min-height: 0; margin: 12px 0 20px; }
+.inside-stage canvas, .inside-stage .still { position: absolute; left: 0; top: 0; width: 100%; height: 100%; object-fit: contain; }
+.leaders { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
+.leaders line { stroke: rgba(255,255,251,.32); stroke-width: 1; transition: opacity .4s; }
+.leaders circle { fill: var(--brand); stroke: rgba(255,255,251,.9); stroke-width: 1.5; transition: opacity .4s; }
+.parts { list-style: none; }
+.parts li { position: absolute; top: 0; width: 280px; display: grid; gap: 4px; opacity: 0; transform: translateY(8px); transition: opacity .5s, transform .5s; }
+.parts li.in { opacity: 1; transform: none; }
+.parts li[data-side="l"] { left: 0; text-align: right; justify-items: end; }
+.parts li[data-side="r"] { right: 0; }
+.parts span { font: 500 12px/15px var(--sans); color: #8D8AFF; }
+.parts b { font: 400 24px/30px var(--serif); color: var(--on-dark); }
+.parts small { font-size: 14px; line-height: 20.3px; color: var(--on-dark-2); }
+.inside-specs { display: grid; grid-template-columns: repeat(4, 1fr); border-top: 1px solid rgba(255,255,251,.12); }
+.inside-specs div { padding: 18px 0 4px; display: grid; gap: 4px; text-align: center; }
+.inside-specs div + div { border-left: 1px solid rgba(255,255,251,.12); }
+.inside-specs dt { font-size: 14px; color: var(--on-dark-2); } .inside-specs dd { font: 500 20px/24px var(--sans); color: var(--on-dark); }
+.inside-stage .still { display: none; } .no-webgl .inside-stage .still { display: block; } .no-webgl #inside3d { display: none; }
+@media (max-width: 1080px) { .parts li { width: 220px; } .inside-panel { padding: 48px 32px 24px; } }
+@media (max-width: 760px) {
+  .inside { height: 260vh; }
+  .inside-panel { top: 64px; height: calc(100svh - 72px); min-height: 0; padding: 32px 16px 16px; }
+  .inside-head h2 { font-size: 32px; line-height: 34px; } .inside-head h2 br { display: none; }
+  .inside-stage canvas, .inside-stage .still { width: 100%; height: calc(100% - 112px); }
+  .parts li { left: 0 !important; right: 0 !important; top: auto !important; bottom: 0; width: auto; text-align: center !important; justify-items: center !important; padding: 12px 16px; border-radius: 12px; background: rgba(38,35,34,.86); backdrop-filter: blur(8px); }
+  .parts li:not(.cur) { opacity: 0 !important; }
+  .parts b { font-size: 20px; line-height: 24px; }
+  .inside-specs { grid-template-columns: repeat(2, 1fr); } .inside-specs div:nth-child(3) { border-left: 0; }
+  .inside-specs dd { font-size: 16px; }
+}

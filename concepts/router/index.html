@@ -9,6 +9,12 @@
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Newsreader:opsz,wght@6..72,400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="./style.css">
+<script type="importmap">
+{ "imports": {
+  "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js",
+  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"
+} }
+</script>
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
@@ -173,6 +179,32 @@
     <button class="car c3" type="button" data-f="cobalt"><span class="nm">Cobalt</span><img src="./assets/cut-cobalt.png" alt="Vyre One in cobalt"></button>
   </div>
   <div class="tailor"><span>Tailored to your home</span><a href="#coverage">Apartments <i>↗</i></a><a href="#coverage">Houses <i>↗</i></a></div>
+</section>
+
+<!-- 6b inside vyre one: the router comes apart as you scroll -->
+<section class="inside" id="inside" aria-labelledby="in-h">
+  <div class="panel inside-panel dark">
+    <header class="inside-head">
+      <p class="eyebrow">Inside Vyre One</p>
+      <h2 id="in-h">Built like a studio monitor. <br>Quiet as a bookshelf.</h2>
+    </header>
+    <div class="inside-stage" id="insideStage">
+      <canvas id="inside3d" aria-label="Vyre One taken apart: glass top, shell, antenna array, heat sink, mainboard and foot"></canvas>
+      <img class="still" src="./assets/inside-100.jpg" alt="Vyre One taken apart into its six parts">
+      <svg class="leaders" id="leaders" aria-hidden="true"></svg>
+      <ol class="parts" id="parts">
+        <li data-side="l"><span>01</span><b>Glass top</b><small>128 vents breathe heat out the top. The ring of light shows status at a glance.</small></li>
+        <li data-side="r"><span>02</span><b>Milled shell</b><small>87% recycled aluminium, milled into ribs that shed heat. No fan, ever.</small></li>
+        <li data-side="l"><span>03</span><b>Antenna array</b><small>12 antennas, tri-band Wi-Fi 7, steering a beam to each device. The light guide runs alongside.</small></li>
+        <li data-side="r"><span>04</span><b>Heat sink</b><small>Radial fins on a copper core keep the chip cool at full load, in silence.</small></li>
+        <li data-side="l"><span>05</span><b>Mainboard</b><small>A quad-core routing engine with 4 GB of memory, planning 23 lanes at once.</small></li>
+        <li data-side="r"><span>06</span><b>Foot</b><small>Weighted and rubberised. 10 Gb fibre in and four 2.5 Gb ports out, hidden underneath.</small></li>
+      </ol>
+    </div>
+    <dl class="inside-specs">
+      <div><dt>Wi-Fi</dt><dd>7 · tri-band</dd></div><div><dt>Antennas</dt><dd>12</dd></div><div><dt>Fibre in</dt><dd>10 Gb</dd></div><div><dt>Noise</dt><dd>0 dB · fanless</dd></div>
+    </dl>
+  </div>
 </section>
 
 <!-- 7 for work -->

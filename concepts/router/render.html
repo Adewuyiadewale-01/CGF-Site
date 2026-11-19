@@ -26,6 +26,10 @@
     st = makeStage(c, { bg: '#E3DDD2', bloom: 0, fov: 26, preserve: true, exposure: 0.82 });
     const s = studioScene(st, asset === 'single' ? [q.get('f') || 'graphite'] : undefined);
     if (asset === 'single') { st.camera.position.set(0, 2.0, 6.2); st.camera.lookAt(0, 1.1, 0); }
+  } else if (asset === 'inside') {
+    const { vyreInside } = await import('./inside.js');
+    st = makeStage(c, { bg: '#363432', bloom: 0.7, fov: 26, preserve: true });
+    st.resize(); const v = vyreInside(st); v.set(t, { az: +(q.get('az') ?? 0.35), time: 1, aspect: c.clientWidth / c.clientHeight });
   } else if (asset === 'cut') {
     // one finish on a transparent background with a soft contact shadow, for compositing
     st = makeStage(c, { bg: null, bloom: 0, fov: 24, preserve: true, exposure: 0.9 });
