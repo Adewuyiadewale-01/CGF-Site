@@ -1,7 +1,7 @@
 // Nanomantic full site: smooth scroll, reveals, and the live 3D sections.
 // One loop drives everything: each section reads its own scroll progress and renders only while on screen.
 import { THREE, V, makeStage } from './kit.js';
-import { street, exploded } from './scenes.js';
+import { street, exploded, diorama } from './scenes.js';
 
 const $ = (s, el = document) => el.querySelector(s);
 const $$ = (s, el = document) => [...el.querySelectorAll(s)];
@@ -87,44 +87,79 @@ view($('#panel3d'), { viewH: 16, look: V(0, 4.2, 0) }, (st) => {
   };
 });
 
-/* 04: a day on one street; scrolling moves the clock */
+/* 04: a flight down one street. Scroll moves a perspective camera between five close-ups,
+   and the street's day (noon export -> evening import -> paid) follows the camera. */
 const how = $('.how');
-view($('#street3d'), { viewH: 36, look: V(2.5, 3, 0), az: 0.5, el: 0.5 }, (st) => {
-  const s = street(st), steps = $$('#steps li'), canvas = st.renderer.domElement;
-  const chips = { flow: $('[data-at="h1"]'), bat: $('[data-at="bat"]'), paid: $('[data-at="h2"]') };
-  const el = { flowL: $('#chipFlowLabel'), flow: $('#chipFlow'), bat: $('#chipBat'), sun: $('#chipSun'), sunL: $('#chipSunLabel'), paid: $('#chipPaid'), fill: $('#clockFill'), knob: $('#clockKnob') };
-  let ph = 0, step = -1;
-  const fit = () => { const a = canvas.clientWidth / Math.max(1, canvas.clientHeight); st.view.viewH = a < 1.25 ? 36 * 1.25 / a : 36; st.project(); };
-  fit();
-  $$('#steps button').forEach((b) => b.addEventListener('click', () => {
-    const r = how.getBoundingClientRect(), top = scrollY + r.top, span = r.height - innerHeight;
-    const target = top + span * ([0.1, 0.35, 0.62, 0.9][+b.dataset.step]);
-    lenis ? lenis.scrollTo(target, { duration: 1.2 }) : scrollTo({ top: target, behavior: 'smooth' });
+view($('#street3d'), { fov: 32 }, (st) => {
+  const s = street(st), cam = st.camera, chs = $$('#chapters .ch'), rail = $$('#rail li'), N = chs.length;
+  st.scene.fog = new THREE.Fog(new THREE.Color(getComputedStyle(root).getPropertyValue('--bg').trim()), 40, 120);
+  const readout = $('#readout'), rtext = $('#readoutText'), credits = $$('#credits span');
+  const r = { export: $('#r-export'), charge: $('#r-charge'), import: $('#r-import'), paid: $('#r-paid') };
+  // camera stops: [position, look-at, street phase, readout anchor]
+  const K = [
+    [V(-11, 8.6, 14.5), V(-22.5, 3.0, 1.5), 0.5, V(-19.2, 4.9, 0)],      // 01 roof close-up
+    [V(-3.5, 5.6, 13), V(-7.5, 1.4, 3.9), 0.75, V(-6, 1.6, 3.9)],         // 02 along the tray
+    [V(11, 9, 17), V(-1.5, 2.6, 1.5), 1.0, V(1.9, 5.8, -0.8)],         // 03 the battery
+    [V(16, 15, 27), V(1, 2.6, 0), 2.35, V(-9.6, 5.1, -0.6)],              // 04 evening, pulled back
+    [V(-2, 40, 40), V(-2, 0, -4), 3.05, V(13.5, 15.6, -1.4)],           // 05 high and wide
+  ];
+  const readouts = (ph) => [
+    'Panel array · 6.6 kW · ' + Math.round(1020 * clamp(1.4 - ph)) + ' W/m²',
+    'Street cable · 415 V · flowing east',
+    'Street battery · ' + Math.round(clamp(ph / 1.1) * 100) + '% · charging',
+    'Home 14 · from the battery · 1.9 kW',
+    'This street today · 61 homes · +$146.20',
+  ];
+  const pos = new THREE.Vector3(), look = new THREE.Vector3(), tmpL = new THREE.Vector3();
+  let k = 0, chOn = -1, ph = 0;
+  rail.forEach((li) => li.querySelector('button')?.addEventListener('click', () => {
+    const rr = how.getBoundingClientRect(), top = scrollY + rr.top, span = rr.height - innerHeight;
+    const target = top + span * (+li.querySelector('button').dataset.ch + 0.5) / N;
+    if (lenis) lenis.scrollTo(target, { duration: 1.6 }); else scrollTo({ top: target, behavior: 'smooth' });
   }));
   return {
-    fit,
     tick(time, dt) {
-      const target = reduced ? 0.6 : stickyProgress(how) * 3.5;
-      ph += (target - ph) * Math.min(1, dt * 5);
+      const p = reduced ? 0.1 : stickyProgress(how);
+      // hold on each stop through the middle of its slice; travel between stops at the edges
+      const x = clamp(p * N - 0.5, 0, N - 1), i = Math.min(N - 2, Math.floor(x)), f = x - i;
+      const hold = 0.28, target = i + ease(clamp((f - hold) / (1 - 2 * hold)));
+      k += (target - k) * Math.min(1, dt * 4.5);
+      const a = Math.min(N - 2, Math.floor(k)), t = k - a;
+      pos.lerpVectors(K[a][0], K[a + 1][0], t); look.lerpVectors(K[a][1], K[a + 1][1], t);
+      ph = K[a][2] + (K[a + 1][2] - K[a][2]) * t;
+      // tall (phone) screens: back the camera off so the subject still fits
+      const aspect = st.renderer.domElement.clientWidth / Math.max(1, st.renderer.domElement.clientHeight);
+      if (aspect < 1.2) pos.sub(look).multiplyScalar(1 + (1.2 - aspect) * 1.1).add(look);
+      pos.x += pointer.x * 1.6; pos.y -= pointer.y * 1.0;
+      cam.position.copy(pos); cam.lookAt(look);
       s.set(ph, time, dt);
-      st.view.az = 0.5 + pointer.x * 0.08; st.view.el = 0.5 - pointer.y * 0.04; st.place();
-      const k = ph < 0.9 ? 0 : ph < 1.7 ? 1 : ph < 2.8 ? 2 : 3;
-      if (k !== step) { step = k; steps.forEach((li, i) => li.classList.toggle('on', i === k)); }
-      // clock: 11:00 at the start of the scroll, 21:30 at the end
-      const hrs = 11 + ph * 3.0, pct = clamp((hrs - 6) / 18) * 100;
-      el.fill.style.width = pct + '%'; el.knob.style.left = pct + '%';
-      const hh = Math.floor(hrs), mm = Math.floor((hrs - hh) * 60 / 5) * 5, clock = `${String(hh).padStart(2, '0')}:${String(mm).padStart(2, '0')}`;
-      const irr = Math.max(0, Math.sin((hrs - 6) / 13 * Math.PI)) * 1050;
-      el.sunL.textContent = irr > 30 ? 'Sun' : 'Dusk'; el.sun.textContent = irr > 30 ? `${clock} · ${Math.round(irr).toLocaleString()} W/m²` : `${clock} · street on battery`;
-      const exporting = ph < 1.7;
-      el.flowL.textContent = exporting ? 'Exporting' : 'From the battery';
-      el.flow.textContent = exporting ? `+${(3.4 * irr / 1050 + 0.2).toFixed(1)} kW` : `−${(1.2 + 0.9 * clamp((ph - 1.7) / 0.6)).toFixed(1)} kW`;
-      const charge = exporting ? Math.min(100, ph / 1.1 * 100) : 100 - (ph - 1.7) / 1.4 * 75;
-      el.bat.textContent = Math.round(clamp(charge, 0, 100)) + '%';
-      el.paid.textContent = '+$' + (2.4 * clamp((ph - 2.7) / 0.6)).toFixed(2);
-      chips.paid.style.opacity = clamp((ph - 2.7) * 3);
-      const place = (chip, key, dy = 26) => { const [x, y] = toScreen(st, s.anchors[key]); chip.style.transform = `translate(${x}px, ${y - dy}px) translate(-50%, -100%)`; };
-      place(chips.flow, 'h1'); place(chips.bat, 'bat', 30); place(chips.paid, 'h2', 70);
+      // chapter text
+      const c = Math.round(k);
+      if (c !== chOn) {
+        chOn = c;
+        chs.forEach((el, j) => { el.classList.toggle('on', j === c); el.classList.toggle('past', j < c); });
+        rail.forEach((li, j) => li.classList.toggle('on', j === c));
+      }
+      // the readout follows the subject of the current stop, and hides while the camera travels
+      tmpL.lerpVectors(K[a][3], K[a + 1][3], t);
+      const [rx0, ry] = toScreen(st, tmpL), half = readout.offsetWidth / 2 + 12, rx = clamp(rx0, half, innerWidth - half);
+      readout.style.transform = 'translate(' + rx + 'px, ' + (ry - 30) + 'px) translate(-50%, -100%)';
+      readout.style.opacity = (t < 0.15 || t > 0.85) ? 1 : 0;
+      rtext.textContent = readouts(ph)[c];
+      // live figures in the chapter specs
+      const irr = clamp(1.4 - ph);
+      r.export.textContent = '+' + (3.4 * irr + 0.2).toFixed(1) + ' kW';
+      r.charge.textContent = Math.round(clamp(ph / 1.1) * 100) + '%';
+      r.import.textContent = (1.2 + 0.7 * clamp((ph - 1.8) / 0.5)).toFixed(1) + ' kW';
+      // credits float up off the roofs in the last chapter
+      const show = clamp((k - 3.4) / 0.5);
+      r.paid.textContent = '$' + (146.2 * show).toFixed(2);
+      credits.forEach((el, j) => {
+        const [cx, cy] = toScreen(st, s.anchors[el.dataset.at]);
+        const rise = (time * 0.35 + j * 0.27) % 1;
+        el.style.transform = 'translate(' + cx + 'px, ' + (cy - 20 - rise * 60) + 'px) translate(-50%, -100%)';
+        el.style.opacity = show * Math.sin(rise * Math.PI);
+      });
     },
   };
 });
@@ -243,15 +278,45 @@ const quote = $('#quote p'), words = [];
 quote.innerHTML = quote.textContent.split(' ').map((w) => `<span class="w">${w}</span>`).join(' ');
 words.push(...$$('.w', quote));
 
-/* ---------- 11 check your street (demo: no addresses leave the page) ---------- */
+/* ---------- 07 what we believe: photo drifts, the promise nearest the middle of the screen lights up ---------- */
+const believe = $('.believe'), beliefRows = $$('#beliefs li'), believeImg = $('.believe-photo img');
+function believeTick() {
+  const r = believe.getBoundingClientRect(); if (r.bottom < 0 || r.top > innerHeight) return;
+  if (!reduced) believeImg.style.setProperty('--py', (r.top * -0.12).toFixed(1) + 'px');
+  let best = -1, bestD = Infinity;
+  beliefRows.forEach((li, i) => { const b = li.getBoundingClientRect(), d = Math.abs(b.top + b.height / 2 - innerHeight * 0.52); if (d < bestD) { bestD = d; best = i; } });
+  beliefRows.forEach((li, i) => li.classList.toggle('on', i === best && bestD < innerHeight * 0.4));
+}
+
+/* ---------- 10 check your street: a live diorama; checking an address lights the street up (demo: nothing leaves the page) ---------- */
+let ctaFire = false, ctaLevel = 0;
+view($('#cta3d'), { viewH: 50, look: V(0, -1, 0), el: 0.62 }, (st) => {
+  const d = diorama(st); let lv = 0;
+  return {
+    tick(time, dt) {
+      lv += (ctaLevel - lv) * Math.min(1, dt * 3);
+      st.view.az = Math.PI / 4 + (reduced ? 0 : time * 0.06) + pointer.x * 0.15;
+      st.view.viewH = 50 - 6 * lv; st.project(); st.place();
+      d.set(lv, time, dt, ctaFire); ctaFire = false;
+    },
+  };
+});
 $('#check-form').addEventListener('submit', (e) => {
   e.preventDefault();
-  const v = $('#addr').value.trim(), outEl = $('#checkOut');
+  const v = $('#addr').value.trim(), outEl = $('#checkOut'), res = $('#result');
   if (v.length < 4) { outEl.textContent = 'Type a street address to check.'; outEl.classList.add('bad'); $('#addr').focus(); return; }
   outEl.classList.remove('bad');
   let h = 0; for (const c of v.toLowerCase()) h = (h * 31 + c.charCodeAt(0)) >>> 0;
-  const street = v.split(',')[0];
-  outEl.textContent = h % 3 ? `Good news: a battery is ${120 + h % 380} m from ${street}. You can join today.` : `No battery on ${street} yet. The next one is planned for ${['March', 'June', 'September'][h % 3]} 2027. Join the waitlist and we’ll tell you first.`;
+  const street = v.split(',')[0], live = h % 3 !== 0;
+  outEl.innerHTML = '<i class="live-dot"></i>' + (live ? 'Found it: ' : 'Not yet: ') + street.replace(/[<>&]/g, '');
+  $('#resK').textContent = live ? '● Battery on your street' : '○ Next battery here: ' + ['March', 'June', 'September'][h % 3] + ' 2027';
+  $('#resK').classList.toggle('wait', !live);
+  $('#resDist').textContent = live ? (120 + h % 380) + ' m' : (900 + h % 1400) + ' m';
+  $('#resHomes').textContent = live ? String(40 + h % 41) : (h % 30) + ' signed up';
+  $('#resCredit').textContent = '$' + (380 + h % 240) + ' / yr';
+  $('#resBtn').firstChild.textContent = live ? 'Reserve my spot ' : 'Join the waitlist ';
+  res.hidden = false;
+  ctaLevel = live ? 1 : 0.45; ctaFire = true;
 });
 
 /* ---------- the loop ---------- */
@@ -265,6 +330,7 @@ function loop(now) {
   const np = passProgress(net, 0.5); netImg.style.setProperty('--s', (1.14 - 0.1 * np).toFixed(4));
   const qp = reduced ? 1 : clamp((innerHeight * 0.85 - quote.getBoundingClientRect().top) / (innerHeight * 0.55));
   const lit = Math.round(qp * words.length); words.forEach((w, i) => w.classList.toggle('lit', i < lit));
+  believeTick();
   requestAnimationFrame(loop);
 }
 requestAnimationFrame(loop);

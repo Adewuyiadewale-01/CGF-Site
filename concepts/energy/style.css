@@ -201,7 +201,7 @@ html.lenis, html.lenis body { height: auto; }
 .nav.hide { transform: translateY(-110%); }
 
 .kicker { font: 500 12px/1 "Geist Mono", monospace; letter-spacing: .08em; text-transform: uppercase; color: var(--mu); }
-.sec h2, .how h2, .inside h2, .calc h2, .network h2, .faq h2, .cta h2 {
+.sec h2, .how h2, .inside h2, .calc h2, .network h2, .faq h2, .cta h2, .believe h2 {
   margin-top: 26px; font-weight: 500; font-size: clamp(36px, 3.9vw, 58px); line-height: 1.04; letter-spacing: -.035em; color: var(--headline);
 }
 h2 em { font-family: "Instrument Serif", serif; font-style: italic; font-weight: 400; letter-spacing: -.01em; font-size: 1.1em; color: var(--volt-headline); }
@@ -248,36 +248,40 @@ h2 em { font-family: "Instrument Serif", serif; font-style: italic; font-weight:
 .stat b { display: block; font-weight: 500; font-size: clamp(52px, 5vw, 76px); line-height: 1; letter-spacing: -.04em; color: var(--headline); font-variant-numeric: tabular-nums; }
 .stat p { margin-top: 16px; max-width: 230px; font-size: 15px; line-height: 1.55; color: var(--mu); }
 
-/* 04 how it works: sticky stage, the section's height is the scroll budget */
-.how { position: relative; height: 420vh; background: var(--face-top); }
-.how-sticky { position: sticky; top: 0; height: 100svh; display: grid; grid-template-columns: minmax(380px, 470px) 1fr; gap: 40px; padding: 110px 0 48px 48px; overflow: hidden; }
-.how-copy { display: flex; flex-direction: column; justify-content: center; gap: 0; }
-.how-copy h2 { margin-bottom: 40px; }
-.steps { list-style: none; }
-.steps button { display: grid; grid-template-columns: 34px 1fr; gap: 0 4px; width: 100%; padding: 18px 20px; text-align: left; border-left: 1px solid var(--hair); transition: background .35s, border-color .35s; }
-.steps .n { font: 400 11px/1.6 "Geist Mono", monospace; color: var(--mu); }
-.steps small { display: block; font: 400 10px/1 "Geist Mono", monospace; letter-spacing: .08em; text-transform: uppercase; color: var(--mu); margin-bottom: 8px; }
-.steps b { display: block; font-weight: 500; font-size: 20px; line-height: 1.25; letter-spacing: -.02em; color: var(--mu); transition: color .35s; }
-.steps .t > span { display: block; overflow: hidden; font-size: 15px; line-height: 1.55; color: var(--mu); }
-.steps .t > span { max-height: 0; opacity: 0; transition: max-height .5s cubic-bezier(.2,.8,.2,1), opacity .4s, margin .5s; }
-.steps li.on button { background: var(--tint); border-left: 3px solid var(--volt); padding-left: 18px; }
-.steps li.on .n { color: var(--volt); }
-.steps li.on b { color: var(--ink); }
-.steps li.on .t > span { max-height: 80px; opacity: 1; margin-top: 8px; }
-.clock { margin-top: 44px; }
-.clock-labels { display: flex; justify-content: space-between; font: 400 10px/1 "Geist Mono", monospace; color: var(--mu); margin-bottom: 12px; }
-.clock-track { position: relative; height: 2px; background: var(--hair); }
-.clock-track i { position: absolute; left: 0; top: 0; height: 2px; width: 30%; background: var(--volt); }
-.clock-track b { position: absolute; top: -5px; left: 30%; width: 12px; height: 12px; margin-left: -6px; border-radius: 50%; background: var(--face-top); border: 2px solid var(--volt); }
-.how-stage { position: relative; min-height: 0; }
-.how-stage canvas, .how-stage .still { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; -webkit-mask-image: linear-gradient(to bottom, #000 62%, transparent 92%); mask-image: linear-gradient(to bottom, #000 62%, transparent 92%); }
-.chips { position: absolute; inset: 0; pointer-events: none; }
-.chip { position: absolute; left: 0; top: 0; display: flex; align-items: center; gap: 8px; padding: 9px 14px 9px 12px; background: var(--face-top); border: 1px solid var(--hair); border-radius: 8px; box-shadow: 0 14px 30px -14px rgba(0, 21, 9, .22); white-space: nowrap; transition: opacity .4s; }
-.chip i { width: 6px; height: 6px; border-radius: 50%; background: var(--volt); animation: live 2s ease-in-out infinite; }
-.chip small { font: 400 10px/1 "Geist Mono", monospace; letter-spacing: .08em; text-transform: uppercase; color: var(--mu); }
-.chip b { font: 500 15px/1 "Geist", sans-serif; font-variant-numeric: tabular-nums; }
-.chip-sun { left: auto !important; right: 48px; top: 24px !important; transform: none !important; }
-.chip-paid b { color: var(--volt); }
+/* 04 how it works: full-bleed sticky flight; chapters cross-fade over the scene */
+.how { position: relative; height: 620vh; background: var(--bg); }
+.how-sticky { position: sticky; top: 0; height: 100svh; overflow: hidden; }
+.how-sticky > canvas, .how-sticky > .still { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.how-wash { position: absolute; inset: 0; pointer-events: none; background:
+  linear-gradient(90deg, var(--bg) 0%, color-mix(in srgb, var(--bg) 82%, transparent) 26%, color-mix(in srgb, var(--bg) 0%, transparent) 52%),
+  linear-gradient(to top, var(--bg) 0%, color-mix(in srgb, var(--bg) 0%, transparent) 22%),
+  linear-gradient(var(--bg) 0%, color-mix(in srgb, var(--bg) 0%, transparent) 16%); }
+.how-tag { position: absolute; left: 48px; top: 108px; }
+.rail { position: absolute; left: 48px; top: 50%; transform: translateY(-50%); list-style: none; display: grid; gap: 4px; }
+.rail li { position: relative; padding-left: 14px; }
+.rail li::before { content: ""; position: absolute; left: 0; top: 50%; width: 6px; height: 1px; background: var(--mu); opacity: .5; transition: width .4s, background .4s, opacity .4s; }
+.rail button, .rail span { font: 400 10px/2 "Geist Mono", monospace; letter-spacing: .08em; color: var(--mu); opacity: .55; transition: color .3s, opacity .3s; }
+.rail li.on::before { width: 10px; background: var(--volt); opacity: 1; }
+.rail li.on button { color: var(--volt); opacity: 1; }
+.rail button:hover { opacity: 1; }
+.chapters { position: absolute; left: 120px; bottom: 72px; width: min(560px, 42vw); }
+.ch { position: absolute; left: 0; bottom: 0; width: 100%; opacity: 0; transform: translateY(24px); transition: opacity .3s ease, transform .6s cubic-bezier(.2,.8,.2,1); pointer-events: none; }
+.ch.on { opacity: 1; transform: none; pointer-events: auto; transition: opacity .6s ease .2s, transform .8s cubic-bezier(.2,.8,.2,1) .2s; }
+.ch.past { transform: translateY(-24px); }
+.ch-k { font: 500 11px/1 "Geist Mono", monospace; letter-spacing: .08em; text-transform: uppercase; color: var(--volt-headline); }
+.ch h3 { margin-top: 18px; font-weight: 500; font-size: clamp(38px, 4.2vw, 64px); line-height: 1.02; letter-spacing: -.04em; color: var(--headline); }
+.ch h3 em { display: block; font-family: "Instrument Serif", serif; font-style: italic; font-weight: 400; letter-spacing: -.01em; font-size: 1.08em; color: var(--volt-headline); }
+.ch > p:not(.ch-k) { margin-top: 20px; max-width: 460px; font-size: 16.5px; line-height: 1.6; color: var(--mu); }
+.ch dl { margin-top: 28px; display: flex; gap: 40px; padding-top: 18px; border-top: 1px solid var(--hair); }
+.ch dt { font: 400 10px/1 "Geist Mono", monospace; letter-spacing: .08em; text-transform: uppercase; color: var(--mu); }
+.ch dd { margin-top: 8px; font: 500 15px/1 "Geist Mono", monospace; letter-spacing: .02em; color: var(--ink); font-variant-numeric: tabular-nums; }
+.readout { position: absolute; left: 0; top: 0; display: flex; align-items: center; gap: 8px; padding: 9px 14px 9px 12px; background: color-mix(in srgb, var(--face-top) 90%, transparent); backdrop-filter: blur(8px); border: 1px solid var(--hair); border-radius: 8px; box-shadow: 0 14px 30px -14px rgba(0,21,9,.22); white-space: nowrap; font: 400 10.5px/1 "Geist Mono", monospace; letter-spacing: .08em; text-transform: uppercase; color: var(--ink); will-change: transform; transition: opacity .4s; }
+.readout i { width: 6px; height: 6px; border-radius: 50%; background: var(--volt); animation: live 2s ease-in-out infinite; }
+.readout::after { content: ""; position: absolute; left: 50%; top: 100%; height: 28px; border-left: 1px dashed var(--mu); opacity: .6; }
+.credits span { position: absolute; left: 0; top: 0; padding: 7px 11px; border-radius: 999px; background: var(--volt); color: #fff; font: 500 14px/1 "Geist", sans-serif; font-variant-numeric: tabular-nums; box-shadow: 0 10px 24px -10px rgba(32,172,93,.6); opacity: 0; will-change: transform, opacity; }
+.how-hint { position: absolute; right: 48px; bottom: 40px; font: 400 10px/1 "Geist Mono", monospace; letter-spacing: .12em; text-transform: uppercase; color: var(--mu); }
+.how-hint::after { content: ""; display: block; width: 1px; height: 36px; margin: 10px auto 0; background: linear-gradient(var(--mu), transparent); animation: hint 2s ease-in-out infinite; transform-origin: top; }
+@keyframes hint { 0% { transform: scaleY(0); } 50% { transform: scaleY(1); } 100% { transform: scaleY(1); opacity: 0; } }
 
 /* 05 inside the battery */
 .inside { position: relative; height: 320vh; }
@@ -405,6 +409,28 @@ h2 em { font-family: "Instrument Serif", serif; font-style: italic; font-weight:
 .totals dd { font-weight: 500; font-size: 22px; letter-spacing: -.02em; font-variant-numeric: tabular-nums; }
 .totals dt { font: 400 10px/1 "Geist Mono", monospace; letter-spacing: .08em; text-transform: uppercase; color: var(--mu); }
 
+/* 07 what we believe: a team photo that fades into the page, then promises that light up one at a time */
+.believe { position: relative; padding-bottom: 140px; }
+.believe-photo { position: relative; height: 92vh; min-height: 620px; overflow: hidden; }
+.believe-photo img { position: absolute; inset: -6% 0 auto 0; width: 100%; height: 112%; object-fit: cover; object-position: 50% 30%; transform: translateY(var(--py, 0px)); filter: saturate(.85) contrast(1.02); }
+.believe-photo::after { content: ""; position: absolute; inset: 0; background: linear-gradient(color-mix(in srgb, var(--bg) 40%, transparent) 0%, color-mix(in srgb, var(--bg) 0%, transparent) 26%, color-mix(in srgb, var(--bg) 0%, transparent) 42%, color-mix(in srgb, var(--bg) 80%, transparent) 70%, var(--bg) 88%); }
+.believe-head { position: relative; z-index: 2; margin-top: -170px; padding: 0 48px; display: flex; justify-content: space-between; align-items: flex-end; gap: 40px; }
+.believe-head h2 { max-width: 880px; }
+.faces { display: grid; justify-items: end; gap: 12px; }
+.faces-row { display: flex; }
+.faces-row img { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; border: 2px solid var(--bg); margin-left: -10px; filter: grayscale(.2); }
+.faces small { font: 400 10px/1 "Geist Mono", monospace; letter-spacing: .08em; text-transform: uppercase; color: var(--mu); }
+.beliefs { list-style: none; margin: 72px 48px 0; border-top: 1px solid var(--hair); }
+.beliefs li { display: grid; grid-template-columns: 80px 1fr 380px; align-items: center; gap: 24px; padding: 30px 0; border-bottom: 1px solid var(--hair); }
+.beliefs .n { font: 400 11px/1 "Geist Mono", monospace; color: var(--mu); transition: color .5s; }
+.beliefs h3 { font-weight: 500; font-size: clamp(40px, 5.2vw, 80px); line-height: 1; letter-spacing: -.045em; color: color-mix(in srgb, var(--ink) 18%, transparent); transition: color .6s cubic-bezier(.2,.8,.2,1); }
+.beliefs h3 em { font-family: "Instrument Serif", serif; font-style: italic; font-weight: 400; letter-spacing: -.01em; font-size: 1.08em; }
+.beliefs p { font-size: 15px; line-height: 1.55; color: color-mix(in srgb, var(--mu) 55%, transparent); transition: color .6s; }
+.beliefs li.on .n { color: var(--volt); }
+.beliefs li.on h3 { color: var(--headline); }
+.beliefs li.on h3 em { color: var(--volt-headline); }
+.beliefs li.on p { color: var(--ink); }
+
 /* 09 voices: the quote lights up word by word */
 .voices { padding: 160px 48px 140px; display: grid; justify-items: center; gap: 64px; text-align: center; }
 .quote { max-width: 1100px; }
@@ -431,22 +457,50 @@ h2 em { font-family: "Instrument Serif", serif; font-style: italic; font-weight:
 .faq-list details p { max-width: 640px; padding-bottom: 26px; font-size: 17px; line-height: 1.6; color: var(--mu); }
 .faq-list summary:hover { color: var(--volt-headline); }
 
-/* 11 check your street */
+/* 10 check your street: forest card, blueprint grid, a live diorama on the right */
 .cta { padding: 40px 48px 80px; }
-.cta-card { position: relative; overflow: hidden; display: grid; grid-template-columns: 1fr 440px; align-items: center; min-height: 600px; padding: 64px; border-radius: 6px; background: radial-gradient(60% 90% at 78% 30%, rgba(32,172,93,.35), transparent 70%), var(--headline); color: #fff; }
+.cta-card { position: relative; overflow: hidden; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr); grid-template-rows: 1fr auto; min-height: 760px; border-radius: 6px; color: #fff;
+  background: radial-gradient(55% 70% at 74% 42%, rgba(32,172,93,.32), transparent 70%), radial-gradient(40% 50% at 10% 100%, rgba(32,172,93,.12), transparent 70%), var(--headline); }
+.cta-grid { position: absolute; inset: 0; pointer-events: none; opacity: .5;
+  background-image: linear-gradient(rgba(255,255,255,.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.05) 1px, transparent 1px);
+  background-size: 56px 56px; -webkit-mask-image: radial-gradient(70% 80% at 72% 45%, #000, transparent 75%); mask-image: radial-gradient(70% 80% at 72% 45%, #000, transparent 75%); }
+.cta-card > canvas, .cta-still { position: absolute; top: 0; right: 0; width: 58%; height: calc(100% - 120px); }
+.cta-still { object-fit: contain; padding: 40px; }
+.cta-copy { position: relative; z-index: 2; padding: 64px 0 40px 64px; align-self: center; }
 .cta .kicker { color: rgba(255,255,255,.55); }
-.cta h2 { color: #fff; font-size: clamp(56px, 7vw, 104px); }
+.cta h2 { color: #fff; font-size: clamp(56px, 7vw, 108px); }
 .cta h2 em { color: var(--volt); }
-.cta-copy > p:not(.kicker):not(.check-out) { margin-top: 24px; max-width: 520px; font-size: 17.5px; line-height: 1.6; color: rgba(255,255,255,.7); }
-.check { margin-top: 36px; display: flex; max-width: 640px; }
-.check input { flex: 1; min-width: 0; padding: 19px 20px; font: 400 16px/1 "Geist", sans-serif; border: 0; border-radius: 0; background: #fff; color: var(--ink); }
-.check input:focus { outline: 2px solid var(--volt); outline-offset: 0; }
-.check .btn { background: var(--volt); box-shadow: none; padding: 19px 26px; }
+.cta-lede { margin-top: 24px; max-width: 480px; font-size: 17.5px; line-height: 1.6; color: rgba(255,255,255,.7); }
+.check { margin-top: 36px; display: flex; max-width: 580px; box-shadow: 0 30px 60px -30px rgba(0,0,0,.6); }
+.check-field { position: relative; flex: 1; min-width: 0; display: flex; align-items: center; background: #fff; }
+.check-field svg { position: absolute; left: 18px; width: 16px; height: 16px; fill: none; stroke: var(--volt); stroke-width: 1.4; }
+.check input { flex: 1; min-width: 0; padding: 20px 20px 20px 44px; font: 400 16px/1 "Geist", sans-serif; border: 0; border-radius: 0; background: transparent; color: var(--ink); }
+.check input:focus { outline: none; }
+.check-field:focus-within { box-shadow: inset 0 0 0 2px var(--volt); }
+.check .btn { background: var(--volt); box-shadow: none; padding: 20px 26px; }
 .check .btn:hover { background: #fff; color: var(--ink); }
-.check-out { margin-top: 22px; font: 400 11px/1.4 "Geist Mono", monospace; letter-spacing: .08em; text-transform: uppercase; color: var(--volt-mid); }
+.check-out { margin-top: 22px; display: flex; align-items: center; gap: 10px; font: 400 11px/1.4 "Geist Mono", monospace; letter-spacing: .08em; text-transform: uppercase; color: var(--volt-mid); }
+.check-out .live-dot { box-shadow: 0 0 0 4px rgba(32,172,93,.2); }
 .check-out.bad { color: #ffb4a8; }
-.cta-art { width: 100%; max-height: 560px; object-fit: contain; filter: drop-shadow(0 40px 60px rgba(0,0,0,.35)); animation: float 7s ease-in-out infinite; }
-@keyframes float { 50% { transform: translateY(-14px); } }
+.result { margin-top: 26px; max-width: 580px; padding: 22px 24px; border: 1px solid rgba(255,255,255,.14); border-radius: 6px; background: rgba(255,255,255,.05); backdrop-filter: blur(8px); animation: result-in .6s cubic-bezier(.2,.8,.2,1); }
+.result[hidden] { display: none; }
+@keyframes result-in { from { opacity: 0; transform: translateY(10px); } }
+.result-k { font: 500 11px/1 "Geist Mono", monospace; letter-spacing: .08em; text-transform: uppercase; color: var(--volt); }
+.result-k.wait { color: var(--volt-mid); }
+.result dl { margin-top: 16px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.result dt { font: 400 10px/1 "Geist Mono", monospace; letter-spacing: .08em; text-transform: uppercase; color: rgba(255,255,255,.5); }
+.result dd { margin-top: 8px; font-weight: 500; font-size: 24px; letter-spacing: -.02em; font-variant-numeric: tabular-nums; }
+.btn-light { margin-top: 20px; background: #fff; color: var(--ink); box-shadow: inset 3px 0 0 var(--volt); font-size: 14px; padding: 14px 22px; }
+.btn-light:hover { background: var(--volt); color: #fff; }
+.join-steps { position: relative; z-index: 2; grid-column: 1 / -1; list-style: none; display: grid; grid-template-columns: repeat(3, 1fr); border-top: 1px solid rgba(255,255,255,.12); }
+.join-steps li { display: grid; grid-template-columns: auto 1fr; column-gap: 14px; row-gap: 6px; padding: 26px 32px 28px 64px; }
+.join-steps li + li { border-left: 1px solid rgba(255,255,255,.12); padding-left: 32px; }
+.join-steps span { grid-row: span 2; font: 400 11px/1.6 "Geist Mono", monospace; color: var(--volt); }
+.join-steps b { font-weight: 500; font-size: 18px; letter-spacing: -.01em; }
+.join-steps small { font-size: 14px; color: rgba(255,255,255,.6); }
+.promises { position: absolute; z-index: 2; right: 32px; top: 32px; list-style: none; display: flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end; max-width: 50%; }
+.promises li { padding: 7px 11px; border: 1px solid rgba(255,255,255,.14); border-radius: 999px; font: 400 10px/1 "Geist Mono", monospace; letter-spacing: .08em; text-transform: uppercase; color: rgba(255,255,255,.75); background: rgba(0,0,0,.12); }
+.promises li::before { content: "✓"; margin-right: 6px; color: var(--volt); }
 
 /* footer */
 .foot { padding: 72px 48px 40px; }
@@ -467,8 +521,11 @@ h2 em { font-family: "Instrument Serif", serif; font-style: italic; font-weight:
   .cell { border-top: 1px solid var(--hair); }
   .calc-grid { grid-template-columns: 1fr; }
   .faq { grid-template-columns: 1fr; gap: 48px; }
-  .cta-card { grid-template-columns: 1fr; }
-  .cta-art { max-height: 380px; }
+  .cta-card { grid-template-columns: 1fr; grid-template-rows: 380px auto auto; }
+  .cta-card > canvas, .cta-still { width: 100%; height: 380px; }
+  .cta-copy { grid-row: 2; padding: 0 40px 40px; }
+  .join-steps { grid-row: 3; }
+  .promises { left: 24px; right: 24px; top: 20px; max-width: none; justify-content: flex-start; }
 }
 @media (max-width: 900px) {
   .nav { padding: 12px 16px; }
@@ -482,22 +539,22 @@ h2 em { font-family: "Instrument Serif", serif; font-style: italic; font-weight:
   .cell-art { min-height: 380px; }
   .cell-art canvas, .cell-art .still { left: 0; top: 48px; width: calc(100% - 110px); height: calc(100% - 64px); }
   .stat b { font-size: 56px; }
-  .how { height: 460vh; }
-  .how-sticky { grid-template-columns: 1fr; grid-template-rows: 1fr auto; gap: 0; padding: 80px 16px 20px; }
-  .how-copy { order: 2; }
-  .how-copy h2, .how-copy .kicker, .clock { display: none; }
-  .steps li:not(.on) { display: none; }
-  .steps b { font-size: 18px; }
-  .how-stage { order: 1; }
-  .chip-sun { right: 0; }
+  .how { height: 640vh; }
+  .how-wash { background: linear-gradient(to top, var(--bg) 0%, color-mix(in srgb, var(--bg) 92%, transparent) 38%, color-mix(in srgb, var(--bg) 0%, transparent) 62%), linear-gradient(var(--bg) 0%, color-mix(in srgb, var(--bg) 0%, transparent) 14%); }
+  .how-tag { left: 16px; top: 84px; }
+  .rail { left: auto; right: 12px; top: 96px; transform: none; }
+  .chapters { left: 16px; right: 16px; width: auto; bottom: 28px; }
+  .ch h3 { font-size: 34px; }
+  .ch > p:not(.ch-k) { font-size: 15px; margin-top: 14px; }
+  .ch dl { margin-top: 18px; gap: 24px; }
+  .how-hint { display: none; }
+  .readout { font-size: 9.5px; }
   .inside { height: 300vh; }
   .inside-sticky { padding: 84px 16px 20px; }
   .inside-stage canvas, .inside-stage .still { width: 100%; }
   .callouts li { left: 0 !important; right: 0 !important; top: auto !important; bottom: 0; width: auto; text-align: center !important; padding: 12px 16px; background: color-mix(in srgb, var(--bg) 88%, transparent); }
   .callouts li:not(.cur) { opacity: 0 !important; }
   .callouts span { font-size: 14px; }
-  .chip[data-at="h1"], .chip-paid { display: none; }
-  .chip-sun { right: 0; top: 0 !important; }
   .specs { grid-template-columns: 1fr 1fr; gap: 12px; }
   .specs dd { font-size: 20px; }
   .cards { grid-template-columns: 1fr; }
@@ -514,10 +571,23 @@ h2 em { font-family: "Instrument Serif", serif; font-style: italic; font-weight:
   .totals { overflow-x: auto; }
   .totals div { padding: 12px 14px; }
   .small-quotes { grid-template-columns: 1fr; }
+  .believe-photo { height: 64vh; min-height: 420px; }
+  .believe-head { margin-top: -160px; padding: 0 16px; flex-direction: column; align-items: flex-start; }
+  .faces { justify-items: start; }
+  .faces-row img:first-child { margin-left: 0; }
+  .beliefs { margin: 48px 16px 0; }
+  .beliefs li { grid-template-columns: 32px 1fr; gap: 10px 12px; padding: 22px 0; }
+  .beliefs p { grid-column: 2; }
   .faq-list summary { font-size: 18px; }
   .cta { padding: 16px 16px 48px; }
-  .cta-card { padding: 32px 22px; min-height: 0; }
+  .cta-card { min-height: 0; grid-template-rows: 320px auto auto; }
+  .cta-card > canvas, .cta-still { height: 320px; }
+  .cta-copy { padding: 0 22px 32px; }
   .check { flex-direction: column; }
+  .result dl { grid-template-columns: 1fr 1fr; }
+  .join-steps { grid-template-columns: 1fr; }
+  .join-steps li, .join-steps li + li { padding: 18px 22px; border-left: 0; border-top: 1px solid rgba(255,255,255,.12); }
+  .promises li:nth-child(n+3) { display: none; }
   .foot { padding: 56px 16px 32px; }
   .foot-top, .foot-bottom { flex-direction: column; }
   .foot-cols { gap: 32px; flex-wrap: wrap; }

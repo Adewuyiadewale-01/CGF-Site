@@ -39,7 +39,7 @@
         </div>
       </div>
       <a href="#battery">Solar &amp; batteries</a>
-      <a href="#voices">About</a>
+      <a href="#team">About</a>
     </nav>
   </div>
   <div class="nav-right">
@@ -111,33 +111,59 @@
   </div>
 </section>
 
-<!-- 04 how it works: sticky street, scroll drives the day -->
+<!-- 04 how it works: a full-screen flight down one street; scroll drives the camera and the day -->
 <section class="how" id="how" aria-labelledby="how-h">
   <div class="how-sticky">
-    <div class="how-copy">
-      <p class="kicker">[ 02 ]&nbsp; How it works</p>
-      <h2 id="how-h">One street. One battery. <em>Four moments.</em></h2>
-      <ol class="steps" id="steps">
-        <li class="on"><button type="button" data-step="0"><span class="n">01</span><span class="t"><small>12:00</small><b>Your roof makes more than you use</b><span>The spare flows down your street to the battery, not out to the wholesale market for cents.</span></span></button></li>
-        <li><button type="button" data-step="1"><span class="n">02</span><span class="t"><small>15:00</small><b>The street battery fills up</b><span>One battery for every 40 to 80 homes, on a pad at the end of the street.</span></span></button></li>
-        <li><button type="button" data-step="2"><span class="n">03</span><span class="t"><small>18:00</small><b>Your street runs on its own sunshine</b><span>When everyone gets home, the battery feeds the street first. Less grid, lower peaks.</span></span></button></li>
-        <li><button type="button" data-step="3"><span class="n">04</span><span class="t"><small>Monthly</small><b>You’re paid for every kWh you shared</b><span>Credits land on your bill. No lock-in, and no new hardware for most homes.</span></span></button></li>
-      </ol>
-      <div class="clock" aria-hidden="true">
-        <div class="clock-labels"><span>06:00</span><span>12:00</span><span>18:00</span><span>24:00</span></div>
-        <div class="clock-track"><i id="clockFill"></i><b id="clockKnob"></b></div>
-      </div>
+    <canvas id="street3d" aria-hidden="true"></canvas>
+    <img class="still" src="./assets/street-noon.png" alt="" loading="lazy">
+    <div class="how-wash" aria-hidden="true"></div>
+    <p class="how-tag kicker">[ 02 ]&nbsp; How it works</p>
+    <h2 class="sr" id="how-h">How it works: one street, one battery, five moments</h2>
+    <ol class="rail" id="rail" aria-label="Chapters">
+      <li class="on"><button type="button" data-ch="0">01</button></li>
+      <li><button type="button" data-ch="1">02</button></li>
+      <li><button type="button" data-ch="2">03</button></li>
+      <li><button type="button" data-ch="3">04</button></li>
+      <li><button type="button" data-ch="4">05</button></li>
+      <li aria-hidden="true"><span>∞</span></li>
+    </ol>
+    <p class="readout" id="readout" aria-hidden="true"><i></i><span id="readoutText">Panel array · 6.6 kW · 1,020 W/m²</span></p>
+    <div class="chapters" id="chapters">
+      <article class="ch on">
+        <p class="ch-k">01 — Noon export</p>
+        <h3>Your roof makes <em>more than you use.</em></h3>
+        <p>At midday a typical Sydney roof makes three times what the house needs. Today the spare is sold off for cents. On our network it stays on your street.</p>
+        <dl><div><dt>Exporting now</dt><dd id="r-export">+3.4 kW</dd></div><div><dt>Feed-in window</dt><dd>10:00 – 15:00</dd></div></dl>
+      </article>
+      <article class="ch">
+        <p class="ch-k">02 — Down the street</p>
+        <h3>The spare flows <em>three doors down.</em></h3>
+        <p>Not out to the wholesale market and back. Power travels along your own street’s cables to the battery at the end of the block.</p>
+        <dl><div><dt>Distance</dt><dd>~180 m</dd></div><div><dt>Line losses</dt><dd>&lt; 2%</dd></div></dl>
+      </article>
+      <article class="ch">
+        <p class="ch-k">03 — The street battery</p>
+        <h3>One battery holds <em>the whole street’s noon.</em></h3>
+        <p>A 300 kWh battery on a two-car pad soaks up every roof on the block through the afternoon, and tells you exactly how full it is.</p>
+        <dl><div><dt>Charge</dt><dd id="r-charge">64%</dd></div><div><dt>Homes on this battery</dt><dd>61</dd></div></dl>
+      </article>
+      <article class="ch">
+        <p class="ch-k">04 — Six o’clock</p>
+        <h3>At six, your street runs <em>on its own sunshine.</em></h3>
+        <p>When everyone gets home, the battery feeds the street first. The grid sees a smaller evening peak, and so does your bill.</p>
+        <dl><div><dt>Evening peak</dt><dd>−38%</dd></div><div><dt>From the battery</dt><dd id="r-import">1.9 kW</dd></div></dl>
+      </article>
+      <article class="ch">
+        <p class="ch-k">05 — Paid</p>
+        <h3>You’re paid for <em>every kWh you shared.</em></h3>
+        <p>Credits are worked out every half hour and land on your power bill each month. No lock-in, and no new hardware for most homes.</p>
+        <dl><div><dt>Today, this street</dt><dd id="r-paid">$146.20</dd></div><div><dt>Your share</dt><dd>+$2.40</dd></div></dl>
+      </article>
     </div>
-    <div class="how-stage">
-      <canvas id="street3d" aria-hidden="true"></canvas>
-      <img class="still" src="./assets/street-noon.png" alt="" loading="lazy">
-      <div class="chips" id="streetChips" aria-hidden="true">
-        <p class="chip" data-at="h1"><i></i><small id="chipFlowLabel">Exporting</small><b id="chipFlow">+3.4 kW</b></p>
-        <p class="chip" data-at="bat"><small>Street battery</small><b id="chipBat">64%</b></p>
-        <p class="chip chip-sun"><small id="chipSunLabel">Sun</small><b id="chipSun">12:40 · 1,020 W/m²</b></p>
-        <p class="chip chip-paid" data-at="h2"><small>Credit</small><b id="chipPaid">+$2.40</b></p>
-      </div>
+    <div class="credits" id="credits" aria-hidden="true">
+      <span data-at="h1">+$2.40</span><span data-at="h2">+$1.85</span><span data-at="apt">+$11.60</span><span data-at="shop">+$4.10</span>
     </div>
+    <p class="how-hint" aria-hidden="true">Scroll</p>
   </div>
 </section>
 
@@ -283,9 +309,33 @@
   </dl>
 </section>
 
-<!-- 09 voices -->
+<!-- 07 what we believe: the people behind the network -->
+<!-- PLACEHOLDER PHOTOS: assets/people/placeholder-*.webp are borrowed from the REPS concept; replace before sharing -->
+<section class="believe" id="team" aria-labelledby="believe-h">
+  <div class="believe-photo"><img src="./assets/people/placeholder-team.webp" alt="The Nanomantic team (placeholder photo)" loading="lazy"></div>
+  <div class="believe-head">
+    <div>
+      <p class="kicker" data-reveal>[ 07 ]&nbsp; What we believe</p>
+      <h2 id="believe-h" data-reveal>Four promises from <em>the people who wire your street.</em></h2>
+    </div>
+    <div class="faces" data-reveal>
+      <p class="faces-row" aria-hidden="true">
+        <img src="./assets/people/placeholder-face-1.webp" alt=""><img src="./assets/people/placeholder-face-2.webp" alt=""><img src="./assets/people/placeholder-face-3.webp" alt=""><img src="./assets/people/placeholder-face-4.webp" alt=""><img src="./assets/people/placeholder-face-5.webp" alt=""><img src="./assets/people/placeholder-face-6.webp" alt="">
+      </p>
+      <small>14 people&nbsp; · &nbsp;Marrickville, Sydney</small>
+    </div>
+  </div>
+  <ol class="beliefs" id="beliefs">
+    <li><span class="n">01</span><h3>Local <em>first</em></h3><p>Every kilowatt your roof makes is offered to your own street before it goes anywhere near the wholesale market.</p></li>
+    <li><span class="n">02</span><h3>Paid in <em>full</em></h3><p>Members keep the credit. We take one flat, published fee, never a margin hidden in the rate.</p></li>
+    <li><span class="n">03</span><h3>Plain <em>numbers</em></h3><p>Half-hourly data in the app, for every home and every battery. If we can’t show it, we don’t claim it.</p></li>
+    <li><span class="n">04</span><h3>Built to <em>last</em></h3><p>Batteries designed for fifteen years, looked after by the same local crew who installed them.</p></li>
+  </ol>
+</section>
+
+<!-- 08 voices -->
 <section class="voices" id="voices" aria-labelledby="voices-h">
-  <p class="kicker" id="voices-h">[ 07 ]&nbsp; From the street</p>
+  <p class="kicker" id="voices-h">[ 08 ]&nbsp; From the street</p>
   <blockquote class="quote" id="quote"><p>“Our street ran on its own sunshine right through the January heatwave. The bill was the smallest we’ve ever had.”</p>
     <footer><i></i><span><b>Priya N.</b><small>Marrickville · member since 2025</small></span></footer>
   </blockquote>
@@ -296,10 +346,10 @@
   </div>
 </section>
 
-<!-- 10 faq -->
+<!-- 09 faq -->
 <section class="faq" id="faq" aria-labelledby="faq-h">
   <div class="faq-l">
-    <p class="kicker" data-reveal>[ 08 ]&nbsp; Questions</p>
+    <p class="kicker" data-reveal>[ 09 ]&nbsp; Questions</p>
     <h2 id="faq-h" data-reveal>Good questions, <em>plain answers.</em></h2>
     <p class="sec-lede" data-reveal>Still curious? Talk to a person in Sydney, weekdays 8 to 6.</p>
   </div>
@@ -313,21 +363,41 @@
   </div>
 </section>
 
-<!-- 11 check your street -->
+<!-- 10 check your street: a live diorama of your street's battery; checking an address lights it up -->
 <section class="cta" id="check" aria-labelledby="cta-h">
   <div class="cta-card">
+    <div class="cta-grid" aria-hidden="true"></div>
+    <canvas id="cta3d" aria-hidden="true"></canvas>
+    <img class="still cta-still" src="./assets/battery-exploded.png" alt="" loading="lazy">
     <div class="cta-copy">
-      <p class="kicker">[ 09 ]&nbsp; Join the network</p>
+      <p class="kicker">[ 10 ]&nbsp; Join the network</p>
       <h2 id="cta-h">Check your <em>street.</em></h2>
-      <p>See if a battery is already on your street, or how close the next one is. It takes ten seconds.</p>
+      <p class="cta-lede">See if a battery is already on your street, or how close the next one is. It takes ten seconds.</p>
       <form class="check" id="check-form" novalidate>
         <label class="sr" for="addr">Your address</label>
-        <input id="addr" name="addr" autocomplete="street-address" placeholder="Start typing your address…">
+        <span class="check-field"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 15s5-4.6 5-8.5A5 5 0 0 0 3 6.5C3 10.4 8 15 8 15z"/><circle cx="8" cy="6.5" r="1.8"/></svg>
+        <input id="addr" name="addr" autocomplete="street-address" placeholder="Start typing your address…"></span>
         <button class="btn" type="submit">Check my street <span aria-hidden="true">→</span></button>
       </form>
-      <p class="check-out" id="checkOut" aria-live="polite">38 streets live&nbsp; · &nbsp;112 on the waitlist</p>
+      <p class="check-out" id="checkOut" aria-live="polite"><i class="live-dot"></i>38 streets live&nbsp; · &nbsp;112 on the waitlist</p>
+      <div class="result" id="result" hidden>
+        <p class="result-k" id="resK">Battery on your street</p>
+        <dl>
+          <div><dt>Nearest battery</dt><dd id="resDist">240 m</dd></div>
+          <div><dt>Homes connected</dt><dd id="resHomes">61</dd></div>
+          <div><dt>Your est. credit</dt><dd id="resCredit">$486 / yr</dd></div>
+        </dl>
+        <a class="btn btn-light" href="#calc" id="resBtn">Reserve my spot <span aria-hidden="true">→</span></a>
+      </div>
     </div>
-    <img class="cta-art" src="./assets/battery-exploded.png" alt="" loading="lazy">
+    <ol class="join-steps">
+      <li><span>01</span><b>Check your street</b><small>Ten seconds, right here.</small></li>
+      <li><span>02</span><b>Swap the meter</b><small>A local electrician, booked by us, free.</small></li>
+      <li><span>03</span><b>Start earning</b><small>Credits from your very first bill.</small></li>
+    </ol>
+    <ul class="promises" aria-label="Our promises">
+      <li>No lock-in</li><li>Leave with 30 days’ notice</li><li>Keep every credit</li><li>Local crew</li>
+    </ul>
   </div>
 </section>
 
@@ -337,7 +407,7 @@
     <nav class="foot-cols" aria-label="Footer">
       <div><small>Network</small><a href="#how">How it works</a><a href="#network">Live map</a><a href="#battery">Street batteries</a><a href="#calc">Calculator</a></div>
       <div><small>Who it’s for</small><a href="#who">Homes</a><a href="#who">Apartments &amp; strata</a><a href="#who">Business</a><a href="#who">Councils</a></div>
-      <div><small>Company</small><a href="#voices">About</a><a href="#">Careers</a><a href="#">Press</a><a href="#check">Contact</a></div>
+      <div><small>Company</small><a href="#team">About</a><a href="#team">Careers</a><a href="#">Press</a><a href="#check">Contact</a></div>
     </nav>
   </div>
   <div class="foot-bottom"><small>© 2026 Nanomantic (concept) · Privacy · Terms</small><small>Built on Gadigal and Wangal land</small></div>

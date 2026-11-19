@@ -88,3 +88,42 @@ export function exploded(stage, kind) {
   const o = kind === 'panel' ? k.panelStack(stage.scene) : k.batteryStack(stage.scene);
   return o;
 }
+
+/* ---------- the diorama for "Check your street": one battery ringed by homes, wired out to each ----------
+   set(level, time): level 0 idle, 1 lit (after an address check) */
+export function diorama(stage) {
+  const { scene, resolution } = stage, k = makeKit(scene);
+  k.plinth(scene, 0, 0, 11, 9, 0, 1.4, { rules: false });
+  const bat = k.battery(scene, -0.6, 0, -0.6);
+  const homes = [], currents = [];
+  const spots = [[-17, -9], [-15, 9], [-3, 17], [12, 14], [18, -1], [8, -16], [-6, -18]];
+  spots.forEach(([x, z], i) => {
+    k.plinth(scene, x, z, 7, 7, -0.6, 0.8, { rules: false, hatch: false });
+    const h = i === 2 ? k.shop(scene, x, -0.6, z - 0.3) : k.house(scene, x - 0.6, -0.6, z - 0.4, 0.9, { solar: i % 2 === 0 });
+    homes.push(h);
+    // a gentle arc from the battery pad out to each lot
+    const a = V(0, 0.08, 0), b = V(x, -0.52, z), m = a.clone().lerp(b, 0.5).setY(1.6);
+    const pts = new THREE.QuadraticBezierCurve3(a, m, b).getPoints(28);
+    currents.push(k.current(pts, resolution, { width: 2 }));
+  });
+  // white dashed rings, so they read on the dark card
+  const rings = [7.5, 12.5, 20].map((r) => {
+    const pts = []; for (let i = 0; i <= 128; i++) { const a = i / 128 * Math.PI * 2; pts.push(V(Math.cos(a) * r, -0.5, Math.sin(a) * r)); }
+    const l = new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts), new THREE.LineDashedMaterial({ color: 0xffffff, transparent: true, opacity: 0.22, dashSize: 0.5, gapSize: 0.5 }));
+    l.computeLineDistances(); scene.add(l); return l;
+  });
+  const pulse = new THREE.Line(rings[0].geometry, new THREE.LineBasicMaterial({ color: k.VOLT, transparent: true, opacity: 0 }));
+  pulse.position.y = 0.02; scene.add(pulse);
+  const INK = k.INK, VOLT = k.VOLT;
+  let pulseT = 99;
+  function set(level, time, dt = 0.016, fire = false) {
+    if (fire) pulseT = 0;
+    pulseT += dt;
+    currents.forEach((c, i) => c.update(0.25 + 0.75 * level, time + i * 0.4, i % 3 ? -1 : 1));
+    for (const e of bat.edges) e.color.copy(INK).lerp(VOLT, 0.25 + 0.5 * level);
+    homes.forEach((h, i) => { const lv = level * (0.5 + 0.5 * Math.sin(time * 2 + i)); for (const e of h.edges) e.color.copy(INK).lerp(VOLT, lv * 0.5); });
+    const r = 1 + pulseT * 2.2; pulse.scale.set(r, 1, r); pulse.material.opacity = Math.max(0, 0.9 - pulseT * 0.45);
+    rings.forEach((l, i) => { l.material.opacity = 0.18 + 0.12 * level + 0.06 * Math.sin(time * 1.5 - i); });
+  }
+  return { set };
+}
