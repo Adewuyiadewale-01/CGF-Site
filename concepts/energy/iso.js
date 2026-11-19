@@ -13,6 +13,8 @@ const VOLT = ACCENT ? new THREE.Color('#' + ACCENT) : C('--volt'), INK = C('--ed
 const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
 // ?scene=city: distant skyline behind the network, and proper pitched roofs
 const CITY = document.documentElement.dataset.scene === 'city';
+// ?scene=grid: the network rises out of a neighbourhood street grid that fills the hero background
+const GRID = document.documentElement.dataset.scene === 'grid';
 // ?view=flat: the same scene through a perspective camera at a gentle angle, instead of isometric
 const FLAT = new URLSearchParams(location.search).get('view') === 'flat';
 // ?export=1 renders the illustration alone on a transparent background (for the Figma file)
@@ -312,11 +314,10 @@ for (const [k, pts] of Object.entries(routes)) {
 }
 function pointAt(c, t) { const d = t * c.total; let i = 1; while (i < c.lens.length - 1 && c.lens[i] < d) i++; const a = c.lens[i - 1], b = c.lens[i]; return c.pts[i - 1].clone().lerp(c.pts[i], b > a ? (d - a) / (b - a) : 0); }
 
-/* ---------- the neighbourhood: a field of low blocks that IS the hero background ----------
+/* ---------- ?scene=grid: a field of low blocks that IS the hero background ----------
    The plinths rise out of a street grid that runs to every edge of the page. It dissolves into
    the page colour at the edges and behind the copy, so the scene and the page are one surface.
-   Energy runs along the streets to the battery, a ripple rolls across the rooftops, and a few
-   solar roofs blink green. */
+   Every few seconds the battery tower flares and a wave of energy rolls out across the roofs. */
 const tickers = [];   // per-frame updates: (time, dt) => void
 const BG = C('--bg');
 const sstep = (a, b, x) => { const t = Math.min(1, Math.max(0, (x - a) / (b - a))); return t * t * (3 - 2 * t); };
@@ -330,7 +331,7 @@ function fadeAt(x, y, z) {
   return Math.min(1, Math.max(edge, copy));
 }
 const G = -9, PITCH = 6.4, TILE = 5.0;
-if (!CITY) {
+if (GRID) {
   let seed = 11; const rnd = () => ((seed = (seed * 16807) % 2147483647) / 2147483647);
   const ox = P.depot.c[0], oz = P.depot.c[1];
   const blocked = (x, z, pad) => Object.values(P).some((p) => Math.abs(p.c[0] - x) < p.size / 2 + pad && Math.abs(p.c[1] - z) < p.size / 2 + pad);
@@ -342,13 +343,15 @@ if (!CITY) {
     if (blocked(x, z, TILE / 2 + 0.6)) continue;
     const h = 0.35 + rnd() * 0.5, f = fadeAt(x, G + h, z);
     if (f > 0.985) continue;
-    tiles.push({ x, z, h, f, ph: rnd(), solar: rnd() < 0.16 });
+    tiles.push({ x, z, h, f, solar: rnd() < 0.12 });
     const t = tiles.at(-1);
-    if (!t.solar && rnd() < 0.2) {   // a low building on some lots
-      const w = 1.4 + rnd() * 2.0, d = 1.4 + rnd() * 2.0, bh = 0.5 + rnd() * 1.4;
+    if (!t.solar && rnd() < 0.16) {   // a low building on some lots
+      const w = 1.4 + rnd() * 2.0, d = 1.4 + rnd() * 2.0, bh = 0.5 + rnd() * 1.2;
       blocks.push({ x: x + (rnd() - 0.5) * (TILE - w - 0.8), z: z + (rnd() - 0.5) * (TILE - d - 0.8), y: G + h, w, d, h: bh, f });
     }
   }
+  // the whole field sits back: even at its strongest it is a little washed toward the page
+  const QUIET = 0.4, q = (f) => QUIET + (1 - QUIET) * f;
   // bodies: one instanced box for every tile and block
   const unit = new THREE.BoxGeometry(1, 1, 1).translate(0, 0.5, 0);
   const body = new THREE.InstancedMesh(unit, [fm.right, fm.top, fm.top, fm.top, fm.left, fm.top], tiles.length + blocks.length);
@@ -357,24 +360,37 @@ if (!CITY) {
   for (const b of blocks) body.setMatrixAt(n++, mtx.makeScale(b.w, b.h, b.d).setPosition(b.x, b.y, b.z));
   // fade the side faces too (instance colour multiplies the face colour toward the page)
   const rc = fm.right.color, ratio = new THREE.Color(BG.r / rc.r, BG.g / rc.g, BG.b / rc.b), one = new THREE.Color(1, 1, 1);
-  [...tiles, ...blocks].forEach((t, k) => body.setColorAt(k, one.clone().lerp(ratio, t.f)));
+  [...tiles, ...blocks].forEach((t, k) => body.setColorAt(k, one.clone().lerp(ratio, q(t.f))));
   scene.add(body);
-  // roofs: a separate instanced top per tile so the ripple can tint it
+  // roofs: a separate instanced top per tile so the wave can tint it
   const tops = new THREE.InstancedMesh(new THREE.PlaneGeometry(TILE - 0.14, TILE - 0.14).rotateX(-Math.PI / 2), new THREE.MeshBasicMaterial({ color: 0xffffff }), tiles.length);
   tiles.forEach((t, k) => tops.setMatrixAt(k, mtx.makeTranslation(t.x, G + t.h + 0.015, t.z)));
-  const topBase = tiles.map((t) => C('--face-top').lerp(BG, 0.25 + t.f * 0.75)), LIT = C('--volt-mid'), col = new THREE.Color();
-  const paint = (time) => {
-    const R = (time * 12) % 120;
+  const topBase = tiles.map((t) => C('--face-top').lerp(BG, 0.45 + t.f * 0.55));
+  const LIT = C('--volt-soft').lerp(C('--volt-mid'), 0.8), col = new THREE.Color();
+  const dist = tiles.map((t) => Math.hypot(t.x - ox, t.z - oz));
+
+  /* the wave: every few seconds the battery tower flares and one ring of energy rolls out
+     across the rooftops, with a handful of pulses running out along the streets. Then it rests. */
+  const PERIOD = 7.5, SPEED = 13, REACH = 95;
+  const wave = { age: 99, n: -1 };   // seconds since the last wave started
+  tickers.push((time) => { const n = Math.floor((time + PERIOD - 1.2) / PERIOD); wave.age = time - (n * PERIOD + 1.2 - PERIOD); if (n !== wave.n) { wave.n = n; wave.fresh = true; } });
+  const paint = () => {
+    const R = wave.age * SPEED, live = R < REACH + 10;
     tiles.forEach((t, k) => {
-      const d = Math.hypot(t.x - ox, t.z - oz);
-      let a = Math.exp(-(((d - R) / 4.5) ** 2)) * (1 - R / 120) * 0.85;
-      if (t.solar) a = Math.max(a, Math.max(0, Math.sin(time * 0.8 + t.ph * 40)) ** 24 * 0.9);
+      const a = live ? Math.exp(-(((dist[k] - R) / 6) ** 2)) * (1 - Math.min(1, R / REACH)) ** 0.7 : 0;
       tops.setColorAt(k, col.copy(topBase[k]).lerp(LIT, a * (1 - t.f)));
     });
     tops.instanceColor.needsUpdate = true;
   };
-  paint(reduced ? 999 : 0); scene.add(tops);
-  if (!reduced) tickers.push(paint);
+  wave.age = 99; paint(); scene.add(tops);
+  // the wavefront itself: a thin ring that widens across the roofs and fades as it goes
+  const front = new THREE.Line(new THREE.BufferGeometry().setFromPoints(Array.from({ length: 161 }, (_, i) => V(Math.cos(i / 160 * Math.PI * 2), 0, Math.sin(i / 160 * Math.PI * 2)))),
+    new THREE.LineBasicMaterial({ color: VOLT, transparent: true, opacity: 0, depthWrite: false }));
+  front.position.set(ox, G + 0.9, oz); scene.add(front);
+  if (!reduced) tickers.push(paint, () => {
+    const R = wave.age * SPEED; front.scale.setScalar(Math.max(0.01, R));
+    front.material.opacity = R > 8 && R < REACH ? 0.75 * (1 - R / REACH) ** 1.1 : 0;
+  });
 
   // edges: one merged line set, each line pre-mixed toward the page colour by its fade
   const ep = [], ec = [];
@@ -386,68 +402,95 @@ if (!CITY) {
     seg(x1, yb, z0, x1, yb, z1, f, k); seg(x1, yb, z1, x0, yb, z1, f, k);
   };
   for (const t of tiles) {
-    boxLines(t.x, G, t.z, TILE, t.h, TILE, t.f, 0.24);
+    boxLines(t.x, G, t.z, TILE, t.h, TILE, t.f, 0.15);
     if (t.solar) { // a panel array on the roof
       const y = G + t.h + 0.03, a0 = t.x - 1.7, a1 = t.x + 1.7, b0 = t.z - 1.2, b1 = t.z + 1.2;
-      for (let q = 0; q <= 4; q++) { const xx = a0 + (a1 - a0) * q / 4; seg(xx, y, b0, xx, y, b1, t.f, 0.2); }
-      for (const zz of [b0, (b0 + b1) / 2, b1]) seg(a0, y, zz, a1, y, zz, t.f, 0.2);
+      for (let i = 0; i <= 4; i++) { const xx = a0 + (a1 - a0) * i / 4; seg(xx, y, b0, xx, y, b1, t.f, 0.12); }
+      for (const zz of [b0, (b0 + b1) / 2, b1]) seg(a0, y, zz, a1, y, zz, t.f, 0.12);
     }
   }
-  for (const b of blocks) boxLines(b.x, b.y, b.z, b.w, b.h, b.d, b.f, 0.32);
+  for (const b of blocks) boxLines(b.x, b.y, b.z, b.w, b.h, b.d, b.f, 0.2);
   const eg = new THREE.BufferGeometry();
   eg.setAttribute('position', new THREE.Float32BufferAttribute(ep, 3)); eg.setAttribute('color', new THREE.Float32BufferAttribute(ec, 3));
   scene.add(new THREE.LineSegments(eg, new THREE.LineBasicMaterial({ vertexColors: true })));
 
-  // the ground between the lots: a shade darker than the roofs, dissolving into the page
+  // the ground between the lots: only a shade darker than the roofs, dissolving into the page
   const gg = new THREE.PlaneGeometry(340, 340, 110, 110).rotateX(-Math.PI / 2).translate(ox, G, oz);
-  const street = C('--face-right').lerp(BG, 0.3), gp = gg.attributes.position, gc = [];
+  const street = C('--face-right').lerp(BG, 0.55), gp = gg.attributes.position, gc = [];
   for (let k = 0; k < gp.count; k++) { const c = street.clone().lerp(BG, fadeAt(gp.getX(k), G, gp.getZ(k))); gc.push(c.r, c.g, c.b); }
   gg.setAttribute('color', new THREE.Float32BufferAttribute(gc, 3));
   scene.add(new THREE.Mesh(gg, new THREE.MeshBasicMaterial({ vertexColors: true, polygonOffset: true, polygonOffsetFactor: 3, polygonOffsetUnits: 3 })));
 
-  // a pool of green light on the rooftops around the battery
-  const pool = new THREE.Mesh(new THREE.PlaneGeometry(70, 70).rotateX(-Math.PI / 2), new THREE.MeshBasicMaterial({ map: glowTex, color: VOLT, transparent: true, opacity: 0.16, depthWrite: false }));
+  // a faint pool of light at the foot of the tower that brightens as each wave leaves
+  const pool = new THREE.Mesh(new THREE.PlaneGeometry(60, 60).rotateX(-Math.PI / 2), new THREE.MeshBasicMaterial({ map: glowTex, color: VOLT, transparent: true, opacity: 0, depthWrite: false }));
   pool.position.set(ox, G + 0.95, oz); scene.add(pool);
-  if (!reduced) tickers.push((time) => { pool.material.opacity = 0.13 + Math.sin(time * 1.1) * 0.04; });
+  const flare = () => Math.exp(-wave.age * 1.6);   // 1 at the moment the wave leaves, gone after ~2s
+  if (!reduced) tickers.push(() => { pool.material.opacity = 0.03 + 0.07 * flare(); });
 
-  // energy running along the streets to the battery; about a third run back out (solar export)
-  const runners = Array.from({ length: reduced ? 0 : 16 }, () => ({
-    trail: Array.from({ length: 8 }, (_, q) => {
+  // pulses: on each wave, a few run out from the tower along the streets, then nothing until the next
+  const runners = Array.from({ length: reduced ? 0 : 8 }, () => ({
+    trail: Array.from({ length: 7 }, (_, i) => {
       const m = new THREE.SpriteMaterial({ map: glowTex, color: VOLT, transparent: true, opacity: 0, depthWrite: false });
-      const s = new THREE.Sprite(m); s.scale.setScalar(1.5 - q * 0.14); scene.add(s); return { s, m };
+      const s = new THREE.Sprite(m); s.scale.setScalar(1.3 - i * 0.13); scene.add(s); return { s, m };
     }),
-    pts: null, lens: null, len: 0, d: 0, speed: 0, next: rnd() * 5,
+    pts: null, lens: null, len: 0, d: 0, speed: 0,
   }));
-  function launch(r) {
-    for (let tries = 0; tries < 30; tries++) {
-      const i = Math.round((rnd() - 0.5) * 24), j = Math.round((rnd() - 0.5) * 24);
-      const sx = ox + (i + 0.5) * PITCH, sz = oz + (j + 0.5) * PITCH;
-      if (Math.abs(sx - ox) < 9 || Math.hypot(sx - ox, sz - oz) < 24 || fadeAt(sx, G, sz) > 0.55) continue;
-      const cz = oz + Math.sign(sz - oz) * 0.5 * PITCH, y = G + 0.15;
-      let pts = [V(sx, y, sz), V(sx, y, cz), V(ox + Math.sign(sx - ox) * 6.4, y, cz)];
-      if (rnd() < 0.35) pts = pts.reverse();
+  function launch(r, quadrant) {
+    for (let tries = 0; tries < 40; tries++) {
+      const sx0 = Math.round(rnd() * 9 + 2), sz0 = Math.round(rnd() * 9 + 1);
+      const sxs = quadrant & 1 ? 1 : -1, szs = quadrant & 2 ? 1 : -1;
+      const sx = ox + sxs * (sx0 + 0.5) * PITCH, sz = oz + szs * (sz0 + 0.5) * PITCH;
+      if (fadeAt(sx, G, sz) > 0.6) continue;
+      const cz = oz + szs * 0.5 * PITCH, y = G + 0.15;
+      const pts = [V(ox + sxs * 6.4, y, cz), V(sx, y, cz), V(sx, y, sz)];   // out from the tower
       r.pts = pts; r.lens = [0];
-      for (let q = 1; q < pts.length; q++) r.lens.push(r.lens[q - 1] + pts[q].distanceTo(pts[q - 1]));
-      r.len = r.lens.at(-1); r.d = 0; r.speed = 9 + rnd() * 6; return;
+      for (let i = 1; i < pts.length; i++) r.lens.push(r.lens[i - 1] + pts[i].distanceTo(pts[i - 1]));
+      r.len = r.lens.at(-1); r.d = -rnd() * 3; r.speed = SPEED * (0.95 + rnd() * 0.15); return;
     }
   }
-  const along = (r, d) => { let q = 1; while (q < r.lens.length - 1 && r.lens[q] < d) q++; const a = r.lens[q - 1], b = r.lens[q]; return r.pts[q - 1].clone().lerp(r.pts[q], (d - a) / (b - a || 1)); };
+  const along = (r, d) => { let i = 1; while (i < r.lens.length - 1 && r.lens[i] < d) i++; const a = r.lens[i - 1], b = r.lens[i]; return r.pts[i - 1].clone().lerp(r.pts[i], (d - a) / (b - a || 1)); };
   tickers.push((time, dt) => {
+    if (wave.fresh) { wave.fresh = false; runners.forEach((r, i) => launch(r, i % 4)); }
     for (const r of runners) {
-      if (!r.pts) { if (time < r.next) continue; launch(r); }
+      if (!r.pts) continue;
       r.d += r.speed * dt;
-      if (r.d - 8 * 0.6 > r.len) { r.pts = null; r.next = time + rnd() * 2.5; r.trail.forEach(({ m }) => { m.opacity = 0; }); continue; }
-      r.trail.forEach(({ s, m }, q) => {
-        const dd = r.d - q * 0.6; if (dd < 0 || dd > r.len) { m.opacity = 0; return; }
+      if (r.d - 7 * 0.6 > r.len) { r.pts = null; r.trail.forEach(({ m }) => { m.opacity = 0; }); continue; }
+      r.trail.forEach(({ s, m }, i) => {
+        const dd = r.d - i * 0.6; if (dd < 0 || dd > r.len) { m.opacity = 0; return; }
         s.position.copy(along(r, dd));
-        const env = Math.min(1, dd / 5, (r.len - dd) / 5);
-        m.opacity = env * (1 - q / 8) * (1 - fadeAt(s.position.x, G, s.position.z)) ** 2;
+        const env = Math.min(1, dd / 4, (r.len - dd) / 8);
+        m.opacity = 0.95 * env * (1 - i / 7) * (1 - fadeAt(s.position.x, G, s.position.z)) ** 2;
       });
     }
   });
-}
 
-/* ---------- light: shafts above the battery and the active building, drifting specks ---------- */
+  /* ---------- light: the tower's shaft (flares with each wave), the active building's shaft, drifting specks ---------- */
+  const beamTex = beamTexture();
+  const beam = (w, h) => {
+    const m = new THREE.SpriteMaterial({ map: beamTex, color: VOLT, transparent: true, opacity: 0, depthWrite: false });
+    const s = new THREE.Sprite(m); s.center.set(0.5, 0); s.scale.set(w, h, 1); scene.add(s); return s;
+  };
+  const towerBeam = beam(8, 30); towerBeam.position.set(ox + 0.6, P.depot.top + 0.4, oz);
+  const activeBeam = beam(6, 22);
+  const BEAM_AT = { homes: V(-2.4, P.homes.top + 0.4, 17.6), business: V(17.8, P.business.top + 0.4, -8), strata: V(16.1, P.strata.top + 14.2, -30.9), solar: V(-19.4, P.solar.top + 0.4, 26.1) };
+  const N = 140, pos = new Float32Array(N * 3), colr = new Float32Array(N * 3), speed = new Float32Array(N);
+  const ink = BG.clone().lerp(INK, 0.45), soft = BG.clone().lerp(VOLT, 0.6);
+  for (let k = 0; k < N; k++) {
+    pos.set([ox + (rnd() - 0.5) * 120, G + rnd() * 50, oz + (rnd() - 0.5) * 120], k * 3);
+    colr.set((rnd() < 0.15 ? soft : ink).toArray(), k * 3); speed[k] = 0.3 + rnd() * 0.8;
+  }
+  const g = new THREE.BufferGeometry();
+  g.setAttribute('position', new THREE.BufferAttribute(pos, 3)); g.setAttribute('color', new THREE.BufferAttribute(colr, 3));
+  scene.add(new THREE.Points(g, new THREE.PointsMaterial({ vertexColors: true, size: 1.6 * renderer.getPixelRatio(), sizeAttenuation: false, transparent: true, opacity: innerWidth < 900 ? 0.25 : 0.38, depthWrite: false })));
+  tickers.push((time, dt) => {
+    const c = current[active]; activeBeam.material.opacity = 0.2 * c.level * c.level;
+    if (c.level < 0.15) activeBeam.position.copy(BEAM_AT[active]);
+    towerBeam.material.opacity = reduced ? 0.16 : 0.14 + 0.3 * flare();
+    if (reduced) return;
+    for (let k = 0; k < N; k++) { pos[k * 3 + 1] += speed[k] * dt; if (pos[k * 3 + 1] > G + 50) pos[k * 3 + 1] = G; }
+    g.attributes.position.needsUpdate = true;
+  });
+}
 function beamTexture() {
   // vertical light with fine striations, brightest at the base
   const c = document.createElement('canvas'); c.width = 64; c.height = 256;
@@ -459,37 +502,6 @@ function beamTexture() {
     img.data[k + 3] = 255 * cols[x] * (y / 255) ** 2.2;
   }
   g.putImageData(img, 0, 0); return new THREE.CanvasTexture(c);
-}
-const beamTex = beamTexture();
-function beam(w, h, op) {
-  const m = new THREE.SpriteMaterial({ map: beamTex, color: VOLT, transparent: true, opacity: op, depthWrite: false });
-  const s = new THREE.Sprite(m); s.center.set(0.5, 0); s.scale.set(w, h, 1); scene.add(s); return s;
-}
-const depotBeam = beam(9, 34, 0.5); depotBeam.position.set(P.depot.c[0] + 0.6, P.depot.top + 0.4, P.depot.c[1]);
-const activeBeam = beam(6.5, 26, 0);
-const BEAM_AT = { homes: V(-2.4, P.homes.top + 0.4, 17.6), business: V(17.8, P.business.top + 0.4, -8), strata: V(16.1, P.strata.top + 14.2, -30.9), solar: V(-19.4, P.solar.top + 0.4, 26.1) };
-{
-  let seed = 3; const rnd = () => ((seed = (seed * 16807) % 2147483647) / 2147483647);
-  const N = 260, pos = new Float32Array(N * 3), colr = new Float32Array(N * 3), speed = new Float32Array(N);
-  const ink = BG.clone().lerp(INK, 0.55);
-  for (let k = 0; k < N; k++) {
-    pos.set([P.depot.c[0] + (rnd() - 0.5) * 120, G + rnd() * 50, P.depot.c[1] + (rnd() - 0.5) * 120], k * 3);
-    colr.set((rnd() < 0.4 ? VOLT : ink).toArray(), k * 3); speed[k] = 0.4 + rnd() * 1.2;
-  }
-  const g = new THREE.BufferGeometry();
-  g.setAttribute('position', new THREE.BufferAttribute(pos, 3)); g.setAttribute('color', new THREE.BufferAttribute(colr, 3));
-  const specks = new THREE.Points(g, new THREE.PointsMaterial({ vertexColors: true, size: 1.7 * renderer.getPixelRatio(), sizeAttenuation: false, transparent: true, opacity: innerWidth < 900 ? 0.32 : 0.5, depthWrite: false }));
-  scene.add(specks);
-  tickers.push((time, dt) => {
-    if (!CITY) { // the active building's shaft fades up once its circuit is live
-      const c = current[active]; activeBeam.material.opacity = 0.42 * c.level * c.level;
-      if (c.level < 0.15) activeBeam.position.copy(BEAM_AT[active]);
-    }
-    depotBeam.material.opacity = 0.5 + Math.sin(time * 1.3) * 0.08;
-    if (reduced) return;
-    for (let k = 0; k < N; k++) { pos[k * 3 + 1] += speed[k] * dt; if (pos[k * 3 + 1] > G + 50) pos[k * 3 + 1] = G; }
-    g.attributes.position.needsUpdate = true;
-  });
 }
 
 /* ---------- capsules + italic tags (HTML, anchored to scene points) ---------- */
