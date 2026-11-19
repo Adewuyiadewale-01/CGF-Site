@@ -203,36 +203,47 @@ const live = {
   solar: house(-19.4, P.solar.top, 26.1, 1.2, { solar: true, ev: true }),
 };
 
-/* ---------- distant skyline (city version) ----------
-   A small, dense city far behind the network, as if seen from the top of one of our plinths:
-   tall in the middle, tapering out, sitting on a lower ground plane and fading into the haze. */
-const farCity = new THREE.Group();
+/* ---------- the city beyond (city version) ----------
+   The network continues back into the city: more plinths with buildings, row after row behind the
+   main five, spread across the full width. Each row is smaller, paler and narrower than the one in
+   front, so the city recedes inward toward the centre like it would in depth. */
 if (CITY) {
-  let seed = 11; const rnd = () => ((seed = (seed * 16807) % 2147483647) / 2147483647);
-  const bg = C('--bg'), haze = (n, k) => new THREE.MeshBasicMaterial({ color: C(n).lerp(bg, k) });
-  const faces = [haze('--face-right', 0.45), haze('--face-top', 0.5), haze('--face-top', 0.5), haze('--face-top', 0.5), haze('--face-left', 0.5), haze('--face-top', 0.5)];
-  const far = new THREE.LineBasicMaterial({ color: INK, transparent: true, opacity: 0.2 });
+  let seed = 23; const rnd = () => ((seed = (seed * 16807) % 2147483647) / 2147483647);
+  const bg = C('--bg');
   const toWorld = (sx, d) => [(sx + d) / Math.SQRT2, (d - sx) / Math.SQRT2];
-  const unit = new THREE.BoxGeometry(1, 1, 1), unitEdges = new THREE.EdgesGeometry(unit);
-  const block = (w, h, d, x, y, z) => { const m = new THREE.Mesh(unit, faces); m.scale.set(w, h, d); m.position.set(x, y + h / 2, z); m.add(new THREE.LineSegments(unitEdges, far)); farCity.add(m); };
-  const CX = 0, CD = 0, RX = 17, RD = 7;           // cluster centre and radii, in screen-diagonal units
-  for (let sx = -RX; sx <= RX; sx += 1.05) for (let dd = -RD; dd <= RD; dd += 1.05) {
-    const r = Math.hypot(sx / RX, dd / RD); if (r > 1 || rnd() < 0.18) continue;
-    const [x, z] = toWorld(CX + sx + (rnd() - 0.5) * 0.3, CD + dd + (rnd() - 0.5) * 0.3);
-    const w = 0.55 + rnd() * 0.35, dpt = 0.55 + rnd() * 0.35;
-    let h = 0.4 + Math.pow(1 - r, 1.8) * 7 * (0.45 + rnd() * 0.8);
-    if (r < 0.35 && rnd() < 0.12) h += 4 + rnd() * 4;   // a few towers in the core
-    block(w, h, dpt, x, 0, z);
-    if (h > 5 && rnd() < 0.5) block(w * 0.55, h * 0.18, dpt * 0.55, x, h, z);            // setback crown
-    if (h > 7 && rnd() < 0.5) farCity.add(Object.assign(new THREE.LineSegments(new THREE.BufferGeometry().setFromPoints([V(x, h, z), V(x, h + 1.6, z)]), far))); // mast
+  const clear = (x, z, r) => Object.values(P).every((p) => Math.hypot(p.c[0] - x, p.c[1] - z) > r);
+  const ROWS = 6, CENTRE = 3;
+  let d = -14;
+  for (let k = 1; k <= ROWS; k++) {
+    const sc = Math.pow(0.8, k);                        // row scale
+    const hz = Math.min(0.38 + k * 0.09, 0.88);         // haze toward the page colour
+    const mat = (n) => new THREE.MeshBasicMaterial({ color: C(n).lerp(bg, hz) });
+    const faces = [mat('--face-right'), mat('--face-top'), mat('--face-top'), mat('--face-top'), mat('--face-left'), mat('--face-top')];
+    const edges = new THREE.LineBasicMaterial({ color: INK, transparent: true, opacity: Math.max(0.42 - k * 0.055, 0.1) });
+    const box = (w, h, dd, x, y, z) => boxAt(scene, w, h, dd, x, y, z, { edges, faces });
+    const size = 10 * sc, step = 11.5 * sc, half = 50 * (1 - k * 0.1);
+    d -= 9 * sc + 3 * Math.pow(0.8, k - 1);             // rows get closer together as they recede
+    for (let sx = CENTRE - half + rnd() * step; sx <= CENTRE + half; sx += step * (0.9 + rnd() * 0.3)) {
+      const [x, z] = toWorld(sx, d + (rnd() - 0.5) * 2 * sc);
+      if (!clear(x, z, (size + 11) / 2 + 0.8)) continue;
+      const top = (1 + rnd() * 9) * sc + k * 0.6;
+      box(size, top + DEPTH, size, x, -DEPTH, z);
+      const u = sc, kind = rnd(), y = top, bx = x - 0.4 * u, bz = z - 0.4 * u;
+      if (kind < 0.28) {                                // house with a pitched roof
+        box(4.4 * u, 2.1 * u, 3.2 * u, bx, y, bz);
+        pitched(scene, 4.4 * u, 3.2 * u, 1.4 * u, bx, y + 2.1 * u, bz, { edges, seams: false });
+      } else if (kind < 0.5) {                          // mid-rise block
+        const h = (5 + rnd() * 5) * u; box(4.6 * u, h, 4.2 * u, bx, y, bz); box(1.4 * u, 0.8 * u, 1.2 * u, bx + u, y + h, bz + u);
+      } else if (kind < 0.68) {                         // stepped tower
+        const h = (8 + rnd() * 6) * u; box(4.2 * u, h, 4.2 * u, bx, y, bz); box(2.6 * u, 4 * u, 2.6 * u, bx - 0.4 * u, y + h, bz - 0.4 * u);
+      } else if (kind < 0.84) {                         // shopfront
+        box(6 * u, 2.6 * u, 4 * u, bx, y, bz); box(6.3 * u, 0.16 * u, 1 * u, bx, y + 1.9 * u, bz + 2.5 * u);
+      } else {                                          // slim tower with a mast
+        const h = (12 + rnd() * 8) * u; box(3 * u, h, 3 * u, bx, y, bz);
+        lines(scene, [V(bx, y + h, bz), V(bx, y + h + 3 * u, bz)], edges);
+      }
+    }
   }
-  // where the city meets the ground: one faint horizon line through it
-  const [hx0, hz0] = toWorld(-RX * 1.6, 0), [hx1, hz1] = toWorld(RX * 1.6, 0);
-  farCity.add(new THREE.LineSegments(new THREE.BufferGeometry().setFromPoints([V(hx0, 0, hz0), V(hx1, 0, hz1)]), new THREE.LineBasicMaterial({ color: INK, transparent: true, opacity: 0.12 })));
-  // place it far back and low, centred between the copy and the tower
-  const [px, pz] = toWorld(9, -46);
-  farCity.position.set(px, -19, pz); farCity.scale.setScalar(1.3);
-  scene.add(farCity);
 }
 
 /* ---------- cable trays (white ribbons) between plinths ---------- */
