@@ -18,10 +18,14 @@ async function make(name, w, h, fn) {
   await sharp(buf, { raw: { width: w, height: h, channels: 3 } }).jpeg({ quality: 88, mozjpeg: true }).toFile(out + name + '.jpg');
   console.log('wrote', name);
 }
-// 1. wood grain: warped bands, cream to apricot, a little grain
-{ const A = hex('#F6EBDD'), B = hex('#F0D3AE'), C = hex('#EBC596');
-  await make('wood', 1400, 560, (x, y) => { const u = x / 420, v = y / 420; const w = fbm(u * 0.9, v * 0.9) * 6 + fbm(u * 3, v * 3) * 0.8; const band = 0.5 + 0.5 * Math.sin((v * 7 + w * 2.2 + u * 0.6) * Math.PI);
-    const line = Math.pow(band, 9), soft = Math.pow(band, 2.4); let c = mix(A, B, soft * 0.75); c = mix(c, C, line * 0.55); const n = (rnd() - 0.5) * 6; return c.map((q) => q + n); }); }
+// 1. wood grain: long warped growth rings, fine lines over soft apricot bands
+{ const A = hex('#F7EEE2'), B = hex('#F2D9B8'), C = hex('#E9BE8B');
+  await make('wood', 1400, 560, (x, y) => { const u = x / 520, v = y / 300; const w = fbm(u * 0.7, v * 0.7) * 5 + fbm(u * 2.4, v * 2.4) * 0.6;
+    const ring = (v * 9 + w * 2.6 + u * 0.4); const f = ring - Math.floor(ring);
+    const soft = 0.5 + 0.5 * Math.sin(ring * Math.PI * 2 * 0.5);
+    const fine = Math.pow(Math.max(0, Math.cos(f * Math.PI * 2)), 18);
+    const grain = Math.pow(0.5 + 0.5 * Math.sin((v * 140 + w * 30)), 30) * 0.35;
+    let c = mix(A, B, soft * 0.65); c = mix(c, C, Math.min(1, fine * 0.7 + grain)); const n = (rnd() - 0.5) * 5; return c.map((q) => q + n); }); }
 // 2. dark sawtooth: stepped diagonal strokes fading to the right
 { const A = hex('#262322'), B = hex('#3B3633');
   await make('saw', 1400, 600, (x, y) => { const k = (x + y * 0.55) / 34, f = k - Math.floor(k), step = Math.floor((y + Math.floor(k) * 9) / 26) % 2; const on = f < 0.42 + 0.12 * step ? 1 : 0;
