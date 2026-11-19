@@ -17,9 +17,9 @@ const CITY = document.documentElement.dataset.scene === 'city';
 const EXPORT = new URLSearchParams(location.search).has('export');
 
 const canvas = document.getElementById('iso');
-const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: EXPORT, preserveDrawingBuffer: EXPORT });
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true, preserveDrawingBuffer: EXPORT });
 renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
-renderer.setClearColor(C('--bg'), EXPORT ? 0 : 1);
+renderer.setClearColor(0x000000, 0);   // transparent: the page background (a soft mist gradient) shows through
 const scene = new THREE.Scene();
 const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, -500, 500);
 const resolution = new THREE.Vector2();
