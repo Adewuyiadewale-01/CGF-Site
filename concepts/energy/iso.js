@@ -10,6 +10,8 @@ const css = getComputedStyle(document.documentElement);
 const C = (name) => new THREE.Color(css.getPropertyValue(name).trim());
 const VOLT = C('--volt'), INK = C('--edge');
 const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+// ?scene=city: distant skyline behind the network, and proper pitched roofs
+const CITY = document.documentElement.dataset.scene === 'city';
 
 const canvas = document.getElementById('iso');
 const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
@@ -31,9 +33,9 @@ const faceSet = (top = M.top) => [M.right, M.hidden, top, M.hidden, M.left, M.hi
 const edgeMat = new THREE.LineBasicMaterial({ color: INK, transparent: true, opacity: 0.85 });
 const fineMat = new THREE.LineBasicMaterial({ color: INK, transparent: true, opacity: 0.16 });
 
-function boxAt(parent, w, h, d, x, y, z, { top, edges = edgeMat } = {}) {
+function boxAt(parent, w, h, d, x, y, z, { top, edges = edgeMat, faces } = {}) {
   const g = new THREE.BoxGeometry(w, h, d);
-  const m = new THREE.Mesh(g, faceSet(top)); m.position.set(x + 0, y + h / 2, z);
+  const m = new THREE.Mesh(g, faces || faceSet(top)); m.position.set(x + 0, y + h / 2, z);
   const e = new THREE.LineSegments(new THREE.EdgesGeometry(g), edges); m.add(e);
   parent.add(m); return m;
 }
@@ -48,6 +50,32 @@ function gable(parent, w, d, rise, x, y, z, { edges = edgeMat, alongX = true } =
   m.position.set(x, y, z);
   m.add(new THREE.LineSegments(new THREE.EdgesGeometry(g, 20), edges));
   parent.add(m); return m;
+}
+// a proper pitched roof: two sheet slabs with eave overhang and fascia thickness,
+// filled gable ends, a ridge, and standing-seam lines on the slope facing the viewer
+const roofMat = new THREE.MeshBasicMaterial({ color: C('--roof') });
+function pitched(parent, len, span, rise, x, y, z, { edges = edgeMat, alongX = true, seams = true } = {}) {
+  const g = new THREE.Group(); g.position.set(x, y, z); if (!alongX) g.rotation.y = Math.PI / 2; parent.add(g);
+  const half = span / 2, a = Math.atan2(rise, half), ov = 0.28, th = 0.13, L = Math.hypot(rise, half) + ov;
+  for (const sd of [1, -1]) {
+    const geo = new THREE.BoxGeometry(len + ov * 2, th, L);
+    const slab = new THREE.Mesh(geo, [M.left, M.left, sd > 0 ? roofMat : M.right, M.left, M.left, M.left]);
+    const u = V(0, -Math.sin(a), sd * Math.cos(a)), n = V(0, Math.cos(a), sd * Math.sin(a));
+    slab.position.copy(V(0, rise, 0).addScaledVector(u, L / 2).addScaledVector(n, th / 2));
+    slab.rotation.x = sd * a;
+    slab.add(new THREE.LineSegments(new THREE.EdgesGeometry(geo), edges)); g.add(slab);
+    if (sd > 0 && seams) { // seams run ridge -> eave
+      const sg = [], top = V(0, rise, 0).addScaledVector(n, th + 0.01);
+      for (let i = -len / 2 + 0.35; i < len / 2; i += 0.35) sg.push(top.clone().setX(i), top.clone().addScaledVector(u, L).setX(i));
+      lines(g, sg, fineMat);
+    }
+  }
+  const tri = new THREE.Shape(); tri.moveTo(-half, 0); tri.lineTo(half, 0); tri.lineTo(0, rise); tri.closePath();
+  for (const end of [1, -1]) { // gable ends sit in the wall plane
+    const m = new THREE.Mesh(new THREE.ShapeGeometry(tri), alongX ? M.right : M.left);
+    m.rotation.y = Math.PI / 2; m.position.x = end * len / 2; g.add(m);
+  }
+  return g;
 }
 function lines(parent, segs, mat = fineMat) {
   const g = new THREE.BufferGeometry().setFromPoints(segs); const l = new THREE.LineSegments(g, mat); parent.add(l); return l;
@@ -94,14 +122,23 @@ function house(x, y, z, s = 1, extra = {}) {
   const e = liveEdges(), f = new THREE.LineBasicMaterial({ color: INK.clone(), transparent: true, opacity: 0.4 });
   const g = new THREE.Group(); scene.add(g);
   boxAt(g, 4.6 * s, 2.2 * s, 3.4 * s, x, y, z, { edges: e });
-  gable(g, 4.9 * s, 3.8 * s, 1.5 * s, x, y + 2.2 * s, z, { edges: e });
+  if (CITY) pitched(g, 4.6 * s, 3.4 * s, 1.5 * s, x, y + 2.2 * s, z, { edges: e, seams: !extra.solar });
+  else gable(g, 4.9 * s, 3.8 * s, 1.5 * s, x, y + 2.2 * s, z, { edges: e });
   boxAt(g, 2.2 * s, 1.6 * s, 2.4 * s, x + 2.6 * s, y, z + 1.6 * s, { edges: e });          // garage wing
-  gable(g, 2.4 * s, 2.6 * s, 0.9 * s, x + 2.6 * s, y + 1.6 * s, z + 1.6 * s, { edges: e, alongX: false });
+  if (CITY) pitched(g, 2.4 * s, 2.2 * s, 0.9 * s, x + 2.6 * s, y + 1.6 * s, z + 1.6 * s, { edges: e, alongX: false });
+  else gable(g, 2.4 * s, 2.6 * s, 0.9 * s, x + 2.6 * s, y + 1.6 * s, z + 1.6 * s, { edges: e, alongX: false });
   windowsZ(g, x - 2.1 * s, x + 0.6 * s, y + 0.5 * s, y + 1.9 * s, z + 1.71 * s, 3, 1, f);
   windowsX(g, z - 1.5 * s, z + 0.9 * s, y + 0.4 * s, y + 1.9 * s, x + 2.31 * s, 2, 1, f);
   lines(g, [V(x + 2.0 * s, y, z + 2.81 * s), V(x + 2.0 * s, y + 1.2 * s, z + 2.81 * s), V(x + 2.0 * s, y + 1.2 * s, z + 2.81 * s), V(x + 3.2 * s, y + 1.2 * s, z + 2.81 * s), V(x + 3.2 * s, y + 1.2 * s, z + 2.81 * s), V(x + 3.2 * s, y, z + 2.81 * s)], f);
-  if (extra.solar) { // panel grid on the front roof slope
-    const p = [], r0 = y + 2.2 * s, rise = 1.5 * s, d = 1.9 * s;
+  if (extra.solar && CITY) { // panel array sitting on the front roof sheet: framed rectangle with cell rules
+    const half = 1.7 * s, rise = 1.5 * s, base = y + 2.2 * s, a = Math.atan2(rise, half);
+    const onSlope = (xx, t) => V(xx, base + rise * (1 - t) + 0.14 / Math.cos(a) + 0.04, z + half * t); // t: 0 ridge -> 1 eave
+    const x0 = x - 1.9 * s, x1 = x + 1.5 * s, t0 = 0.18, t1 = 0.82, p = [];
+    for (let i = 0; i <= 5; i++) { const xx = x0 + (x1 - x0) * (i / 5); p.push(onSlope(xx, t0), onSlope(xx, t1)); }
+    for (const t of [t0, (t0 + t1) / 2, t1]) p.push(onSlope(x0, t), onSlope(x1, t));
+    lines(g, p, e);
+  } else if (extra.solar) { // panel grid on the front roof slope
+    const p = [], r0 = y + 2.2 * s + (CITY ? 0.2 : 0), rise = 1.5 * s, d = (CITY ? 1.7 : 1.9) * s;
     for (let i = 0; i <= 4; i++) { const xx = x - 2.0 * s + i * 0.9 * s; p.push(V(xx, r0 + 0.25 * s, z + d * 0.75), V(xx, r0 + rise * 0.85, z + d * 0.12)); }
     for (let j = 0; j <= 2; j++) { const t = j / 2, zz = z + d * (0.75 - 0.63 * t), yy = r0 + 0.25 * s + (rise * 0.85 - 0.25 * s) * t; p.push(V(x - 2.0 * s, yy + 0.02, zz), V(x + 1.6 * s, yy + 0.02, zz)); }
     lines(g, p, e);
@@ -165,6 +202,41 @@ const live = {
   business: shop(17.8, P.business.top, -8),
   solar: house(-19.4, P.solar.top, 26.1, 1.2, { solar: true, ev: true }),
 };
+
+/* ---------- distant skyline (city version): rough tops, fainter lines, filling the empty space ---------- */
+if (CITY) {
+  let seed = 7; const rnd = () => ((seed = (seed * 16807) % 2147483647) / 2147483647);
+  const far = new THREE.LineBasicMaterial({ color: INK, transparent: true, opacity: 0.2 });
+  const farFine = new THREE.LineBasicMaterial({ color: INK, transparent: true, opacity: 0.07 });
+  // distance haze: faces pulled halfway to the page colour
+  const bg = C('--bg'), haze = (n) => new THREE.MeshBasicMaterial({ color: C(n).lerp(bg, 0.55) });
+  const hT = haze('--face-top'), hL = haze('--face-left'), hR = haze('--face-right');
+  const farFaces = [hR, hT, hT, hT, hL, hT];
+  const box = (w, h, d, x, y, z) => boxAt(scene, w, h, d, x, y, z, { edges: far, faces: farFaces });
+  const toWorld = (sx, d) => [(sx + d) / Math.SQRT2, (d - sx) / Math.SQRT2];   // screen-diagonal coords -> x, z
+  const clear = (x, z, r) => Object.values(P).every((p) => Math.hypot(p.c[0] - x, p.c[1] - z) > r);
+  const tops = {
+    block(x, y, z, w) { box(w, 3 + rnd() * 4, w * 0.8, x, y, z); },
+    stepped(x, y, z, w) { const h = 3 + rnd() * 3; box(w, h, w * 0.85, x, y, z); box(w * 0.6, 2 + rnd() * 3, w * 0.55, x - w * 0.1, y + h, z - w * 0.1); },
+    tower(x, y, z, w) { const h = 4 + rnd() * 5; box(w * 0.55, h, w * 0.55, x, y, z); lines(scene, [V(x, y + h, z), V(x, y + h + 2.5, z)], far); },
+    house(x, y, z, w) { box(w * 0.7, 1.6, w * 0.5, x, y, z); pitched(scene, w * 0.7, w * 0.5, 1.0, x, y + 1.6, z, { edges: far, seams: false }); },
+    saw(x, y, z, w) { box(w, 1.8, w * 0.7, x, y, z); for (let k = 0; k < 3; k++) { const xx = x - w / 2 + (k + 0.5) * (w / 3); lines(scene, [V(xx - w / 6, y + 1.8, z + w * 0.35), V(xx + w / 6, y + 2.8, z + w * 0.35), V(xx + w / 6, y + 2.8, z + w * 0.35), V(xx + w / 6, y + 1.8, z + w * 0.35)], far); } },
+    plant(x, y, z, w) { const h = 2.5 + rnd() * 2; box(w, h, w * 0.8, x, y, z); box(w * 0.3, 0.8, w * 0.3, x + w * 0.2, y + h, z); },
+  };
+  const kinds = Object.keys(tops);
+  // rows behind the network, rising as they recede; left of sx -6 stays clear for the copy
+  for (let row = 0; row < 3; row++) {
+    const d = -22 - row * 11;
+    for (let sx = -2 + row * 4; sx < 38; sx += 8 + rnd() * 4) {
+      const [x, z] = toWorld(sx + rnd() * 2, d + rnd() * 3);
+      if (!clear(x, z, 10.5)) continue;
+      const size = 5 + rnd() * 2, top = 1 + row * 3.5 + rnd() * 6;
+      boxAt(scene, size, top + DEPTH, size, x, -DEPTH, z, { edges: far, faces: farFaces });
+      lines(scene, [V(x + size / 2 + 0.01, top - 0.3, z - size / 4), V(x + size / 2 + 0.01, top - 5, z - size / 4)], farFine);
+      tops[kinds[Math.floor(rnd() * kinds.length)]](x - 0.3, top, z - 0.3, size * 0.75);
+    }
+  }
+}
 
 /* ---------- cable trays (white ribbons) between plinths ---------- */
 const routes = {

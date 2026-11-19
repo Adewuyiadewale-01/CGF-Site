@@ -6,7 +6,10 @@
 <title>CGF Energy — concept</title>
 <script>
   // v2 is the same page in the grey / charcoal / orange theme: /?v=2
-  if (new URLSearchParams(location.search).get('v') === '2') document.documentElement.dataset.theme = 'v2';
+  // ?scene=city adds the distant skyline, proper roofs and larger hero copy (combine freely: ?v=2&scene=city)
+  const q = new URLSearchParams(location.search);
+  if (q.get('v') === '2') document.documentElement.dataset.theme = 'v2';
+  if (q.get('scene') === 'city') document.documentElement.dataset.scene = 'city';
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
