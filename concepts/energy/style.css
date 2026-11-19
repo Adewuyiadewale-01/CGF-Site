@@ -127,3 +127,7 @@ h1 em { font-family: "Instrument Serif", serif; font-style: italic; font-weight:
   .legend { left: 16px; right: 16px; bottom: 20px; }
   .cap { display: none; }
 }
+
+/* ?export=1: only the illustration, on transparent, for the Figma file */
+.export, .export body { background: transparent; }
+.export .nav, .export .copy, .export .legend, .export .overlay { visibility: hidden; }

@@ -12,11 +12,13 @@ const VOLT = C('--volt'), INK = C('--edge');
 const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
 // ?scene=city: distant skyline behind the network, and proper pitched roofs
 const CITY = document.documentElement.dataset.scene === 'city';
+// ?export=1 renders the illustration alone on a transparent background (for the Figma file)
+const EXPORT = new URLSearchParams(location.search).has('export');
 
 const canvas = document.getElementById('iso');
-const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: EXPORT, preserveDrawingBuffer: EXPORT });
 renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
-renderer.setClearColor(C('--bg'));
+renderer.setClearColor(C('--bg'), EXPORT ? 0 : 1);
 const scene = new THREE.Scene();
 const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, -500, 500);
 const resolution = new THREE.Vector2();
@@ -402,3 +404,10 @@ function frame() {
   requestAnimationFrame(frame);
 }
 requestAnimationFrame(frame);
+
+/* ---------- export for Figma: illustration only, no pulses, transparent ---------- */
+if (EXPORT) {
+  document.documentElement.classList.add('export');
+  scene.traverse((o) => { if (o.isSprite) o.visible = false; });
+  setTimeout(() => { window.__ready = true; }, 1500);
+}
