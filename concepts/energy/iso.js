@@ -13,7 +13,7 @@ const VOLT = ACCENT ? new THREE.Color('#' + ACCENT) : C('--volt'), INK = C('--ed
 const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
 // ?scene=city: distant skyline behind the network, and proper pitched roofs
 const CITY = document.documentElement.dataset.scene === 'city';
-// ?view=flat: the same scene as a straight-on elevation instead of an isometric view
+// ?view=flat: the same scene through a perspective camera at a gentle angle, instead of isometric
 const FLAT = new URLSearchParams(location.search).get('view') === 'flat';
 // ?export=1 renders the illustration alone on a transparent background (for the Figma file)
 const EXPORT = new URLSearchParams(location.search).has('export');
@@ -23,7 +23,7 @@ const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true,
 renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
 renderer.setClearColor(0x000000, 0);   // transparent: the page background (a soft mist gradient) shows through
 const scene = new THREE.Scene();
-const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, -500, 500);
+const camera = FLAT ? new THREE.PerspectiveCamera(26, 1, 1, 1000) : new THREE.OrthographicCamera(-1, 1, 1, -1, -500, 500);
 const resolution = new THREE.Vector2();
 const V = (x, y, z) => new THREE.Vector3(x, y, z);
 
@@ -127,8 +127,7 @@ function house(x, y, z, s = 1, extra = {}) {
   const e = liveEdges(), f = new THREE.LineBasicMaterial({ color: INK.clone(), transparent: true, opacity: 0.4 });
   const g = new THREE.Group(); scene.add(g);
   boxAt(g, 4.6 * s, 2.2 * s, 3.4 * s, x, y, z, { edges: e });
-  if (FLAT) pitched(g, 3.4 * s, 4.6 * s, 1.7 * s, x, y + 2.2 * s, z, { edges: e, alongX: false });   // gable end faces the viewer
-  else if (CITY) pitched(g, 4.6 * s, 3.4 * s, 1.5 * s, x, y + 2.2 * s, z, { edges: e, seams: !extra.solar });
+  if (CITY || FLAT) pitched(g, 4.6 * s, 3.4 * s, 1.5 * s, x, y + 2.2 * s, z, { edges: e, seams: !extra.solar });
   else gable(g, 4.9 * s, 3.8 * s, 1.5 * s, x, y + 2.2 * s, z, { edges: e });
   boxAt(g, 2.2 * s, 1.6 * s, 2.4 * s, x + 2.6 * s, y, z + 1.6 * s, { edges: e });          // garage wing
   if (CITY || FLAT) pitched(g, 2.4 * s, 2.2 * s, 0.9 * s, x + 2.6 * s, y + 1.6 * s, z + 1.6 * s, { edges: e, alongX: false });
@@ -136,9 +135,7 @@ function house(x, y, z, s = 1, extra = {}) {
   windowsZ(g, x - 2.1 * s, x + 0.6 * s, y + 0.5 * s, y + 1.9 * s, z + 1.71 * s, 3, 1, f);
   windowsX(g, z - 1.5 * s, z + 0.9 * s, y + 0.4 * s, y + 1.9 * s, x + 2.31 * s, 2, 1, f);
   lines(g, [V(x + 2.0 * s, y, z + 2.81 * s), V(x + 2.0 * s, y + 1.2 * s, z + 2.81 * s), V(x + 2.0 * s, y + 1.2 * s, z + 2.81 * s), V(x + 3.2 * s, y + 1.2 * s, z + 2.81 * s), V(x + 3.2 * s, y + 1.2 * s, z + 2.81 * s), V(x + 3.2 * s, y, z + 2.81 * s)], f);
-  if (extra.solar && FLAT) {
-    // flat view: a strip of panels standing on the roof line
-  } else if (extra.solar && CITY) { // panel array sitting on the front roof sheet: framed rectangle with cell rules
+  if (extra.solar && (CITY || FLAT)) { // panel array sitting on the front roof sheet: framed rectangle with cell rules
     const half = 1.7 * s, rise = 1.5 * s, base = y + 2.2 * s, a = Math.atan2(rise, half);
     const onSlope = (xx, t) => V(xx, base + rise * (1 - t) + 0.14 / Math.cos(a) + 0.04, z + half * t); // t: 0 ridge -> 1 eave
     const x0 = x - 1.9 * s, x1 = x + 1.5 * s, t0 = 0.18, t1 = 0.82, p = [];
@@ -211,14 +208,7 @@ const live = {
   solar: house(-19.4, P.solar.top, 26.1, 1.2, { solar: true, ev: true }),
 };
 
-// flat view: turn every plinth and building a quarter-diagonal so its front faces the camera square-on
-if (FLAT) {
-  for (const g of scene.children.filter((o) => o.isGroup)) {
-    const c = new THREE.Box3().setFromObject(g).getCenter(new THREE.Vector3());
-    const pivot = new THREE.Group(); pivot.position.set(c.x, 0, c.z); scene.add(pivot);
-    pivot.attach(g); pivot.rotation.y = Math.PI / 4;
-  }
-}
+
 
 /* ---------- the city below (city version) ----------
    Seen from the top of our plinths: the rest of the city sits far below on the ground, spread
@@ -295,7 +285,6 @@ routes.strata = arcPts;
 
 /* ---------- response rings around the depot ---------- */
 function ring(r) {
-  if (FLAT) return;                                    // rings only read from above
   const pts = []; for (let i = 0; i <= 128; i++) { const a = (i / 128) * Math.PI * 2; pts.push(V(Math.cos(a) * r, 0.02, Math.sin(a) * r)); }
   const l = new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts), new THREE.LineDashedMaterial({ color: INK, transparent: true, opacity: 0.35, dashSize: 0.45, gapSize: 0.5 }));
   l.computeLineDistances(); l.position.set(P.depot.c[0], 6, P.depot.c[1]); scene.add(l);
@@ -331,8 +320,6 @@ const ITEMS = [
   { k: 'strata',   name: 'Apartments',    stat: '41 kWh',  at: V(16.1, 36, -30.9) },
   { k: 'solar',    name: 'Rooftop solar', stat: '+6.6 kW', at: V(-19.4, 5.5, 26.1) },
 ];
-// flat view: markers sit just above each roof line rather than at isometric heights
-if (FLAT) { const y = { homes: 9.6, business: 9.2, strata: 32, solar: 6.4 }; for (const it of ITEMS) it.at.y = y[it.k]; }
 const figure = '<svg viewBox="0 0 26 40" aria-hidden="true"><path class="a" d="M13 1a5 5 0 1 1 0 10a5 5 0 1 1 0-10zM5 13h16a3 3 0 0 1 3 3v11h-4v12h-5V27h-4v12H6V27H2V16a3 3 0 0 1 3-3z"/><path class="b" d="M13 20h-8v7h1v12h5V27h2zm0 0h8v7h-1v12h-5V27h-2z" opacity=".95"/></svg>';
 const bolt = '<svg viewBox="0 0 26 40" aria-hidden="true"><path class="a" d="M16 1L3 23h9l-2 16 13-22h-9z"/><path class="b" d="M12 23l-2 16 13-22h-6z"/></svg>';
 const LEADER = 30;
@@ -377,7 +364,8 @@ function resize() {
   W = canvas.clientWidth; H = canvas.clientHeight; mobile = W < 900;
   renderer.setSize(W, H, false);
   const viewH = mobile ? 96 : FLAT ? 50 : 60, aspect = W / H;
-  camera.top = viewH / 2; camera.bottom = -viewH / 2; camera.left = -viewH * aspect / 2; camera.right = viewH * aspect / 2;
+  if (camera.isPerspectiveCamera) camera.aspect = aspect;
+  else { camera.top = viewH / 2; camera.bottom = -viewH / 2; camera.left = -viewH * aspect / 2; camera.right = viewH * aspect / 2; }
   camera.updateProjectionMatrix();
   resolution.set(W * renderer.getPixelRatio(), H * renderer.getPixelRatio());
 }
@@ -390,10 +378,12 @@ function frame() {
   eased.x += (pointer.x - eased.x) * 0.04; eased.y += (pointer.y - eased.y) * 0.04;
 
   // true isometric, nudged by the pointer
-  const az = Math.PI / 4 + eased.x * (FLAT ? 0.02 : 0.12), el = FLAT ? 0 : 0.6155 - eased.y * 0.05;
-  const look = FLAT ? (mobile ? V(4, 16, 4) : V(-7, 15.5, -7))
+  // perspective: a lower, gentler angle than isometric, still high enough to see every roof
+  const az = Math.PI / 4 + eased.x * (FLAT ? 0.06 : 0.12), el = FLAT ? 0.36 - eased.y * 0.03 : 0.6155 - eased.y * 0.05;
+  const look = FLAT ? (mobile ? V(2, 26, 2) : V(-6.5, 10.5, -6.5))
              : mobile ? V(4, 24, 4) : V(-6, 10.5, -4); // scene runs the full width, a touch right of centre
-  camera.position.set(look.x + Math.sin(az) * Math.cos(el) * 100, look.y + Math.sin(el) * 100, look.z + Math.cos(az) * Math.cos(el) * 100);
+  const dist = FLAT ? (mobile ? 205 : 126) : 100;
+  camera.position.set(look.x + Math.sin(az) * Math.cos(el) * dist, look.y + Math.sin(el) * dist, look.z + Math.cos(az) * Math.cos(el) * dist);
   camera.lookAt(look);
 
   if (!userPicked && !reduced && t - lastSwitch > 4.2) { lastSwitch = t; const order = ['homes', 'business', 'strata', 'solar']; select(order[(order.indexOf(active) + 1) % order.length]); }
