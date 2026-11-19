@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CGF Electrical — concept</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./style.css">
+<script type="importmap">
+{ "imports": {
+  "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js",
+  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"
+} }
+</script>
+</head>
+<body>
+
+<header class="nav">
+  <a class="logo" href="#">CGF <span>Electrical</span></a>
+  <nav aria-label="Main">
+    <a href="#">Services</a><a href="#">Service areas</a><a href="#">Projects</a><a href="#">About</a><a href="#">Blog</a>
+  </nav>
+  <a class="call" href="tel:1300243732"><b>1300 243 732</b><span>Call now</span></a>
+</header>
+
+<main>
+<section class="hero" aria-labelledby="h1">
+  <canvas id="xray" aria-hidden="true"></canvas>
+  <div class="labels" id="labels" aria-hidden="true"></div>
+
+  <div class="copy">
+    <p class="eyebrow">Licensed electricians — Sydney</p>
+    <h1 id="h1">Good wiring is the<br><span>work you never see.</span></h1>
+    <p class="lede">Lighting, power, switchboards, solar and EV chargers for Sydney homes. Planned properly, installed neatly, tested and certified before we leave.</p>
+    <div class="actions">
+      <a class="btn" href="#">Get a free quote <i>→</i></a>
+      <a class="link" href="#">See recent work</a>
+    </div>
+  </div>
+
+  <div class="plate" role="group" aria-labelledby="plate-t">
+    <p class="plate-t" id="plate-t">See how it’s wired</p>
+    <button class="sw" role="switch" aria-checked="true"  data-c="lighting"><span class="n">Lighting</span><span class="m">24 fittings</span><span class="k" style="--c:var(--lighting)"></span></button>
+    <button class="sw" role="switch" aria-checked="false" data-c="power"><span class="n">Power points</span><span class="m">18 outlets</span><span class="k" style="--c:var(--power)"></span></button>
+    <button class="sw" role="switch" aria-checked="false" data-c="solar"><span class="n">Solar + battery</span><span class="m">6.6 kW</span><span class="k" style="--c:var(--solar)"></span></button>
+    <button class="sw" role="switch" aria-checked="false" data-c="ev"><span class="n">EV charging</span><span class="m">7 kW</span><span class="k" style="--c:var(--ev)"></span></button>
+  </div>
+
+  <ul class="trust">
+    <li>4.9 ★ Google</li><li>Lic. 000000C</li><li>Same-day callouts</li>
+  </ul>
+</section>
+</main>
+
+<script type="module" src="./xray.js"></script>
+</body>
+</html>
