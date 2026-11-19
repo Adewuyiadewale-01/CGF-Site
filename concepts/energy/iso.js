@@ -203,46 +203,46 @@ const live = {
   solar: house(-19.4, P.solar.top, 26.1, 1.2, { solar: true, ev: true }),
 };
 
-/* ---------- the city beyond (city version) ----------
-   The network continues back into the city: more plinths with buildings, row after row behind the
-   main five, spread across the full width. Each row is smaller, paler and narrower than the one in
-   front, so the city recedes inward toward the centre like it would in depth. */
+/* ---------- the city below (city version) ----------
+   Seen from the top of our plinths: the rest of the city sits far below on the ground, spread
+   evenly with street gaps between buildings. The further away, the smaller the buildings and the
+   hazier they get, so heights shrink with distance the way they would from a rooftop. */
 if (CITY) {
-  let seed = 23; const rnd = () => ((seed = (seed * 16807) % 2147483647) / 2147483647);
+  let seed = 31; const rnd = () => ((seed = (seed * 16807) % 2147483647) / 2147483647);
   const bg = C('--bg');
   const toWorld = (sx, d) => [(sx + d) / Math.SQRT2, (d - sx) / Math.SQRT2];
   const clear = (x, z, r) => Object.values(P).every((p) => Math.hypot(p.c[0] - x, p.c[1] - z) > r);
-  const ROWS = 6, CENTRE = 3;
-  let d = -14;
-  for (let k = 1; k <= ROWS; k++) {
-    const sc = Math.pow(0.8, k);                        // row scale
-    const hz = Math.min(0.38 + k * 0.09, 0.88);         // haze toward the page colour
-    const mat = (n) => new THREE.MeshBasicMaterial({ color: C(n).lerp(bg, hz) });
-    const faces = [mat('--face-right'), mat('--face-top'), mat('--face-top'), mat('--face-top'), mat('--face-left'), mat('--face-top')];
-    const edges = new THREE.LineBasicMaterial({ color: INK, transparent: true, opacity: Math.max(0.42 - k * 0.055, 0.1) });
+  const GROUND = -26, NEAR = -12, FAR = -84, BANDS = 7;
+  // one material set per distance band
+  const bands = Array.from({ length: BANDS }, (_, i) => {
+    const t = i / (BANDS - 1), hz = 0.32 + t * 0.6;
+    const m = (n) => new THREE.MeshBasicMaterial({ color: C(n).lerp(bg, hz) });
+    return { faces: [m('--face-right'), m('--face-top'), m('--face-top'), m('--face-top'), m('--face-left'), m('--face-top')],
+             edges: new THREE.LineBasicMaterial({ color: INK, transparent: true, opacity: 0.34 - t * 0.27 }) };
+  });
+  let d = NEAR;
+  while (d > FAR) {
+    const t = (NEAR - d) / (NEAR - FAR), sc = 1 / (1 + t * 3.2);   // scale falls off with distance
+    const { faces, edges } = bands[Math.min(BANDS - 1, Math.floor(t * BANDS))];
     const box = (w, h, dd, x, y, z) => boxAt(scene, w, h, dd, x, y, z, { edges, faces });
-    const size = 10 * sc, step = 11.5 * sc, half = 50 * (1 - k * 0.1);
-    d -= 9 * sc + 3 * Math.pow(0.8, k - 1);             // rows get closer together as they recede
-    for (let sx = CENTRE - half + rnd() * step; sx <= CENTRE + half; sx += step * (0.9 + rnd() * 0.3)) {
-      const [x, z] = toWorld(sx, d + (rnd() - 0.5) * 2 * sc);
-      if (!clear(x, z, (size + 11) / 2 + 0.8)) continue;
-      const top = (1 + rnd() * 9) * sc + k * 0.6;
-      box(size, top + DEPTH, size, x, -DEPTH, z);
-      const u = sc, kind = rnd(), y = top, bx = x - 0.4 * u, bz = z - 0.4 * u;
-      if (kind < 0.28) {                                // house with a pitched roof
-        box(4.4 * u, 2.1 * u, 3.2 * u, bx, y, bz);
-        pitched(scene, 4.4 * u, 3.2 * u, 1.4 * u, bx, y + 2.1 * u, bz, { edges, seams: false });
-      } else if (kind < 0.5) {                          // mid-rise block
-        const h = (5 + rnd() * 5) * u; box(4.6 * u, h, 4.2 * u, bx, y, bz); box(1.4 * u, 0.8 * u, 1.2 * u, bx + u, y + h, bz + u);
-      } else if (kind < 0.68) {                         // stepped tower
-        const h = (8 + rnd() * 6) * u; box(4.2 * u, h, 4.2 * u, bx, y, bz); box(2.6 * u, 4 * u, 2.6 * u, bx - 0.4 * u, y + h, bz - 0.4 * u);
-      } else if (kind < 0.84) {                         // shopfront
-        box(6 * u, 2.6 * u, 4 * u, bx, y, bz); box(6.3 * u, 0.16 * u, 1 * u, bx, y + 1.9 * u, bz + 2.5 * u);
-      } else {                                          // slim tower with a mast
-        const h = (12 + rnd() * 8) * u; box(3 * u, h, 3 * u, bx, y, bz);
-        lines(scene, [V(bx, y + h, bz), V(bx, y + h + 3 * u, bz)], edges);
+    const pitch = 9 * sc, half = 70 - t * 26;         // street grid pitch; the view narrows slightly inward
+    for (let sx = -half + rnd() * pitch; sx < half; sx += pitch) {
+      if (rnd() < 0.42 + t * 0.2) continue;                       // empty lots and parks keep it from clustering
+      const [x, z] = toWorld(sx + (rnd() - 0.5) * pitch * 0.25, d + (rnd() - 0.5) * pitch * 0.25);
+      if (!clear(x, z, 9)) continue;
+      const u = sc, w = (2.6 + rnd() * 2.2) * u, dp = (2.4 + rnd() * 2) * u, r = rnd();
+      if (r < 0.35) {                                   // house
+        box(w, 1.5 * u, dp, x, GROUND, z);
+        pitched(scene, w, dp, 1.0 * u, x, GROUND + 1.5 * u, z, { edges, seams: false });
+      } else if (r < 0.75) {                            // low block, 1-3 storeys
+        box(w, (1.4 + rnd() * 2.6) * u, dp, x, GROUND, z);
+      } else if (r < 0.93) {                            // mid-rise
+        const h = (4 + rnd() * 4) * u; box(w * 0.8, h, dp * 0.8, x, GROUND, z);
+      } else {                                          // the odd tower, still well below our plinths
+        const h = (8 + rnd() * 5) * u; box(w * 0.6, h, dp * 0.6, x, GROUND, z);
       }
     }
+    d -= pitch;
   }
 }
 
