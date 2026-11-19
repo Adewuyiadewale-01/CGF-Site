@@ -110,22 +110,14 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 }
 .overlay { position: absolute; inset: 0; pointer-events: none; }
 
-/* capsule callouts, anchored to the scene: only the active property opens up */
+/* property markers on the scene: small rings on dashed leaders; the active one turns green */
 .cap {
-  position: absolute; left: 0; top: 0; pointer-events: auto;
-  display: flex; flex-direction: column; align-items: center; gap: 8px;
-  width: 58px; padding: 12px 0 14px; border-radius: 40px;
-  background: var(--face-top); border: 1px solid var(--volt); text-align: center;
-  transition: border-color .3s, background .3s;
+  position: absolute; left: 0; top: 0; pointer-events: auto; width: 14px; height: 14px; border-radius: 50%;
+  background: var(--face-top); border: 1.5px solid var(--ink); transition: background .3s, border-color .3s, box-shadow .3s;
 }
-.cap svg { width: 26px; height: 40px; }
-.cap svg .a { fill: var(--volt-mid); }
-.cap svg .b { fill: var(--volt); }
-.cap b { font: 600 12px/1 "Geist Mono", monospace; letter-spacing: -.02em; }
 .cap::after { content: ""; position: absolute; left: 50%; top: 100%; height: var(--leader, 30px); border-left: 1px dashed var(--mu); opacity: .7; }
-.cap:not(.on) { width: 14px; height: 14px; padding: 0; border: 1.5px solid var(--ink); background: var(--face-top); }
-.cap:not(.on) svg, .cap:not(.on) b { display: none; }
-.cap:not(.on):hover { border-color: var(--volt); background: var(--volt-soft); }
+.cap:hover { border-color: var(--volt); }
+.cap.on { background: var(--volt); border-color: var(--volt); box-shadow: 0 0 0 5px color-mix(in srgb, var(--volt) 18%, transparent); }
 
 .copy { position: absolute; left: 48px; top: 164px; z-index: 4; max-width: 540px; }
 .eyebrow { display: flex; align-items: center; gap: 10px; font: 500 12px/1 "Geist Mono", monospace; letter-spacing: .08em; text-transform: uppercase; color: var(--mu); }
@@ -141,18 +133,20 @@ h1 em { font-family: "Instrument Serif", serif; font-style: italic; font-weight:
 .link span { color: var(--volt); transition: transform .25s; }
 .link:hover span { transform: translate(2px, -2px); }
 
-/* property picker: a tab group built from the same button */
-.legend { position: absolute; left: 48px; bottom: 44px; z-index: 4; }
-.legend p { font: italic 400 20px/1.3 "Instrument Serif", serif; color: var(--mu); margin-bottom: 12px; }
-.tabs { display: flex; flex-wrap: wrap; gap: 4px; }
-.tab { padding: 15px 24px; font-size: 17px; color: var(--ink); background: var(--tab); box-shadow: inset 3px 0 0 transparent; }
-.tab:hover { box-shadow: inset 3px 0 0 var(--volt); }
-.tab[aria-selected="true"] { color: var(--on-ink); background: var(--ink); box-shadow: inset 3px 0 0 var(--volt); }
-
-/* city version: solid nav so the skyline passes behind it */
-:root[data-scene="city"] .nav { background: var(--bg); }
-/* a soft wash of page colour behind the copy so the city reads behind it, not through it */
-:root[data-scene="city"] .overlay { background: radial-gradient(40% 34% at 15% 27%, var(--bg) 40%, color-mix(in srgb, var(--bg) 65%, transparent) 70%, transparent 100%); }
+/* property picker: quiet progress tabs at the bottom right; the active bar fills while it plays */
+.legend { position: absolute; right: 32px; bottom: 40px; z-index: 4; }
+.legend p { font: 400 11px/1 "Geist Mono", monospace; letter-spacing: .08em; text-transform: uppercase; color: var(--mu); margin-bottom: 14px; }
+.tabs { display: flex; gap: 20px; }
+.tabs .tab {
+  display: grid; grid-template-columns: auto 1fr; align-items: baseline; column-gap: 8px; row-gap: 10px; width: 118px; padding: 0;
+  background: none; clip-path: none; box-shadow: none; color: var(--mu); text-align: left; font: 500 13px/1 "Geist", sans-serif;
+  transition: color .25s;
+}
+.tabs .tab .n { font: 400 11px/1 "Geist Mono", monospace; opacity: .8; }
+.tabs .tab .bar { grid-column: 1 / -1; position: relative; height: 2px; border-radius: 2px; background: color-mix(in srgb, var(--ink) 12%, transparent); overflow: hidden; }
+.tabs .tab .bar i { position: absolute; inset: 0; background: var(--volt); transform: scaleX(0); transform-origin: left; }
+.tabs .tab:hover, .tabs .tab[aria-selected="true"] { color: var(--ink); }
+.tabs .tab:focus-visible { outline: 2px solid var(--volt); outline-offset: 6px; }
 
 @media (max-width: 900px) {
   .nav { padding: 12px 16px; }
@@ -161,12 +155,14 @@ h1 em { font-family: "Instrument Serif", serif; font-style: italic; font-weight:
   .btn-nav { height: 46px; padding: 0 14px; font-size: 11.5px; }
   .nav-left { height: 46px; }
   .logo span { font-size: 18px; }
-  .tab { padding: 12px 16px; font-size: 15px; }
   .copy { left: 16px; right: 16px; top: 104px; }
   h1 { white-space: normal; }
   h1 br { display: none; }
   .legend { left: 16px; right: 16px; bottom: 20px; }
-  .cap { display: none; }
+  .tabs { gap: 12px; }
+  .tabs .tab { width: auto; flex: 1; font-size: 12px; white-space: nowrap; }
+  .tabs .tab .n { display: none; }
+  .cap::after { display: none; }
 }
 
 /* ?export=1: only the illustration, on transparent, for the Figma file */

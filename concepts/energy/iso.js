@@ -322,18 +322,18 @@ const LEADER = 30;
 const caps = ITEMS.map((it) => {
   const b = document.createElement('button'); b.className = 'cap'; b.type = 'button';
   b.setAttribute('aria-label', `Show the circuit to ${it.name}`);
-  b.innerHTML = (it.k === 'solar' ? bolt : figure) + `<b>${it.stat}</b>`;
   b.style.setProperty('--leader', LEADER + 'px');
   b.addEventListener('click', () => select(it.k, true));
   overlay.appendChild(b); return { ...it, el: b };
 });
-const TAGS = []; // labels kept to the capsules only
+const TAGS = []; // no labels on the illustration
 const tags = TAGS.map((t) => { const s = document.createElement('span'); s.className = 'tag' + (t.slant ? ' slant' : ''); s.textContent = t.text; overlay.appendChild(s); return { ...t, el: s }; });
 
 const chipsEl = document.getElementById('chips');
 const chips = ITEMS.map((it) => {
   const b = document.createElement('button'); b.className = 'tab'; b.type = 'button'; b.setAttribute('role', 'tab'); b.setAttribute('aria-selected', 'false');
-  b.textContent = it.name; b.addEventListener('click', () => select(it.k, true)); chipsEl.appendChild(b); return { k: it.k, el: b };
+  b.innerHTML = `<span class="n">0${ITEMS.indexOf(it) + 1}</span><span class="l">${it.name}</span><i class="bar"><i></i></i>`;
+  b.addEventListener('click', () => select(it.k, true)); chipsEl.appendChild(b); return { k: it.k, el: b, bar: b.querySelector('.bar i') };
 });
 
 // arrow keys move between tabs
@@ -393,9 +393,11 @@ function frame() {
     for (const m of mats) m.color.copy(INK).lerp(white.copy(VOLT), lv);
   }
 
+  const prog = userPicked || reduced ? 1 : Math.min(1, (t - lastSwitch) / 4.2);
+  for (const c of chips) c.bar.style.transform = `scaleX(${c.k === active ? prog : 0})`;
   for (const c of caps) {
     tmp.copy(c.at).project(camera);
-    // capsule bottom sits LEADER px above the anchor; inactive ones collapse to a dot
+    // marker sits LEADER px above its building, on a dashed leader
     const x = ((tmp.x + 1) / 2) * W, y = ((1 - tmp.y) / 2) * H + 30;
     c.el.style.transform = `translate(${x - c.el.offsetWidth / 2}px, ${y - c.el.offsetHeight - LEADER}px)`;
   }
