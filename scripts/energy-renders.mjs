@@ -16,6 +16,9 @@ const JOBS = {
   shop:             'asset=shop',
   'panel-exploded': 'asset=panel&t=1',
   'battery-exploded': 'asset=battery&t=1',
+  'flight-roof':    'asset=flight&cam=-11,8.6,14.5,-22.5,3,1.5&phase=0.5',
+  'flight-evening': 'asset=flight&cam=16,15,27,1,2.6,0&phase=2.35',
+  diorama:          'asset=diorama',
 };
 const names = process.argv.slice(2).length ? process.argv.slice(2) : Object.keys(JOBS);
 const browser = await chromium.launch({ args: ['--use-angle=metal', '--enable-gpu', '--ignore-gpu-blocklist'] });

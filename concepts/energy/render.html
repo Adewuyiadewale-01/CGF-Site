@@ -16,8 +16,8 @@
 <body>
 <canvas id="c"></canvas>
 <script type="module">
-  import { V, makeStage } from './kit.js';
-  import { street, building, exploded } from './scenes.js';
+  import { THREE, V, makeStage } from './kit.js';
+  import { street, building, exploded, diorama } from './scenes.js';
   const q = new URLSearchParams(location.search), asset = q.get('asset') || 'street';
   const frames = {
     street:  { viewH: 36, look: V(2.5, 3, 0), az: 0.5, el: 0.5 },
@@ -27,8 +27,12 @@
     panel:   { viewH: 16, look: V(0, 4.2, 0) },
     battery: { viewH: 17, look: V(-0.8, 6.4, -0.4) },
   };
-  const stage = makeStage(document.getElementById('c'), { ...frames[asset], preserve: true });
+  // ?asset=flight&cam=px,py,pz,lx,ly,lz&phase=: the How it works camera (perspective, fogged)
+  const cam = (q.get('cam') || '-11,8.6,14.5,-22.5,3,1.5').split(',').map(Number);
+  const stage = makeStage(document.getElementById('c'), { ...(frames[asset] || { viewH: 50, look: V(0, -1, 0), el: 0.62 }), preserve: true, fov: asset === 'flight' ? 32 : 0 });
   let s;
+  if (asset === 'diorama') { const d = diorama(stage); for (let i = 0; i < 60; i++) d.set(1, 2 + i * 0.016, 0.016, i === 30); stage.render(); window.__ready = true; throw 0; }
+  if (asset === 'flight') { s = street(stage); stage.scene.fog = new THREE.Fog(0xEEF2F1, 40, 120); stage.place = () => { stage.camera.position.set(cam[0], cam[1], cam[2]); stage.camera.lookAt(cam[3], cam[4], cam[5]); }; for (let i = 0; i < 120; i++) s.set(+(q.get('phase') ?? 0.5), 1.3 + i * 0.016); stage.place(); stage.renderer.render(stage.scene, stage.camera); window.__ready = true; throw 0; }
   if (asset === 'street') s = street(stage);
   else if (asset === 'panel' || asset === 'battery') s = exploded(stage, asset);
   else building(stage, asset);
