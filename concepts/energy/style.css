@@ -111,7 +111,8 @@ h1 em { font-family: "Instrument Serif", serif; font-style: italic; font-weight:
 .tab:hover { box-shadow: inset 3px 0 0 var(--volt); }
 .tab[aria-selected="true"] { color: var(--on-ink); background: var(--ink); box-shadow: inset 3px 0 0 var(--volt); }
 
-/* city version: slightly larger hero copy */
+/* city version: solid nav so the skyline passes behind it; slightly larger hero copy */
+:root[data-scene="city"] .nav { background: var(--bg); }
 :root[data-scene="city"] .copy { max-width: 540px; top: 164px; }
 :root[data-scene="city"] h1 { font-size: clamp(44px, 4.5vw, 68px); }
 :root[data-scene="city"] .lede { font-size: 17.5px; max-width: 460px; }
