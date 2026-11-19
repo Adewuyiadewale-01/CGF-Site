@@ -294,11 +294,12 @@ export function makeKit(scene, pal = PAL) {
 }
 
 /** An isometric stage on a canvas: renderer + ortho camera framed on a box. */
-export function makeStage(canvas, { viewH = 30, look = V(0, 0, 0), az = Math.PI / 4, el = 0.6155, transparent = true, preserve = false } = {}) {
+export function makeStage(canvas, { viewH = 30, look = V(0, 0, 0), az = Math.PI / 4, el = 0.6155, transparent = true, preserve = false, fov = 0 } = {}) {
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: transparent, preserveDrawingBuffer: preserve });
   renderer.setPixelRatio(Math.min(devicePixelRatio, 2)); renderer.setClearColor(0x000000, 0);
   const scene = new THREE.Scene();
-  const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, -500, 500);
+  // fov > 0: a perspective camera (cinematic sections); otherwise isometric
+  const camera = fov ? new THREE.PerspectiveCamera(fov, 1, 0.5, 400) : new THREE.OrthographicCamera(-1, 1, 1, -1, -500, 500);
   const resolution = new THREE.Vector2();
   const view = { viewH, look: look.clone(), az, el, dist: 100 };
   function place() {
@@ -310,6 +311,7 @@ export function makeStage(canvas, { viewH = 30, look = V(0, 0, 0), az = Math.PI 
   // project: re-fit the camera to view.viewH (cheap, call every frame); resize: also re-size the drawing buffer
   function project() {
     const aspect = W / H;
+    if (camera.isPerspectiveCamera) { camera.aspect = aspect; camera.updateProjectionMatrix(); return; }
     camera.top = view.viewH / 2; camera.bottom = -view.viewH / 2; camera.left = -view.viewH * aspect / 2; camera.right = view.viewH * aspect / 2;
     camera.updateProjectionMatrix();
   }
