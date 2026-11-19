@@ -64,40 +64,54 @@
   </ul>
 </section>
 
-<!-- ===== traffic planner ===== -->
-<section class="panel planner topo" id="planner" aria-labelledby="pl-h">
+<!-- ===== traffic planner: your home, drawn like a map ===== -->
+<section class="panel mapsec planner" id="planner" aria-labelledby="pl-h">
+  <div class="stage"><div class="map" id="planMap" role="img" aria-label="A map of your apartment with the route from the selected device to the street"></div><div class="markers" id="planMarkers"></div></div>
   <div class="copy">
-    <p class="label reveal">Traffic Planner</p>
+    <p class="eyebrow reveal">Traffic Planner</p>
     <h2 id="pl-h" class="h2 split">Give every device its own lane, on your terms.</h2>
     <p class="body reveal">Tell Vyre what matters — the 4K call, the ranked match, the 2 am backup — and it plans a path for each one through your home, re-routing in under a millisecond when anything changes.</p>
-    <a class="btn btn-dark reveal" href="#signal">Explore the planner <i aria-hidden="true">↗</i></a>
+    <a class="btn btn-grey reveal" href="#signal">Explore the planner <i aria-hidden="true">↗</i></a>
   </div>
-  <div class="plan-stage">
-    <canvas id="plan3d" aria-label="An apartment plan with lit paths from the router to each device"></canvas>
-    <img class="still" src="./assets/plan.png" alt="">
-  </div>
-  <form class="card settings reveal" id="settings" aria-label="Device settings" onsubmit="return false">
-    <header><svg viewBox="0 0 14 14" aria-hidden="true"><rect x="1.5" y="2.5" width="11" height="7.5" rx="1.2"/><path d="M5 12.5H9"/></svg><b>Device settings</b></header>
-    <label class="field"><span>Device</span>
-      <select id="device">
+  <div class="ui">
+    <form class="ui-card settings" id="settings" aria-label="Device settings" onsubmit="return false">
+      <header><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="1.8" y="2.8" width="12.4" height="8.4" rx="1.4"/><path d="M5.5 13.6h5"/></svg>Device settings</header>
+      <label class="f"><span>Device</span><span class="fld sel"><select id="device">
         <option value="mac">Studio Mac</option><option value="console">Console</option><option value="tv">Living room TV</option><option value="phone">Maya’s phone</option><option value="tablet">Kids tablet</option><option value="cam">Door camera</option>
-      </select>
-    </label>
-    <div class="field"><span>Priority</span><output id="prio">High <small>1 of 23</small></output></div>
-    <div class="field"><span>Latency budget</span><output id="budget">8 <small>ms</small></output></div>
-    <div class="field"><span>Bandwidth floor</span><output id="floor">500 <small>Mbps</small></output></div>
-    <div class="field"><span>Band</span><div class="seg" id="band" role="radiogroup" aria-label="Band"><button type="button" role="radio" aria-checked="false">2.4</button><button type="button" role="radio" aria-checked="false">5</button><button type="button" role="radio" aria-checked="true">6 GHz</button></div></div>
-    <div class="field"><span>Focus mode</span><div class="seg" id="focus" role="radiogroup" aria-label="Focus mode"><button type="button" role="radio" aria-checked="false">Off</button><button type="button" role="radio" aria-checked="true">On</button></div></div>
-  </form>
-  <article class="card path reveal" id="path" aria-live="polite">
-    <b class="path-title" id="pathTitle">Studio Mac → Video call</b>
-    <div class="acts"><button class="on" type="button">Pin lane</button><button type="button" id="reroute">Reroute</button><button type="button">Share</button></div>
-    <p class="path-big"><span id="pathMs">3.1 ms</span><small id="pathSub">end to end · 14 reroutes today</small></p>
-    <dl><div><dt>Jitter</dt><dd id="pJit">0.4 ms</dd></div><div><dt>Packet loss</dt><dd>0.00 %</dd></div><div><dt>Throughput</dt><dd id="pThr">2.1 Gbps</dd></div></dl>
-    <p class="label mute">Path breakdown</p>
-    <ol class="hops" id="hops"></ol>
-  </article>
-  <div class="built reveal"><span>Built for</span><a href="#planner">Homes ↗</a><a href="#planner">Creators ↗</a><a href="#planner">Gamers ↗</a><a href="#work">Small offices ↗</a></div>
+      </select></span></label>
+      <div class="f"><span>Latency budget</span><span class="fld"><b id="budget">8</b><small>ms</small></span></div>
+      <div class="f"><span>Bandwidth floor</span><span class="fld"><b id="floor">500</b><small>Mbps</small></span></div>
+      <div class="f"><span>Priority rank</span><span class="step"><span class="fld"><b id="rank">1</b></span><button type="button" data-step="1" aria-label="Lower priority">−</button><button type="button" data-step="-1" aria-label="Raise priority">+</button></span></div>
+      <div class="f"><span>Band</span><span class="fld"><b id="band">6 GHz</b><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4.5 6.5 8 10l3.5-3.5"/></svg></span></div>
+      <div class="f"><span>Focus mode</span><span class="toggle" id="focus" role="radiogroup" aria-label="Focus mode"><button type="button" role="radio" aria-checked="false">Off</button><button type="button" role="radio" aria-checked="true">On</button></span></div>
+    </form>
+    <article class="ui-card lane-card" id="laneCard" aria-live="polite">
+      <div class="lc-top">
+        <header><b id="laneTitle">Studio Mac to Video call</b><button type="button" class="x" aria-label="Close"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4.5 4.5l7 7M11.5 4.5l-7 7"/></svg></button></header>
+        <p class="sub" id="laneSub">Lane 1 of 23 · 4K · Priority high</p>
+        <div class="acts">
+          <button type="button" class="on" id="pinBtn"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 14.5s4.5-4.1 4.5-7.6A4.5 4.5 0 0 0 3.5 6.9C3.5 10.4 8 14.5 8 14.5z"/><circle cx="8" cy="6.8" r="1.6"/></svg>Pin lane</button>
+          <button type="button" id="reroute"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M13 8a5 5 0 1 1-1.5-3.6M13 2.5v2.8h-2.8"/></svg>Reroute</button>
+          <button type="button"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 10V2.5M5 5.2 8 2.3l3 2.9M3.5 8.5v4.2c0 .6.4 1 1 1h7c.6 0 1-.4 1-1V8.5"/></svg>Share</button>
+        </div>
+      </div>
+      <div class="lc-body">
+        <div class="sum"><p><b id="laneMs">3.1 ms end to end</b><span id="laneStable">Stable for 14 h</span></p><small id="laneMeta">4 hops · 2.1 Gbps · 2 reroutes today</small></div>
+        <dl>
+          <div><dt>Jitter</dt><dd id="lJit">0.4 ms</dd></div><div><dt>Throughput</dt><dd id="lThr">2.1 Gbps</dd></div><div><dt>Packet loss</dt><dd>0.00 %</dd></div><div><dt>Bandwidth reserved</dt><dd id="lRes">500 Mbps</dd></div>
+        </dl>
+        <p class="warn" id="lWarn"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 2.2 14.6 13.5H1.4L8 2.2z"/><path d="M8 6.5v3.2" class="w"/><circle cx="8" cy="11.5" r=".8" class="w"/></svg><span>Microwave noise on 2.4 GHz — lane kept on 6 GHz</span></p>
+        <p class="lbl">Route breakdown</p>
+        <ol class="route-list" id="routeList"></ol>
+      </div>
+    </article>
+    <article class="ui-card hop-card" id="hopCard" aria-live="polite">
+      <header><span class="logo-sq" id="hopLogo">n</span><b id="hopTitle">Northwire · Surry Hills exchange</b></header>
+      <p class="chips" id="hopChips"><span>1 Gbps</span><span>1.7 ms</span><span>FTTP</span></p>
+      <dl id="hopRows"><div><dt>Distance</dt><dd>1.2 km</dd></div><div><dt>Congestion now</dt><dd class="ok">Low</dd></div><div><dt>Peak tonight</dt><dd>7–10 pm, avoided</dd></div></dl>
+    </article>
+  </div>
+  <div class="tailor reveal"><span>Built for your home</span><a href="#planner">Homes <i>↗</i></a><a href="#planner">Creators <i>↗</i></a><a href="#planner">Gamers <i>↗</i></a><a href="#work">Small offices <i>↗</i></a></div>
 </section>
 
 <!-- ===== quote + stats ===== -->
@@ -115,25 +129,35 @@
   </section>
 </div>
 
-<!-- ===== signal map ===== -->
-<section class="panel signal dark" id="signal" aria-labelledby="sg-h">
+<!-- ===== signal map: the same home at night, coverage drawn live ===== -->
+<section class="panel mapsec signal dark" id="signal" aria-labelledby="sg-h">
+  <div class="stage"><div class="map" id="sigMap" aria-hidden="true"></div><canvas class="heat" id="heat" aria-label="Wi-Fi coverage across the apartment"></canvas><div class="markers" id="sigMarkers"></div><div class="fade" aria-hidden="true"></div></div>
   <div class="copy">
-    <p class="label reveal">Signal Map</p>
+    <p class="eyebrow reveal">Signal Map</p>
     <h2 id="sg-h" class="h2 split">See your Wi-Fi the way your walls see it.</h2>
-    <p class="body reveal">A live map of coverage, room by room. Vyre measures what every wall costs and moves the mesh until the dead zones are gone. Nothing to calibrate, no app gymnastics.</p>
-    <button class="btn btn-primary reveal" id="meshToggle" type="button" aria-pressed="true">Vyre Mini: on <i aria-hidden="true">↗</i></button>
+    <p class="body reveal">A live map of coverage, room by room. Vyre measures what every wall costs and moves the mesh until the dead zones are gone.</p>
+    <a class="btn btn-primary reveal" href="#help">See it in your home <i aria-hidden="true">↗</i></a>
   </div>
-  <div class="map-stage">
-    <canvas id="signal3d" aria-label="A heat map of Wi-Fi coverage across the apartment"></canvas>
-    <img class="still" src="./assets/signal.jpg" alt="">
-    <div class="pins" id="pins"></div>
+  <div class="ui">
+    <article class="ui-card mesh-card">
+      <header>
+        <span class="logo-sq soft"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M1.8 6.2a9 9 0 0 1 12.4 0M4 8.6a5.8 5.8 0 0 1 8 0M6.2 11a2.6 2.6 0 0 1 3.6 0"/><circle cx="8" cy="13.2" r=".9"/></svg></span>
+        <span class="t"><b>Vyre Mini · Hallway</b><small id="meshState">Mesh node · online 41 days</small></span>
+        <button class="switch" id="meshToggle" type="button" role="switch" aria-checked="true" aria-label="Vyre Mini"><i></i></button>
+      </header>
+      <dl>
+        <div><dt>Covers</dt><dd id="mCovers">Bedroom · Kids · Entry</dd></div>
+        <div><dt>Backhaul</dt><dd id="mBack">6 GHz · 2.4 Gbps</dd></div>
+        <div><dt>Weakest room</dt><dd id="mWeak" class="ok">Kids · −54 dBm</dd></div>
+      </dl>
+      <p class="legend"><span>Weak</span><i></i><span>Strong</span></p>
+    </article>
+    <article class="ui-card focus-card">
+      <svg viewBox="0 0 112 112" aria-hidden="true"><circle cx="56" cy="56" r="46" class="track"/><circle cx="56" cy="56" r="46" class="arc" id="ringArc"/><path d="M41 52a21 21 0 0 1 30 0M46 58a13.5 13.5 0 0 1 20 0" class="wf"/><circle cx="56" cy="65" r="2.6" class="wd"/></svg>
+      <b>3 h 20 / 4 h</b><small>Focus hours left on the kids tablet</small>
+    </article>
   </div>
-  <div class="legend"><span>Weak</span><i></i><span>Strong</span><b id="sigNote">−38 dBm in the studio · 0 dead zones</b></div>
-  <article class="card ring reveal">
-    <svg viewBox="0 0 84 84" aria-hidden="true"><circle cx="42" cy="42" r="34" class="track"/><circle cx="42" cy="42" r="34" class="arc" id="ringArc"/><rect x="40.5" y="28" width="3" height="28" rx="1.5"/></svg>
-    <div><p class="label mute">Focus hours · Kids tablet</p><b>3 h 20 / 4 h</b><small>Games pause at 8:30 pm. Homework sites stay on.</small></div>
-  </article>
-  <div class="built light reveal"><span>Made for</span><a href="#signal">Families ↗</a><a href="#signal">Share houses ↗</a><a href="#signal">Studios ↗</a></div>
+  <div class="tailor light reveal"><span>Made for</span><a href="#signal">Families <i>↗</i></a><a href="#signal">Share houses <i>↗</i></a><a href="#signal">Studios <i>↗</i></a></div>
 </section>
 
 <!-- ===== uptime + quote ===== -->
@@ -195,7 +219,7 @@
 </div>
 
 <!-- ===== for work ===== -->
-<section class="panel work topo" id="work" aria-labelledby="wk-h">
+<section class="panel work" id="work" aria-labelledby="wk-h">
   <div class="copy">
     <p class="label reveal">Vyre for Work</p>
     <h2 id="wk-h" class="h2 split">Run every studio, café and office from one screen.</h2>
