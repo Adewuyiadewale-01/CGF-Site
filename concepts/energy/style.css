@@ -1,119 +1,118 @@
+/* v1: white, ink and electric ultramarine */
 :root {
   --bg: #FFFFFF;
   --ink: #141416;
   --mu: #6E6E76;
   --hair: #E4E4E8;
-  --volt: #4A3AFF;       /* electric ultramarine: the only accent */
+  --volt: #4A3AFF;        /* the only accent */
   --volt-soft: #ECEAFF;
+  --volt-mid: #BDB5FF;
+  --on-ink: #FFFFFF;
+  --tab: #F1F1F4;
+  /* scene */
+  --edge: #1C1C20;
+  --face-top: #FFFFFF;
+  --face-left: #F5F5F7;
+  --face-right: #E8E8EC;
 }
+/* v2: warm grey, charcoal and signal orange */
+:root[data-theme="v2"] {
+  --bg: #E4E4E3;
+  --ink: #2E2E2E;
+  --mu: #6A6A68;
+  --hair: #CCCCC9;
+  --volt: #E8742C;
+  --volt-soft: #F2D8C6;
+  --volt-mid: #F0B48C;
+  --on-ink: #F4F4F3;
+  --tab: #D8D8D6;
+  --edge: #3A3A3A;
+  --face-top: #F1F1F0;
+  --face-left: #E9E9E8;
+  --face-right: #D8D8D6;
+}
+
 * { box-sizing: border-box; margin: 0; padding: 0; }
 html, body { background: var(--bg); color: var(--ink); }
 body { font-family: "Geist", system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
 a { color: inherit; text-decoration: none; }
 button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
+:focus-visible { outline: 2px solid var(--volt); outline-offset: 3px; }
 
-/* nav: one floating instrument strip. logo | sections | live grid readout | action */
-.nav {
-  position: fixed; top: 20px; left: 50%; transform: translateX(-50%); z-index: 10;
-  width: min(1180px, calc(100% - 32px));
-  display: flex; align-items: stretch; height: 56px;
-  background: rgba(255,255,255,.92); border: 1px solid var(--hair); border-radius: 14px;
-  box-shadow: 0 1px 0 rgba(20,20,22,.03), 0 12px 32px -18px rgba(20,20,22,.18);
-  -webkit-backdrop-filter: saturate(1.4) blur(10px); backdrop-filter: saturate(1.4) blur(10px);
+/* the one button: clipped corner like a cable tag, with an accent edge */
+.btn, .tab {
+  display: inline-flex; align-items: center; justify-content: center;
+  padding: 15px 26px; font-weight: 500; font-size: 15px; color: var(--on-ink); background: var(--ink);
+  clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 0 100%);
+  box-shadow: inset 3px 0 0 var(--volt);
+  transition: background .25s, color .25s, box-shadow .25s;
 }
-.nav > * { display: flex; align-items: center; }
-.nav > * + * { border-left: 1px solid var(--hair); }
-.logo { padding: 0 22px 0 18px; gap: 8px; font-weight: 600; font-size: 18px; letter-spacing: -.02em; }
-.logo svg { width: 22px; height: 22px; fill: var(--volt); }
-.logo span { font-family: "Instrument Serif", serif; font-style: italic; font-weight: 400; font-size: 18px; color: var(--mu); letter-spacing: 0; margin-left: -2px; }
-.nav nav { flex: 1; gap: 2px; padding: 0 10px; font-size: 14px; }
-.nav nav a { padding: 8px 13px; border-radius: 8px; color: var(--mu); transition: color .2s, background .2s; }
-.nav nav a:hover { color: var(--ink); background: #F4F4F6; }
-.nav nav a[aria-current="page"] { color: var(--ink); }
-.nav nav a[aria-current="page"]::before { content: ""; display: inline-block; width: 5px; height: 5px; border-radius: 50%; background: var(--volt); margin-right: 8px; vertical-align: 2px; }
-.live { gap: 10px; padding: 0 18px; font: 400 12px/1 "Geist Mono", monospace; color: var(--mu); }
-.live svg { width: 64px; height: 18px; overflow: visible; }
-.live polyline { fill: none; stroke: var(--volt); stroke-width: 1.5; stroke-linejoin: round; transition: all .6s; }
-.live b { font-weight: 500; color: var(--ink); }
-.nav-cta { padding: 0 22px; margin: -1px -1px -1px 0; border-radius: 0 14px 14px 0; background: var(--ink); color: #fff; font-weight: 500; font-size: 14px; transition: background .25s; }
-.nav-cta:hover { background: var(--volt); }
-.nav a:focus-visible { outline: 2px solid var(--volt); outline-offset: -4px; }
+.btn:hover { background: var(--volt); box-shadow: inset 3px 0 0 var(--ink); }
+
+/* nav: full width, hairline underneath; logo left, sections and the action right */
+.nav {
+  position: absolute; inset: 0 0 auto 0; z-index: 10; height: 76px;
+  display: flex; align-items: center; gap: 36px; padding: 0 48px; border-bottom: 1px solid var(--hair);
+}
+.logo { display: flex; align-items: center; gap: 8px; margin-right: auto; }
+.logo b { font: 600 15px/1 "Geist", sans-serif; letter-spacing: .02em; color: var(--on-ink); background: var(--ink); padding: 5px 7px 4px; }
+.logo span { font: 500 17px/1 "Geist", sans-serif; letter-spacing: .14em; }
+.nav nav { display: flex; gap: 30px; font: 500 12.5px/1 "Geist", sans-serif; letter-spacing: .07em; text-transform: uppercase; }
+.nav nav a { position: relative; padding: 6px 0; opacity: .78; transition: opacity .2s; }
+.nav nav a::after { content: ""; position: absolute; left: 0; right: 100%; bottom: 0; height: 1.5px; background: var(--volt); transition: right .3s cubic-bezier(.2,.8,.2,1); }
+.nav nav a:hover { opacity: 1; }
+.nav nav a:hover::after { right: 0; }
+.btn-nav { padding: 13px 22px; font-size: 13px; letter-spacing: .05em; text-transform: uppercase; }
 
 .hero { position: relative; height: 100svh; min-height: 780px; overflow: hidden; }
 #iso {
-  position: absolute; inset: 0; width: 100%; height: 100%; display: block; cursor: default;
+  position: absolute; inset: 0; width: 100%; height: 100%; display: block;
   /* plinths run off the bottom of the page, like a section cut */
   -webkit-mask-image: linear-gradient(to bottom, #000 72%, transparent 98%);
           mask-image: linear-gradient(to bottom, #000 72%, transparent 98%);
 }
 .overlay { position: absolute; inset: 0; pointer-events: none; }
 
-/* capsule callouts, anchored to the scene */
+/* capsule callouts, anchored to the scene: only the active property opens up */
 .cap {
   position: absolute; left: 0; top: 0; pointer-events: auto;
   display: flex; flex-direction: column; align-items: center; gap: 8px;
   width: 58px; padding: 12px 0 14px; border-radius: 40px;
-  background: #fff; border: 1px dashed #B9B9C2; text-align: center;
-  transition: border-color .3s, background .3s, transform .4s cubic-bezier(.2,.8,.2,1);
+  background: var(--face-top); border: 1px solid var(--volt); text-align: center;
+  transition: border-color .3s, background .3s;
 }
 .cap svg { width: 26px; height: 40px; }
-.cap svg .a { fill: var(--volt-soft); transition: fill .3s; }
-.cap svg .b { fill: #CFCBFF; transition: fill .3s; }
+.cap svg .a { fill: var(--volt-mid); }
+.cap svg .b { fill: var(--volt); }
 .cap b { font: 600 12px/1 "Geist Mono", monospace; letter-spacing: -.02em; }
-.cap::after { /* dashed leader down to the building */
-  content: ""; position: absolute; left: 50%; top: 100%; height: var(--leader, 40px);
-  border-left: 1px dashed #A9A9B3;
-}
-.cap.on { border: 1px solid var(--volt); background: #fff; }
-.cap.on svg .a { fill: #BDB5FF; }
-.cap.on svg .b { fill: var(--volt); }
-.cap:hover { border-color: var(--volt); }
-.cap:focus-visible { outline: 2px solid var(--volt); outline-offset: 3px; }
-/* only the active property shows its capsule; the rest are quiet markers */
+.cap::after { content: ""; position: absolute; left: 50%; top: 100%; height: var(--leader, 30px); border-left: 1px dashed var(--mu); opacity: .7; }
 .cap:not(.on) { width: 14px; height: 14px; padding: 0; border: 1.5px solid var(--ink); }
 .cap:not(.on) svg, .cap:not(.on) b { display: none; }
 .cap:not(.on):hover { border-color: var(--volt); background: var(--volt-soft); }
 
-.tag { position: absolute; left: 0; top: 0; font: italic 400 15px/1 "Instrument Serif", serif; color: var(--mu); white-space: nowrap; }
-.tag.slant { font-size: 14px; }
-
-.copy { position: absolute; left: max(48px, calc(50% - 590px)); top: 150px; z-index: 4; max-width: 470px; }
+.copy { position: absolute; left: 48px; top: 168px; z-index: 4; max-width: 470px; }
 .eyebrow { display: flex; align-items: center; gap: 10px; font: 500 11px/1 "Geist Mono", monospace; letter-spacing: .08em; text-transform: uppercase; color: var(--mu); }
-.eyebrow i { width: 8px; height: 8px; border-radius: 50%; background: var(--volt); box-shadow: 0 0 0 4px var(--volt-soft); }
+.eyebrow i { width: 8px; height: 8px; background: var(--volt); box-shadow: 0 0 0 4px var(--volt-soft); }
 h1 { margin-top: 26px; font-weight: 500; font-size: clamp(40px, 3.9vw, 58px); line-height: 1.02; letter-spacing: -.035em; }
 h1 em { font-family: "Instrument Serif", serif; font-style: italic; font-weight: 400; letter-spacing: -.01em; font-size: 1.08em; color: var(--volt); }
-.lede { margin-top: 22px; max-width: 400px; font-size: 16px; line-height: 1.6; color: var(--mu); }
+.lede { margin-top: 22px; max-width: 420px; font-size: 16px; line-height: 1.6; color: var(--mu); }
 .actions { margin-top: 30px; display: flex; align-items: center; gap: 26px; }
-.btn {
-  position: relative; padding: 15px 26px; font-weight: 500; font-size: 15px; color: #fff; background: var(--ink);
-  clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 0 100%); /* clipped corner, like a cable tag */
-  transition: background .25s;
-}
-.btn:hover { background: var(--volt); }
 .link { font-weight: 500; font-size: 15px; display: inline-flex; gap: 6px; }
 .link span { color: var(--volt); transition: transform .25s; }
 .link:hover span { transform: translate(2px, -2px); }
 
-.legend { position: absolute; left: max(48px, calc(50% - 590px)); bottom: 44px; z-index: 4; }
+/* property picker: a tab group built from the same button */
+.legend { position: absolute; left: 48px; bottom: 44px; z-index: 4; }
 .legend p { font: italic 400 16px/1 "Instrument Serif", serif; color: var(--mu); margin-bottom: 12px; }
-.chips { display: flex; flex-wrap: wrap; gap: 6px; }
-.chip {
-  display: inline-flex; align-items: center; gap: 8px; padding: 9px 14px 9px 11px; border-radius: 100px;
-  border: 1px solid var(--hair); background: #fff; font-size: 13.5px; font-weight: 500; transition: border-color .25s, background .25s, color .25s;
-}
-.chip i { width: 7px; height: 7px; border-radius: 50%; border: 1.5px solid #B4B4BC; transition: background .25s, border-color .25s; }
-.chip:hover { border-color: #C8C8D0; }
-.chip[aria-pressed="true"] { border-color: var(--volt); background: var(--volt-soft); color: var(--volt); }
-.chip[aria-pressed="true"] i { background: var(--volt); border-color: var(--volt); }
-.chip:focus-visible { outline: 2px solid var(--volt); outline-offset: 2px; }
-
-.foot { position: absolute; right: 48px; bottom: 44px; z-index: 4; font: italic 400 14px/1 "Instrument Serif", serif; color: var(--mu); }
+.tabs { display: flex; flex-wrap: wrap; gap: 4px; }
+.tab { padding: 12px 20px; font-size: 13.5px; color: var(--ink); background: var(--tab); box-shadow: inset 3px 0 0 transparent; }
+.tab:hover { box-shadow: inset 3px 0 0 var(--volt); }
+.tab[aria-selected="true"] { color: var(--on-ink); background: var(--ink); box-shadow: inset 3px 0 0 var(--volt); }
 
 @media (max-width: 900px) {
-  .nav { top: 12px; height: 52px; }
-  .nav nav, .live { display: none; }
-  .logo { flex: 1; }
+  .nav { height: 64px; padding: 0 16px; }
+  .nav nav { display: none; }
   .copy { left: 16px; right: 16px; top: 104px; }
   .legend { left: 16px; right: 16px; bottom: 20px; }
-  .foot, .tag, .cap { display: none; }
+  .cap { display: none; }
 }

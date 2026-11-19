@@ -5,14 +5,16 @@ import { Line2 } from 'three/addons/lines/Line2.js';
 import { LineMaterial } from 'three/addons/lines/LineMaterial.js';
 import { LineGeometry } from 'three/addons/lines/LineGeometry.js';
 
-const VOLT = new THREE.Color(0x4A3AFF);
-const INK = new THREE.Color(0x1C1C20);
+// colours come from the page theme (CSS custom properties), so v1 and v2 share this file
+const css = getComputedStyle(document.documentElement);
+const C = (name) => new THREE.Color(css.getPropertyValue(name).trim());
+const VOLT = C('--volt'), INK = C('--edge');
 const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 const canvas = document.getElementById('iso');
 const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
 renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
-renderer.setClearColor(0xffffff);
+renderer.setClearColor(C('--bg'));
 const scene = new THREE.Scene();
 const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, -500, 500);
 const resolution = new THREE.Vector2();
@@ -20,10 +22,10 @@ const V = (x, y, z) => new THREE.Vector3(x, y, z);
 
 /* ---------- materials: flat white faces, two greys for the sides ---------- */
 const M = {
-  top: new THREE.MeshBasicMaterial({ color: 0xffffff }),
-  left: new THREE.MeshBasicMaterial({ color: 0xF5F5F7 }),   // +z face
-  right: new THREE.MeshBasicMaterial({ color: 0xE8E8EC }),  // +x face
-  hidden: new THREE.MeshBasicMaterial({ color: 0xffffff }),
+  top: new THREE.MeshBasicMaterial({ color: C('--face-top') }),
+  left: new THREE.MeshBasicMaterial({ color: C('--face-left') }),   // +z face
+  right: new THREE.MeshBasicMaterial({ color: C('--face-right') }), // +x face
+  hidden: new THREE.MeshBasicMaterial({ color: C('--face-top') }),
 };
 const faceSet = (top = M.top) => [M.right, M.hidden, top, M.hidden, M.left, M.hidden];
 const edgeMat = new THREE.LineBasicMaterial({ color: INK, transparent: true, opacity: 0.85 });
@@ -170,7 +172,7 @@ const routes = {
   solar:    [V(-4.1, 6, -1), V(-9.5, 6, -1), V(-9.5, 0, 11), V(-9.5, 0, 27), V(-15, 0, 27)],
   business: [V(6.9, 6, -4.6), V(9.2, 6, -4.6), V(12.9, 4, -4.6), V(14.6, 4, -4.6)],
 };
-const trayTop = new THREE.MeshBasicMaterial({ color: 0xffffff, side: THREE.DoubleSide });
+const trayTop = new THREE.MeshBasicMaterial({ color: C('--face-top'), side: THREE.DoubleSide });
 function tray(points, width = 1.3) {
   const L = [], R = [];
   for (let i = 0; i < points.length; i++) {
@@ -183,7 +185,7 @@ function tray(points, width = 1.3) {
   scene.add(new THREE.Mesh(new THREE.BufferGeometry().setFromPoints(pos), trayTop));
   // side skirts so the ribbon reads as a slab
   const sk = []; for (let i = 0; i < points.length - 1; i++) { const d = V(0, -0.35, 0); sk.push(R[i], R[i + 1], R[i + 1].clone().add(d), R[i], R[i + 1].clone().add(d), R[i].clone().add(d)); }
-  scene.add(new THREE.Mesh(new THREE.BufferGeometry().setFromPoints(sk), new THREE.MeshBasicMaterial({ color: 0xEDEDF0, side: THREE.DoubleSide })));
+  scene.add(new THREE.Mesh(new THREE.BufferGeometry().setFromPoints(sk), new THREE.MeshBasicMaterial({ color: C('--face-right'), side: THREE.DoubleSide })));
   const s = []; for (let i = 0; i < points.length - 1; i++) s.push(L[i], L[i + 1], R[i], R[i + 1], R[i].clone().setY(R[i].y - 0.35), R[i + 1].clone().setY(R[i + 1].y - 0.35)); lines(scene, s, edgeMat);
 }
 Object.values(routes).forEach((r) => tray(r));
@@ -247,8 +249,15 @@ const tags = TAGS.map((t) => { const s = document.createElement('span'); s.class
 
 const chipsEl = document.getElementById('chips');
 const chips = ITEMS.map((it) => {
-  const b = document.createElement('button'); b.className = 'chip'; b.type = 'button'; b.setAttribute('aria-pressed', 'false');
-  b.innerHTML = `<i></i>${it.name}`; b.addEventListener('click', () => select(it.k, true)); chipsEl.appendChild(b); return { k: it.k, el: b };
+  const b = document.createElement('button'); b.className = 'tab'; b.type = 'button'; b.setAttribute('role', 'tab'); b.setAttribute('aria-selected', 'false');
+  b.textContent = it.name; b.addEventListener('click', () => select(it.k, true)); chipsEl.appendChild(b); return { k: it.k, el: b };
+});
+
+// arrow keys move between tabs
+chipsEl.addEventListener('keydown', (e) => {
+  if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+  const i = chips.findIndex((c) => c.k === active), n = (i + (e.key === 'ArrowRight' ? 1 : -1) + chips.length) % chips.length;
+  select(chips[n].k, true); chips[n].el.focus(); e.preventDefault();
 });
 
 /* ---------- selection ---------- */
@@ -256,7 +265,7 @@ let active = 'homes', userPicked = false, lastSwitch = 0;
 function select(k, byUser = false) {
   active = k; if (byUser) userPicked = true;
   caps.forEach((c) => c.el.classList.toggle('on', c.k === k));
-  chips.forEach((c) => c.el.setAttribute('aria-pressed', String(c.k === k)));
+  chips.forEach((c) => { const on = c.k === k; c.el.setAttribute('aria-selected', String(on)); c.el.tabIndex = on ? 0 : -1; });
 }
 select('homes');
 
