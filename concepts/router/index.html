@@ -3,287 +3,244 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Vyre One — the router that routes like a city</title>
-<meta name="description" content="Vyre One reads every device, every wall and every second of your connection, then routes traffic around congestion before you feel it. A concept.">
+<title>Vyre | Home network routing</title>
+<meta name="description" content="Vyre One plans the route of every call, game and stream through your home. A concept.">
 <link rel="icon" href="./assets/svg/mark.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&family=Newsreader:ital,opsz,wght@0,6..72,300;1,6..72,300&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Newsreader:opsz,wght@6..72,400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="./style.css">
-<script type="importmap">
-{ "imports": {
-  "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js",
-  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/",
-  "lenis": "https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.mjs"
-} }
-</script>
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
 
+<!-- nav -->
 <header class="nav" id="nav">
   <a class="logo" href="#top" aria-label="Vyre home">
-    <svg class="mark" viewBox="0 0 28 28" aria-hidden="true"><circle cx="14" cy="14" r="11.5" fill="none" stroke="currentColor" stroke-width="2.4"/><circle cx="14" cy="14" r="6.2" fill="none" stroke="var(--cobalt)" stroke-width="2"/><rect x="12.9" y="1" width="2.2" height="26" rx="1.1" fill="currentColor"/></svg>
-    <span>vyre</span>
+    <svg viewBox="0 0 28 28" aria-hidden="true"><circle cx="14" cy="14" r="11.5" fill="none" stroke="currentColor" stroke-width="2.4"/><circle cx="14" cy="14" r="6.2" fill="none" stroke="var(--brand)" stroke-width="2"/><rect x="12.9" y="1" width="2.2" height="26" rx="1.1" fill="currentColor"/></svg>vyre
   </a>
-  <nav class="links" aria-label="Primary">
-    <a href="#finishes">Vyre One</a><a href="#planner">Traffic Planner</a><a href="#signal">Signal Map</a><a href="#work">For work</a><a href="#help">Support</a>
-  </nav>
-  <div class="actions">
-    <a class="btn btn-light" href="#help">Sign in <i aria-hidden="true">↗</i></a>
-    <a class="btn btn-dark" href="#help">Pre-order <i aria-hidden="true">↗</i></a>
-  </div>
+  <nav class="nav-links" aria-label="Primary"><a href="#planner">Products</a><a href="#signal">Use cases</a><a href="#help">Support</a><a href="#work">Pricing</a><a href="#footer">Company</a></nav>
+  <div class="nav-cta"><a class="nb nb-dark" href="#help">Pre-order</a><a class="nb nb-line" href="#help">Sign in</a></div>
 </header>
 
 <main id="main">
-<!-- ===== hero ===== -->
-<section class="panel hero dark" id="top" aria-labelledby="hero-h">
-  <canvas id="hero3d" aria-hidden="true"></canvas>
-  <img class="still" src="./assets/hero-wide.jpg" alt="">
-  <div class="hero-wash" aria-hidden="true"></div>
-  <div class="hero-copy">
-    <p class="tag reveal"><i class="dot"></i>Wi-Fi 7 · Pre-orders open · Ships March</p>
-    <h1 id="hero-h" class="display split">Every packet takes<br>the <em>fastest way home.</em></h1>
-    <p class="lede reveal">Vyre One reads every device, every wall and every second of your connection, then routes traffic around congestion before you feel it. Wi-Fi 7, a self-healing mesh, and one line of light you’ll want on the shelf.</p>
-    <div class="row reveal">
-      <a class="btn btn-primary" href="#help">Pre-order · $449 <i aria-hidden="true">↗</i></a>
-      <a class="btn btn-glass" href="#planner">Map my home <i aria-hidden="true">↗</i></a>
-    </div>
+<!-- 1 hero -->
+<section class="panel hero" id="top" aria-labelledby="h1">
+  <h1 id="h1" class="rise">A home’s traffic plan is your evening plan.</h1>
+  <p class="hero-sub rise">Every packet decision lands on someone’s screen. Plan the route of every call, game and stream through your home, all tailored to how your household lives.</p>
+  <div class="hero-btns rise">
+    <a class="btn btn-brand" href="#help">Pre-order <i>↗</i></a>
+    <a class="btn btn-ghost" href="#planner"><img src="./assets/map/thumb.jpg" alt="">Map my home <i>↗</i></a>
   </div>
-  <article class="card household reveal" aria-label="Household latency, live">
-    <header><h3>Household</h3><span class="live"><i></i>Live</span></header>
-    <div class="tabs" role="tablist"><button role="tab" aria-selected="true">Latency</button><button role="tab" aria-selected="false">Throughput</button><button role="tab" aria-selected="false">Devices</button></div>
-    <svg class="trace" id="trace" viewBox="0 0 320 80" preserveAspectRatio="none" aria-hidden="true"></svg>
-    <dl><div><dt>Median</dt><dd><span data-count="3.1" data-dec="1">3.1</span> ms</dd></div><div><dt>Jitter</dt><dd><span data-count="0.4" data-dec="1">0.4</span> ms</dd></div><div><dt>Devices</dt><dd><span data-count="23">23</span></dd></div></dl>
+  <div class="hero-art" aria-hidden="true">
+    <div class="streaks">
+      <i style="--y:118px;--h:30px;--w:44%;--d:0s"></i><i style="--y:176px;--h:22px;--w:40%;--d:.12s"></i><i style="--y:236px;--h:26px;--w:46%;--d:.24s"></i><i style="--y:300px;--h:18px;--w:38%;--d:.36s"></i>
+      <i class="r" style="--y:106px;--h:8px;--w:42%;--d:.06s"></i><i class="r" style="--y:198px;--h:10px;--w:44%;--d:.18s"></i><i class="r" style="--y:262px;--h:6px;--w:40%;--d:.3s"></i><i class="r" style="--y:326px;--h:9px;--w:46%;--d:.42s"></i>
+    </div>
+    <img class="hand" src="./assets/ai/hand-cut.png" alt="">
+  </div>
+  <article class="tile chart-tile rise" aria-label="Household latency">
+    <h3>Household</h3>
+    <p class="tabs"><span class="on">Latency</span><span>Throughput</span></p>
+    <div class="chart">
+      <ol class="axis"><li>40</li><li>30</li><li>20</li><li>10</li><li>0</li></ol>
+      <svg viewBox="0 0 240 132" preserveAspectRatio="none" id="heroChart"><path d=""/></svg>
+    </div>
   </article>
-  <article class="lane" id="lane" aria-label="Studio Mac lane">
-    <b>Studio Mac</b><small>Video call · 4K</small>
-    <p><span class="chip">3 ms</span><span class="chip">2.1 Gbps</span><span class="chip mute">6 GHz</span></p>
+  <article class="tile trip-tile rise" aria-label="Vyre One summary">
+    <header><div><h3>Vyre One</h3><p>Living room to Perth edge</p></div><span class="swatches"><i style="--c:#1A1A20"></i><i style="--c:#E8E3D8"></i><i style="--c:#2A2E9E"></i></span></header>
+    <p class="chips"><span>23 Devices</span><span>3.1 ms</span><span>2.1 Gbps</span></p>
   </article>
-  <ul class="partners" aria-label="Fibre partners">
-    <li class="p1">northwire</li><li class="p2">Halcyon Fibre</li><li class="p3">KITE.NET</li><li class="p4">meridian&amp;co</li><li class="p5">Strata</li><li class="p6">PULSE/AU</li>
+  <ul class="logos" aria-label="Fibre partners">
+    <li class="l1">northwire</li><li class="l2">Halcyon Fibre</li><li class="l3">KITE.NET</li><li class="l4">meridian&amp;co</li><li class="l5">Strata</li><li class="l6">PULSE/AU</li><li class="l7">ORBITEL</li>
   </ul>
 </section>
 
-<!-- ===== traffic planner: your home, drawn like a map ===== -->
-<section class="panel mapsec planner" id="planner" aria-labelledby="pl-h">
-  <div class="stage"><div class="map" id="planMap" role="img" aria-label="A map of your apartment with the route from the selected device to the street"></div><div class="markers" id="planMarkers"></div></div>
-  <div class="copy">
-    <p class="eyebrow reveal">Traffic Planner</p>
-    <h2 id="pl-h" class="h2 split">Give every device its own lane, on your terms.</h2>
-    <p class="body reveal">Tell Vyre what matters — the 4K call, the ranked match, the 2 am backup — and it plans a path for each one through your home, re-routing in under a millisecond when anything changes.</p>
-    <a class="btn btn-grey reveal" href="#signal">Explore the planner <i aria-hidden="true">↗</i></a>
+<!-- 2 traffic planner: the map -->
+<section class="panel planner" id="planner" aria-labelledby="pl-h">
+  <div class="map-bg" aria-hidden="true"><img src="./assets/map/perth-light.jpg" alt=""></div>
+  <div class="sec-copy">
+    <p class="eyebrow">Traffic Planner</p>
+    <h2 id="pl-h">Keep every call, game<br>and stream on a lane<br>tailored to your home.</h2>
+    <p class="sec-body">Let Vyre find the best path for each device, on your terms. Set priority for the things that matter, cut buffering to zero, and keep the whole household on one fast, calm network.</p>
+    <a class="btn btn-dark" href="#signal">Explore traffic planning <i>↗</i></a>
   </div>
-  <div class="ui">
-    <form class="ui-card settings" id="settings" aria-label="Device settings" onsubmit="return false">
-      <header><svg viewBox="0 0 16 16" aria-hidden="true"><rect x="1.8" y="2.8" width="12.4" height="8.4" rx="1.4"/><path d="M5.5 13.6h5"/></svg>Device settings</header>
-      <label class="f"><span>Device</span><span class="fld sel"><select id="device">
-        <option value="mac">Studio Mac</option><option value="console">Console</option><option value="tv">Living room TV</option><option value="phone">Maya’s phone</option><option value="tablet">Kids tablet</option><option value="cam">Door camera</option>
-      </select></span></label>
-      <div class="f"><span>Latency budget</span><span class="fld"><b id="budget">8</b><small>ms</small></span></div>
-      <div class="f"><span>Bandwidth floor</span><span class="fld"><b id="floor">500</b><small>Mbps</small></span></div>
-      <div class="f"><span>Priority rank</span><span class="step"><span class="fld"><b id="rank">1</b></span><button type="button" data-step="1" aria-label="Lower priority">−</button><button type="button" data-step="-1" aria-label="Raise priority">+</button></span></div>
-      <div class="f"><span>Band</span><span class="fld"><b id="band">6 GHz</b><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4.5 6.5 8 10l3.5-3.5"/></svg></span></div>
-      <div class="f"><span>Focus mode</span><span class="toggle" id="focus" role="radiogroup" aria-label="Focus mode"><button type="button" role="radio" aria-checked="false">Off</button><button type="button" role="radio" aria-checked="true">On</button></span></div>
-    </form>
-    <article class="ui-card lane-card" id="laneCard" aria-live="polite">
-      <div class="lc-top">
-        <header><b id="laneTitle">Studio Mac to Video call</b><button type="button" class="x" aria-label="Close"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4.5 4.5l7 7M11.5 4.5l-7 7"/></svg></button></header>
-        <p class="sub" id="laneSub">Lane 1 of 23 · 4K · Priority high</p>
-        <div class="acts">
-          <button type="button" class="on" id="pinBtn"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 14.5s4.5-4.1 4.5-7.6A4.5 4.5 0 0 0 3.5 6.9C3.5 10.4 8 14.5 8 14.5z"/><circle cx="8" cy="6.8" r="1.6"/></svg>Pin lane</button>
-          <button type="button" id="reroute"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M13 8a5 5 0 1 1-1.5-3.6M13 2.5v2.8h-2.8"/></svg>Reroute</button>
-          <button type="button"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 10V2.5M5 5.2 8 2.3l3 2.9M3.5 8.5v4.2c0 .6.4 1 1 1h7c.6 0 1-.4 1-1V8.5"/></svg>Share</button>
-        </div>
-      </div>
-      <div class="lc-body">
-        <div class="sum"><p><b id="laneMs">3.1 ms end to end</b><span id="laneStable">Stable for 14 h</span></p><small id="laneMeta">4 hops · 2.1 Gbps · 2 reroutes today</small></div>
-        <dl>
-          <div><dt>Jitter</dt><dd id="lJit">0.4 ms</dd></div><div><dt>Throughput</dt><dd id="lThr">2.1 Gbps</dd></div><div><dt>Packet loss</dt><dd>0.00 %</dd></div><div><dt>Bandwidth reserved</dt><dd id="lRes">500 Mbps</dd></div>
-        </dl>
-        <p class="warn" id="lWarn"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 2.2 14.6 13.5H1.4L8 2.2z"/><path d="M8 6.5v3.2" class="w"/><circle cx="8" cy="11.5" r=".8" class="w"/></svg><span>Microwave noise on 2.4 GHz — lane kept on 6 GHz</span></p>
-        <p class="lbl">Route breakdown</p>
-        <ol class="route-list" id="routeList"></ol>
-      </div>
-    </article>
-    <article class="ui-card hop-card" id="hopCard" aria-live="polite">
-      <header><span class="logo-sq" id="hopLogo">n</span><b id="hopTitle">Northwire · Surry Hills exchange</b></header>
-      <p class="chips" id="hopChips"><span>1 Gbps</span><span>1.7 ms</span><span>FTTP</span></p>
-      <dl id="hopRows"><div><dt>Distance</dt><dd>1.2 km</dd></div><div><dt>Congestion now</dt><dd class="ok">Low</dd></div><div><dt>Peak tonight</dt><dd>7–10 pm, avoided</dd></div></dl>
-    </article>
-  </div>
-  <div class="tailor reveal"><span>Built for your home</span><a href="#planner">Homes <i>↗</i></a><a href="#planner">Creators <i>↗</i></a><a href="#planner">Gamers <i>↗</i></a><a href="#work">Small offices <i>↗</i></a></div>
-</section>
-
-<!-- ===== quote + stats ===== -->
-<div class="duo">
-  <figure class="panel quote topo reveal">
-    <blockquote>“We stopped noticing the internet. Honestly, that’s the highest compliment I can give a router.”</blockquote>
-    <figcaption><img src="./assets/ai/face1.jpg" alt=""><span><b>Mei Tanaka</b><small>Music producer · Surry Hills</small></span></figcaption>
-  </figure>
-  <section class="panel stats cobalt reveal" aria-label="Results">
-    <h3>The routing brain behind 41,000 homes.</h3>
-    <div class="nums">
-      <p><b><span data-count="3.1" data-dec="1">3.1</span> ms</b><small>Median in-home latency, measured every second.</small></p>
-      <p><b><span data-count="41">41</span>%</b><small>Fewer dropouts in the first month on Vyre.</small></p>
-    </div>
-  </section>
-</div>
-
-<!-- ===== signal map: the same home at night, coverage drawn live ===== -->
-<section class="panel mapsec signal dark" id="signal" aria-labelledby="sg-h">
-  <div class="stage"><div class="map" id="sigMap" aria-hidden="true"></div><canvas class="heat" id="heat" aria-label="Wi-Fi coverage across the apartment"></canvas><div class="markers" id="sigMarkers"></div><div class="fade" aria-hidden="true"></div></div>
-  <div class="copy">
-    <p class="eyebrow reveal">Signal Map</p>
-    <h2 id="sg-h" class="h2 split">See your Wi-Fi the way your walls see it.</h2>
-    <p class="body reveal">A live map of coverage, room by room. Vyre measures what every wall costs and moves the mesh until the dead zones are gone.</p>
-    <a class="btn btn-primary reveal" href="#help">See it in your home <i aria-hidden="true">↗</i></a>
-  </div>
-  <div class="ui">
-    <article class="ui-card mesh-card">
-      <header>
-        <span class="logo-sq soft"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M1.8 6.2a9 9 0 0 1 12.4 0M4 8.6a5.8 5.8 0 0 1 8 0M6.2 11a2.6 2.6 0 0 1 3.6 0"/><circle cx="8" cy="13.2" r=".9"/></svg></span>
-        <span class="t"><b>Vyre Mini · Hallway</b><small id="meshState">Mesh node · online 41 days</small></span>
-        <button class="switch" id="meshToggle" type="button" role="switch" aria-checked="true" aria-label="Vyre Mini"><i></i></button>
+  <div class="map-ui">
+    <article class="card trip" id="trip">
+      <header class="trip-head">
+        <div><h4>Fremantle to Singapore</h4><p>Streaming on Living room TV · 4K</p></div>
+        <button class="x" type="button" aria-label="Close"><svg viewBox="0 0 16 16"><path d="M4.5 4.5l7 7M11.5 4.5l-7 7"/></svg></button>
       </header>
-      <dl>
-        <div><dt>Covers</dt><dd id="mCovers">Bedroom · Kids · Entry</dd></div>
-        <div><dt>Backhaul</dt><dd id="mBack">6 GHz · 2.4 Gbps</dd></div>
-        <div><dt>Weakest room</dt><dd id="mWeak" class="ok">Kids · −54 dBm</dd></div>
-      </dl>
-      <p class="legend"><span>Weak</span><i></i><span>Strong</span></p>
+      <div class="trip-acts">
+        <button type="button" class="on"><svg viewBox="0 0 16 16"><rect x="4.5" y="1.8" width="7" height="12.4" rx="1.6"/><path d="M7 11.8h2"/></svg>Send to phone</button>
+        <button type="button" id="reroute"><svg viewBox="0 0 16 16"><path d="M13 8a5 5 0 1 1-1.5-3.6M13 2.5v2.8h-2.8"/></svg>Reroute</button>
+        <button type="button"><svg viewBox="0 0 16 16"><path d="M8 10V2.5M5 5.2 8 2.3l3 2.9M3.5 8.5v4.2c0 .6.4 1 1 1h7c.6 0 1-.4 1-1V8.5"/></svg>Share</button>
+      </div>
+      <div class="trip-body">
+        <div class="trip-sum">
+          <p><b id="tripMs">48 ms round trip</b><em>Stable since 19:05</em></p>
+          <small>3,912 km · 6 network hops</small>
+          <dl>
+            <div><dt>Wi-Fi time</dt><dd>3.1 ms</dd></div><div><dt>Est. data used</dt><dd>2.4 GB</dd></div><div><dt>Est. energy</dt><dd>4.2 Wh</dd></div><div><dt>Buffering avoided</dt><dd>14 stalls</dd></div>
+          </dl>
+          <p class="note"><svg viewBox="0 0 16 16"><path d="M8 2.2 14.6 13.5H1.4L8 2.2z" class="tri"/><path d="M8 6.5v3.2M8 11.4v.2" class="ex"/></svg>Evening peak adds 2 ms after 19:00</p>
+          <p class="note"><svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="6"/><path d="M8 7.2V11M8 5v.2"/></svg>Includes an undersea cable</p>
+        </div>
+        <p class="rb">Route breakdown</p>
+        <ol class="stops">
+          <li><b>Fremantle, Western Australia</b><span class="chips sm"><span>Wi-Fi 7</span><span>−41 dBm</span></span></li>
+          <li class="seg">0.3 ms · 12 m · Living room</li>
+          <li><b>Vyre One · Living room</b><span class="chips sm"><span>Lane 1</span><span>2.4 Gbps</span></span><dl><div><dt>Hand-off time</dt><dd>0.3 ms</dd></div><div><dt>Lane load</dt><dd>20% → 34%</dd></div><div><dt>Priority</dt><dd>High</dd></div></dl></li>
+          <li class="seg">1.7 ms · 18 km · Exchange crossing</li>
+          <li><b>Northwire · Fremantle exchange</b><span class="chips sm"><span>10 Gbps</span><span>14 ºC</span></span><dl><div><dt>Hand-off time</dt><dd>0.4 ms</dd></div><div><dt>Load</dt><dd>20% → 34%</dd></div><div><dt>Est. cost</dt><dd>$0.00</dd></div></dl></li>
+          <li class="seg">44 ms · 3,880 km · Undersea cable</li>
+        </ol>
+      </div>
     </article>
-    <article class="ui-card focus-card">
-      <svg viewBox="0 0 112 112" aria-hidden="true"><circle cx="56" cy="56" r="46" class="track"/><circle cx="56" cy="56" r="46" class="arc" id="ringArc"/><path d="M41 52a21 21 0 0 1 30 0M46 58a13.5 13.5 0 0 1 20 0" class="wf"/><circle cx="56" cy="65" r="2.6" class="wd"/></svg>
-      <b>3 h 20 / 4 h</b><small>Focus hours left on the kids tablet</small>
+    <form class="card settings" aria-label="Home settings" onsubmit="return false">
+      <header><svg viewBox="0 0 16 16"><path d="M2.5 7.2 8 2.8l5.5 4.4V13a.8.8 0 0 1-.8.8H3.3a.8.8 0 0 1-.8-.8V7.2z"/><path d="M6.5 13.8V10h3v3.8"/></svg>Home settings</header>
+      <div class="row"><span>Devices at home</span><span class="fld"><b>23</b></span></div>
+      <div class="row"><span>Peak hours start</span><span class="fld"><b>19:00</b></span></div>
+      <div class="row"><span>People</span><span class="pair2"><span class="fld"><b id="people">3</b></span><span class="fld pm"><button type="button" data-d="-1" aria-label="Fewer">-</button><button type="button" data-d="1" aria-label="More">+</button></span></span></div>
+      <div class="row"><span>Usage style</span><span class="fld"><b>Streaming</b></span></div>
+      <div class="row"><span>Gaming mode</span><span class="seg" id="gaming"><button type="button" class="on">Off</button><button type="button">On</button></span></div>
+      <div class="row"><span>Backup cap</span><span class="fld"><b>200</b><small>GB</small></span></div>
+    </form>
+    <article class="card station">
+      <header><span class="mark">n</span><b>Northwire · Fremantle exchange</b></header>
+      <p class="chips sm"><span>10 Gbps</span><span>14 ºC</span></p>
+      <dl><div><dt>Hand-off time</dt><dd>0.4 ms</dd></div><div><dt>Load</dt><dd>20% → 34%</dd></div><div><dt>Estimated cost</dt><dd>$0.00</dd></div></dl>
     </article>
   </div>
-  <div class="tailor light reveal"><span>Made for</span><a href="#signal">Families <i>↗</i></a><a href="#signal">Share houses <i>↗</i></a><a href="#signal">Studios <i>↗</i></a></div>
+  <div class="tailor"><span>Tailored to your home</span><a href="#planner">Families <i>↗</i></a><a href="#planner">Creators <i>↗</i></a><a href="#planner">Gamers <i>↗</i></a><a href="#planner">Share houses <i>↗</i></a></div>
+  <p class="osm">Map data © OpenStreetMap contributors</p>
 </section>
 
-<!-- ===== uptime + quote ===== -->
-<div class="duo duo-b">
-  <section class="panel uptime dark reveal" aria-label="Uptime">
-    <h3>A highly reliable network that heals itself before you notice.</h3>
-    <div class="beat" id="beat" aria-hidden="true"></div>
-    <b class="stat"><span data-count="99.99" data-dec="2">99.99</span>%</b>
-    <small>Uptime across 41,000 homes over 12 months. One blip, rerouted in 0.8 s.</small>
+<!-- 3 quote + stats -->
+<div class="pair">
+  <figure class="panel quote wood rise">
+    <blockquote>“Vyre’s planner made it easy for our whole house to understand what the internet was doing, and their support is always kind, quick and honest.”</blockquote>
+    <figcaption><span class="chip-logo">Fold Studios</span><b>Mei Tanaka</b><small>Producer and Vyre customer</small></figcaption>
+  </figure>
+  <section class="panel stats brand rise" aria-label="Vyre in numbers">
+    <p class="lead">The routing engine behind the calmest homes in Australia.</p>
+    <div class="nums"><p><b data-count="41" data-suf="K">41K</b><small>Homes routed each month.</small></p><p><b data-count="38" data-suf="%">38%</b><small>Fewer dropouts in the first month on Vyre.</small></p></div>
   </section>
-  <figure class="panel quote dark topo-dark reveal">
-    <blockquote>“It found a dead zone behind our fridge that we’d blamed on the provider for three years. Fixed it by moving one little cylinder.”</blockquote>
-    <figcaption><img src="./assets/ai/face2.jpg" alt=""><span><b>Daniel Okafor</b><small>Dad of three · Marrickville</small></span></figcaption>
-  </figure>
 </div>
 
-<!-- ===== finishes ===== -->
-<section class="panel finishes" id="finishes" aria-labelledby="fn-h">
-  <div class="copy">
-    <p class="label reveal">Vyre One</p>
-    <h2 id="fn-h" class="h2 big split">Three finishes.<br><em>One line of light.</em></h2>
+<!-- 4 signal map: dark -->
+<section class="panel signal dark" id="signal" aria-labelledby="sg-h">
+  <div class="sec-copy">
+    <p class="eyebrow">Signal Map</p>
+    <h2 id="sg-h">Turn guests into regulars by<br>making your Wi-Fi and<br>partnerships stand out.</h2>
+    <p class="sec-body">Show guests what matters: speed, uptime, coverage, quiet zones. Help them find the right seat, and help yourself turn short visits into long ones.</p>
   </div>
-  <div class="aside reveal">
-    <p class="body">Milled aluminium ribs that shed heat, a recessed glass top that breathes, and a single line of light that only speaks up when something needs you.</p>
-    <a class="btn btn-light" href="#help">Compare finishes <i aria-hidden="true">↗</i></a>
+  <div class="slabs" aria-hidden="true"><i class="s1"></i><i class="s2"></i><i class="s3"></i><i class="s4"></i></div>
+  <div class="dark-map" aria-hidden="true">
+    <img src="./assets/map/perth-dark.jpg" alt="">
+    <span class="pin" style="--x:57%;--y:43%"></span><span class="pin" style="--x:66%;--y:51%"></span><span class="pin" style="--x:50%;--y:58%"></span><span class="pin" style="--x:61%;--y:66%"></span><span class="pin" style="--x:44%;--y:72%"></span><span class="pin alt" style="--x:73%;--y:38%"></span><span class="pin" style="--x:79%;--y:57%"></span>
   </div>
-  <div class="studio" id="studio" data-f="all">
-    <img src="./assets/studio.jpg" alt="Vyre One in graphite, bone and cobalt" class="f-all">
-    <img src="./assets/single-graphite.jpg" alt="Vyre One in graphite" class="f-graphite">
-    <img src="./assets/single-bone.jpg" alt="Vyre One in bone" class="f-bone">
-    <img src="./assets/single-cobalt.jpg" alt="Vyre One in cobalt" class="f-cobalt">
-  </div>
-  <div class="picker" role="radiogroup" aria-label="Finish">
-    <button type="button" role="radio" aria-checked="false" data-f="graphite"><i style="--c:#1A1A20"></i>Graphite</button>
-    <button type="button" role="radio" aria-checked="false" data-f="bone"><i style="--c:#E8E3D8"></i>Bone</button>
-    <button type="button" role="radio" aria-checked="false" data-f="cobalt"><i style="--c:#20238A"></i>Cobalt</button>
-  </div>
-  <dl class="specs">
-    <div><dt>Wi-Fi</dt><dd>7 · tri-band 6 GHz</dd></div><div><dt>Ports</dt><dd>10 Gb WAN · 4 × 2.5 Gb</dd></div><div><dt>Covers</dt><dd>280 m² · add Mini for more</dd></div><div><dt>Made of</dt><dd>87% recycled aluminium</dd></div>
-  </dl>
+  <article class="card partner rise">
+    <h4>Vyre x Kepler Coffee</h4><p>Partnership</p>
+    <svg viewBox="0 0 160 160" aria-hidden="true"><circle cx="80" cy="80" r="64" class="trk"/><circle cx="80" cy="80" r="64" class="arc" id="partnerArc"/><path d="M58 76a31 31 0 0 1 44 0M65 85a21 21 0 0 1 30 0" class="wf"/><circle cx="80" cy="96" r="4" class="wd"/></svg>
+    <b>950 / 1,500</b><small>Minutes online collected for a free coffee</small>
+  </article>
+  <div class="tailor light"><span>Tailored to your venue</span><a href="#signal">Cafés <i>↗</i></a><a href="#signal">Retailers <i>↗</i></a><a href="#signal">Councils <i>↗</i></a></div>
 </section>
 
-<!-- ===== hardware ===== -->
-<div class="duo">
-  <figure class="panel photo hold reveal">
-    <img src="./assets/ai/hand.jpg" alt="A hand holding Vyre One against streaks of light" loading="lazy">
-    <p class="label light">[ 01 ] Hardware</p>
-    <figcaption>Small enough to hold.<br>Strong enough to carry the house.</figcaption>
-  </figure>
-  <figure class="panel photo macro reveal">
-    <img src="./assets/macro.jpg" alt="The top of Vyre One: a ring of light around a perforated glass top" loading="lazy">
-    <p class="label light">[ 02 ] Up close</p>
-    <ul class="callouts">
-      <li style="--x:47%;--y:21%;--lx:57%;--ly:28%"><b>Ring of light</b><small>Status at a glance, dims at night</small></li>
-      <li style="--x:43%;--y:47%;--lx:58%;--ly:38%"><b>Recessed glass top</b><small>128 vents, silent passive cooling</small></li>
-      <li style="--x:36%;--y:81%;--lx:47%;--ly:73%"><b>Milled ribs</b><small>Heat out, fingerprints never</small></li>
-    </ul>
+<!-- 5 accuracy + quote -->
+<div class="pair">
+  <section class="panel stat-dark dark rise" aria-label="Accuracy">
+    <p class="lead">A highly accurate engine that predicts congestion before anyone notices.</p>
+    <p class="big"><b data-count="97" data-suf="%">97%</b><small>Accuracy when predicting evening congestion for any home.</small></p>
+  </section>
+  <figure class="panel quote dark saw rise">
+    <blockquote>“Vyre’s signal and coverage maps are accurate, useful tools for our customers as they work out what their home really needs and plan the network around it.”</blockquote>
+    <figcaption><span class="chip-logo dk">Halcyon Fibre</span><b>Ed Marlow</b><small>Innovation Manager</small></figcaption>
   </figure>
 </div>
 
-<!-- ===== for work ===== -->
-<section class="panel work" id="work" aria-labelledby="wk-h">
-  <div class="copy">
-    <p class="label reveal">Vyre for Work</p>
-    <h2 id="wk-h" class="h2 split">Run every studio, café and office from one screen.</h2>
-    <p class="body reveal">Score every site, spot trouble before a client does, and push one policy to fifty routers at once. Built for the people who are “good with computers” and now run the network.</p>
-    <a class="btn btn-dark reveal" href="#help">Explore Vyre for Work <i aria-hidden="true">↗</i></a>
+<!-- 6 coverage map -->
+<section class="panel coverage brush" id="coverage" aria-labelledby="cv-h">
+  <div class="sec-copy">
+    <p class="eyebrow">Coverage map</p>
+    <h2 id="cv-h">Satisfy landlords,<br>eliminate dead zones<br>and boost every room.</h2>
+    <p class="sec-body">Display coverage using real-time data. Compare finishes and models, and turn square metres into rooms that simply work.</p>
   </div>
-  <figure class="work-photo reveal"><img src="./assets/ai/studio-night.jpg" alt="A producer working late in a home studio, Vyre One glowing on the desk" loading="lazy"><figcaption><i></i>Fold Studios · Surry Hills · Healthy</figcaption></figure>
+  <div class="range" id="range" data-f="graphite">
+    <svg class="blob" viewBox="0 0 600 420" aria-hidden="true"><defs><linearGradient id="blobG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#C9C7FF"/><stop offset="1" stop-color="#ECEBFF"/></linearGradient></defs><path id="blobPath" fill="url(#blobG)"/></svg>
+    <button class="car c1" type="button" data-f="bone"><span class="nm">Bone</span><img src="./assets/cut-bone.png" alt="Vyre One in bone"></button>
+    <button class="car c2 on" type="button" data-f="graphite"><span class="nm">Graphite</span><img src="./assets/cut-graphite.png" alt="Vyre One in graphite"></button>
+    <button class="car c3" type="button" data-f="cobalt"><span class="nm">Cobalt</span><img src="./assets/cut-cobalt.png" alt="Vyre One in cobalt"></button>
+  </div>
+  <div class="tailor"><span>Tailored to your home</span><a href="#coverage">Apartments <i>↗</i></a><a href="#coverage">Houses <i>↗</i></a></div>
+</section>
+
+<!-- 7 for work -->
+<section class="panel work" id="work" aria-labelledby="wk-h">
+  <div class="sec-copy">
+    <p class="eyebrow">Vyre for Work</p>
+    <h2 id="wk-h">Lower your downtime and<br>optimise every site in minutes.</h2>
+    <p class="sec-body">Push the right policies across sites and teams that make sense. Optimise every network, in the office or at home.</p>
+  </div>
+  <div class="sand" aria-hidden="true"></div>
   <div class="dash">
-    <article class="card score reveal"><header><h3>Network score</h3><small>Median over all sites</small></header><div class="bars" id="scoreBars"></div><p><b data-count="93">93</b><span>+23 since March</span></p></article>
-    <article class="card sites reveal">
-      <header><div><h3>Sites</h3><small>Fold Studios · 11 sites · 6 shown</small></div><button type="button" id="pushAll">Push policy to all</button></header>
-      <table><tbody id="sitesBody">
-        <tr><td>Paddington Studio</td><td>12 devices</td><td>2 nodes</td><td><span class="st ok">Healthy</span></td></tr>
-        <tr><td>Bondi Café</td><td>31 devices</td><td>3 nodes</td><td><span class="st warn">Watch</span></td></tr>
-        <tr><td>Newtown Office</td><td>48 devices</td><td>4 nodes</td><td><span class="st ok">Healthy</span></td></tr>
-        <tr><td>Ultimo Lab</td><td>64 devices</td><td>6 nodes</td><td><span class="st ok">Healthy</span></td></tr>
-        <tr><td>Glebe Clinic</td><td>22 devices</td><td>2 nodes</td><td><span class="st mute">Pending</span></td></tr>
-        <tr class="faint"><td>Redfern Store</td><td>17 devices</td><td>1 node</td><td><span class="st ok">Healthy</span></td></tr>
+    <article class="card dcard score rise"><h4>Network score</h4><p>Median over all sites</p><div class="sv"><b data-count="93">93</b><em>+23</em></div></article>
+    <article class="card dcard plan rise"><h4>Network plan</h4><p>Fold Studios</p>
+      <table><tbody>
+        <tr><td>Site #12914</td><td>23 Devices</td><td>8 Nodes</td><td><span class="st ok">On track</span></td></tr>
+        <tr><td>Site #14567</td><td>15 Devices</td><td>5 Nodes</td><td></td></tr>
+        <tr><td>Site #15892</td><td>30 Devices</td><td>10 Nodes</td><td><span class="st risk">At risk</span></td></tr>
+        <tr><td>Site #15893</td><td>45 Devices</td><td>15 Nodes</td><td><span class="st ok">On track</span></td></tr>
+        <tr><td>Site #12948</td><td>42 Devices</td><td>8 Nodes</td><td><span class="st pend">Pending</span></td></tr>
+        <tr><td>Site #23913</td><td>13 Devices</td><td>5 Nodes</td><td></td></tr>
+        <tr><td>Site #12915</td><td>23 Devices</td><td>8 Nodes</td><td></td></tr>
       </tbody></table>
     </article>
-    <article class="card downtime reveal"><header><h3>Downtime avoided</h3><small>Hours, across all sites this year</small></header><b data-count="1284">1,284</b></article>
+    <article class="card dcard green rise"><h4>Hours of downtime avoided</h4><p>Compared to a standard router</p><div class="sv"><b data-count="1284">1,284</b></div></article>
   </div>
+  <div class="tailor"><span>Tailored to your team</span><a href="#work">IT teams <i>↗</i></a></div>
 </section>
 
-<figure class="panel quote center reveal">
-  <blockquote>“We run eleven sites on Vyre. I haven’t driven to a single one for a network problem since March.”</blockquote>
-  <figcaption><img src="./assets/ai/face3.jpg" alt=""><span><b>Priya Raman</b><small>IT lead · Fold Studios</small></span></figcaption>
+<!-- 8 quote -->
+<figure class="panel quote center rise">
+  <blockquote>“Our clients want to grow their offices without the network becoming the bottleneck. Vyre shows them the possibilities and the best choice for every site.”</blockquote>
+  <figcaption><span class="chip-logo">meridian&amp;co</span><b>Priya Raman</b><small>Network Consultant</small></figcaption>
 </figure>
 
-<!-- ===== live session ===== -->
-<section class="panel photo session" aria-labelledby="lv-h">
-  <img src="./assets/ai/apartment.jpg" alt="A living room at night, Vyre One glowing on a sideboard, the city behind" loading="lazy" id="liveImg">
-  <div class="live-copy">
-    <p class="label light">Live session · Thu 27 Nov · 7 pm AEST</p>
-    <h2 id="lv-h" class="h2 big light split">Building the zero-lag home.</h2>
-  </div>
-  <a class="btn btn-primary" href="#help">Save my seat <i aria-hidden="true">↗</i></a>
+<!-- 9 live session -->
+<section class="panel session" aria-labelledby="ss-h">
+  <img src="./assets/ai/apartment.jpg" alt="A living room at night, Vyre One glowing on a sideboard" loading="lazy">
+  <div class="session-copy"><p class="eyebrow">Join our live session</p><h2 id="ss-h">Live session: Building the zero-lag home</h2></div>
+  <a class="btn btn-brand" href="#help">Watch on-demand <i>↗</i></a>
 </section>
 
-<!-- ===== help me choose ===== -->
+<!-- 10 help me choose -->
 <section class="panel cta" id="help" aria-labelledby="cta-h">
-  <p class="label center reveal">Help me choose</p>
-  <h2 id="cta-h" class="h2 big split">See Vyre One<br>in your home.</h2>
-  <div class="row center reveal"><a class="btn btn-primary" href="#top">Pre-order · $449 <i aria-hidden="true">↗</i></a><a class="btn btn-dark" href="#signal">Book a home scan <i aria-hidden="true">↗</i></a></div>
+  <p class="eyebrow">Help me choose</p>
+  <h2 id="cta-h">Get a home scan to see<br>Vyre in action.</h2>
+  <div class="hero-btns"><a class="btn btn-brand" href="#top">Pre-order <i>↗</i></a><a class="btn btn-dark" href="#planner">Start a scan <i>↗</i></a></div>
 </section>
 <div class="trio">
-  <article class="panel reveal"><span class="faces"><img src="./assets/ai/face1.jpg" alt=""><img src="./assets/ai/face2.jpg" alt=""></span><p>Talk to a network specialist. Ten minutes, no sales script, and they’ll tell you if you don’t need us.</p></article>
-  <article class="panel reveal"><svg viewBox="0 0 40 40" aria-hidden="true"><rect width="40" height="40" rx="9" class="ic-bg"/><path d="M12 16V12H16M24 12H28V16M28 24V28H24M16 28H12V24" class="ic"/><circle cx="20" cy="20" r="3" fill="var(--cobalt)"/></svg><p>Map your home in five minutes. Walk around with your phone and see where the dead zones are today.</p></article>
-  <article class="panel reveal"><svg viewBox="0 0 40 40" aria-hidden="true"><rect width="40" height="40" rx="9" class="ic-bg"/><path d="M12 15.5L20 11L28 15.5V24.5L20 29L12 24.5V15.5Z M12 15.5L20 20L28 15.5M20 20V29" class="ic"/></svg><p>30 nights in your home, free returns. If it isn’t the quietest network you’ve had, send it back.</p></article>
+  <article class="panel"><span class="faces"><img src="./assets/ai/face1.jpg" alt=""><img src="./assets/ai/face2.jpg" alt=""></span><p>Intro call with one of our experts. See Vyre in your home and get all your questions answered.</p></article>
+  <article class="panel"><span class="ic"><svg viewBox="0 0 20 20"><circle cx="9" cy="9" r="5.5"/><path d="M13.2 13.2 17 17"/></svg></span><p>Scope out your home’s needs. Tell us how you live and our team will plan the network with you.</p></article>
+  <article class="panel"><span class="ic"><svg viewBox="0 0 20 20"><path d="M10 2.5 16.5 6v8L10 17.5 3.5 14V6L10 2.5z"/><path d="M3.5 6 10 9.5 16.5 6M10 9.5v8"/></svg></span><p>Start with a 30-night trial. Go live with step-by-step setup help from our team.</p></article>
 </div>
 </main>
 
-<footer class="panel foot">
-  <nav class="foot-cols" aria-label="Footer">
-    <div><small>Product</small><a href="#finishes">Vyre One</a><a href="#signal">Vyre Mini</a><a href="#planner">Traffic Planner</a><a href="#signal">Signal Map</a></div>
-    <div><small>Use cases</small><a href="#planner">Homes</a><a href="#planner">Creators</a><a href="#planner">Gamers</a><a href="#work">Small offices</a></div>
-    <div><small>Support</small><a href="#help">Setup guides</a><a href="#help" class="ok"><i></i>All systems normal</a><a href="#help">Returns</a><a href="#help">Contact</a></div>
-    <div><small>Company</small><a href="#top">About</a><a href="#top">Careers</a><a href="#top">Press</a><a href="#top">Sustainability</a></div>
-  </nav>
-  <div class="news"><p class="news-h"><b>vyre</b><em>signal</em></p><p>Monthly notes on making home internet invisible. No spam, ever.</p><a class="btn btn-dark" href="#help">Sign up <i aria-hidden="true">↗</i></a></div>
-  <p class="giant" aria-hidden="true">vyre</p>
-  <div class="foot-bottom"><small>© 2026 Vyre (concept)</small><small>Terms · Privacy · Cookies · Security</small></div>
+<footer class="panel footer" id="footer">
+  <div class="fcols">
+    <div><small>Products</small><a href="#top">Vyre One</a><a href="#coverage">Vyre Mini</a></div>
+    <div><small>Use cases</small><a href="#planner">Families</a><a href="#planner">Creators</a><a href="#planner">Gamers</a><a href="#signal">Cafés</a><a href="#work">Small offices</a></div>
+    <div><small>Resources</small><a href="#help">Setup guides</a><a href="#help">Documentation</a><a href="#help">Sign up</a><a href="#help" class="stable"><i></i>Stable</a></div>
+    <div><small>Company</small><a href="#top">About</a><a href="#top">Mission</a><a href="#top">Newsroom</a><a href="#help">Contact</a><a href="#top">LinkedIn</a><a href="#top" class="join">👋&nbsp; Join us</a></div>
+  </div>
+  <div class="fnews"><p class="fn-h"><b>vyre</b> presents</p><p>Monthly perspectives from the Vyre team on routing, Wi-Fi, and the road to a network you never think about.</p><a class="btn btn-dark" href="#help">Sign up <i>↗</i></a></div>
+  <div class="fbottom">
+    <span class="badges" aria-hidden="true"><svg viewBox="0 0 40 40"><circle cx="20" cy="20" r="17"/><path d="M13 20.5l4.5 4.5L27 15.5"/></svg><svg viewBox="0 0 40 40"><circle cx="20" cy="20" r="17"/><path d="M12 24c5-9 11-9 16 0M15 18h10"/></svg></span>
+    <nav aria-label="Legal"><a href="#">Terms</a><a href="#">Privacy</a><a href="#">Cookies</a><a href="#">Security</a><span class="mc"><i></i>Manage Cookies</span></nav>
+    <small>© Vyre Pty Ltd (concept)</small>
+  </div>
 </footer>
-
 <script type="module" src="./site.js"></script>
 </body>
 </html>
