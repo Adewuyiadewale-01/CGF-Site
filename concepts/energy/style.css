@@ -92,13 +92,15 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 .cap:not(.on) svg, .cap:not(.on) b { display: none; }
 .cap:not(.on):hover { border-color: var(--volt); background: var(--volt-soft); }
 
-.copy { position: absolute; left: 48px; top: 168px; z-index: 4; max-width: 470px; }
-.eyebrow { display: flex; align-items: center; gap: 10px; font: 500 11px/1 "Geist Mono", monospace; letter-spacing: .08em; text-transform: uppercase; color: var(--mu); }
+.copy { position: absolute; left: 48px; top: 164px; z-index: 4; max-width: 780px; }
+.eyebrow { display: flex; align-items: center; gap: 10px; font: 500 12px/1 "Geist Mono", monospace; letter-spacing: .08em; text-transform: uppercase; color: var(--mu); }
 .eyebrow i { width: 8px; height: 8px; background: var(--volt); box-shadow: 0 0 0 4px var(--volt-soft); }
-h1 { margin-top: 26px; font-weight: 500; font-size: clamp(40px, 3.9vw, 58px); line-height: 1.02; letter-spacing: -.035em; }
+h1 { margin-top: 26px; font-weight: 500; font-size: clamp(44px, 4.5vw, 68px); line-height: 1.02; letter-spacing: -.035em; white-space: nowrap; }
 h1 em { font-family: "Instrument Serif", serif; font-style: italic; font-weight: 400; letter-spacing: -.01em; font-size: 1.08em; color: var(--volt); }
-.lede { margin-top: 22px; max-width: 420px; font-size: 16px; line-height: 1.6; color: var(--mu); }
+.lede { margin-top: 22px; max-width: 460px; font-size: 17.5px; line-height: 1.6; color: var(--mu); }
 .actions { margin-top: 30px; display: flex; align-items: center; gap: 26px; }
+.actions .btn, .link { font-size: 16px; }
+.actions .btn { padding: 17px 30px; }
 .link { font-weight: 500; font-size: 15px; display: inline-flex; gap: 6px; }
 .link span { color: var(--volt); transition: transform .25s; }
 .link:hover span { transform: translate(2px, -2px); }
@@ -111,21 +113,17 @@ h1 em { font-family: "Instrument Serif", serif; font-style: italic; font-weight:
 .tab:hover { box-shadow: inset 3px 0 0 var(--volt); }
 .tab[aria-selected="true"] { color: var(--on-ink); background: var(--ink); box-shadow: inset 3px 0 0 var(--volt); }
 
-/* city version: solid nav so the skyline passes behind it; slightly larger hero copy */
+/* city version: solid nav so the skyline passes behind it */
 :root[data-scene="city"] .nav { background: var(--bg); }
 /* a soft wash of page colour behind the copy so the city reads behind it, not through it */
 :root[data-scene="city"] .overlay { background: radial-gradient(40% 34% at 15% 27%, var(--bg) 40%, color-mix(in srgb, var(--bg) 65%, transparent) 70%, transparent 100%); }
-:root[data-scene="city"] .copy { max-width: 540px; top: 164px; }
-:root[data-scene="city"] h1 { font-size: clamp(44px, 4.5vw, 68px); }
-:root[data-scene="city"] .lede { font-size: 17.5px; max-width: 460px; }
-:root[data-scene="city"] .eyebrow { font-size: 12px; }
-:root[data-scene="city"] .actions .btn, :root[data-scene="city"] .link { font-size: 16px; }
-:root[data-scene="city"] .actions .btn { padding: 17px 30px; }
 
 @media (max-width: 900px) {
   .nav { height: 64px; padding: 0 16px; }
   .nav nav { display: none; }
   .copy { left: 16px; right: 16px; top: 104px; }
+  h1 { white-space: normal; }
+  h1 br { display: none; }
   .legend { left: 16px; right: 16px; bottom: 20px; }
   .cap { display: none; }
 }
