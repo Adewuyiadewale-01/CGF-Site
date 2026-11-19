@@ -162,7 +162,7 @@ h1 em { font-family: "Instrument Serif", serif; font-style: italic; font-weight:
   .tabs { gap: 12px; }
   .tabs .tab { width: auto; flex: 1; font-size: 12px; white-space: nowrap; }
   .tabs .tab .n { display: none; }
-  .cap::after { display: none; }
+  .cap { display: none; }
 }
 
 /* ?export=1: only the illustration, on transparent, for the Figma file */
