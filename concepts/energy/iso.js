@@ -229,7 +229,7 @@ const ITEMS = [
   { k: 'homes',    name: 'Homes',         stat: '3.2 kWh', at: V(-2.4, 12, 17.6) },
   { k: 'business', name: 'Business',      stat: '96 kWh',  at: V(17.8, 14, -8) },
   { k: 'strata',   name: 'Apartments',    stat: '41 kWh',  at: V(16.1, 36, -30.9) },
-  { k: 'solar',    name: 'Rooftop solar', stat: '+6.6 kW', at: V(-19.4, 9, 26.1) },
+  { k: 'solar',    name: 'Rooftop solar', stat: '+6.6 kW', at: V(-19.4, 5.5, 26.1) },
 ];
 const figure = '<svg viewBox="0 0 26 40" aria-hidden="true"><path class="a" d="M13 1a5 5 0 1 1 0 10a5 5 0 1 1 0-10zM5 13h16a3 3 0 0 1 3 3v11h-4v12h-5V27h-4v12H6V27H2V16a3 3 0 0 1 3-3z"/><path class="b" d="M13 20h-8v7h1v12h5V27h2zm0 0h8v7h-1v12h-5V27h-2z" opacity=".95"/></svg>';
 const bolt = '<svg viewBox="0 0 26 40" aria-hidden="true"><path class="a" d="M16 1L3 23h9l-2 16 13-22h-9z"/><path class="b" d="M12 23l-2 16 13-22h-6z"/></svg>';
