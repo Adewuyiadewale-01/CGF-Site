@@ -371,9 +371,12 @@
 <!-- 10 check your street: a live diorama of your street's battery; checking an address lights it up -->
 <section class="cta" id="check" aria-labelledby="cta-h">
   <div class="cta-card">
-    <div class="cta-grid" aria-hidden="true"></div>
-    <canvas id="cta3d" aria-hidden="true"></canvas>
-    <img class="still cta-still" src="./assets/battery-exploded.png" alt="" loading="lazy">
+    <div class="cta-stage" aria-hidden="true">
+      <div class="cta-grid"></div>
+      <canvas id="cta3d"></canvas>
+      <img class="still cta-still" src="./assets/battery-exploded.png" alt="" loading="lazy">
+      <p class="cta-stage-tag"><i class="live-dot"></i>Live · one battery, 18 buildings</p>
+    </div>
     <div class="cta-copy">
       <p class="kicker">[ 10 ]&nbsp; Join the network</p>
       <h2 id="cta-h">Check your <em>street.</em></h2>
@@ -385,6 +388,9 @@
         <button class="btn" type="submit">Check my street <span aria-hidden="true">→</span></button>
       </form>
       <p class="check-out" id="checkOut" aria-live="polite"><i class="live-dot"></i>38 streets live&nbsp; · &nbsp;112 on the waitlist</p>
+      <ul class="promises" aria-label="Our promises">
+        <li>No lock-in</li><li>Leave with 30 days’ notice</li><li>Keep every credit</li><li>Local crew</li>
+      </ul>
       <div class="result" id="result" hidden>
         <p class="result-k" id="resK">Battery on your street</p>
         <dl>
@@ -400,9 +406,6 @@
       <li><span>02</span><b>Swap the meter</b><small>A local electrician, booked by us, free.</small></li>
       <li><span>03</span><b>Start earning</b><small>Credits from your very first bill.</small></li>
     </ol>
-    <ul class="promises" aria-label="Our promises">
-      <li>No lock-in</li><li>Leave with 30 days’ notice</li><li>Keep every credit</li><li>Local crew</li>
-    </ul>
   </div>
 </section>
 

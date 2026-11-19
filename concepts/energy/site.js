@@ -303,14 +303,14 @@ function believeTick() {
 
 /* ---------- 10 check your street: a live diorama; checking an address lights the street up (demo: nothing leaves the page) ---------- */
 let ctaFire = false, ctaLevel = 0;
-view($('#cta3d'), { viewH: 64, look: V(-14, -1, 4), el: 0.6 }, (st) => {
+view($('#cta3d'), { viewH: 64, look: V(0, -1, 0), el: 0.6 }, (st) => {
   const d = diorama(st); let lv = 0;
   return {
     tick(time, dt) {
       lv += (ctaLevel - lv) * Math.min(1, dt * 3);
       st.view.az = Math.PI / 4 + (reduced ? 0 : time * 0.06) + pointer.x * 0.15;
       const aspect = st.renderer.domElement.clientWidth / Math.max(1, st.renderer.domElement.clientHeight);
-      st.view.viewH = (64 - 6 * lv) * Math.max(1, 1.4 / aspect); st.view.look.set(aspect > 1.2 ? -16 : 0, -1, aspect > 1.2 ? 6 : 0);
+      st.view.viewH = Math.max(50, 70 / aspect) * (1 - 0.08 * lv); st.view.look.set(0, -1, 0); // the whole street, centred in its own panel
       st.project(); st.place();
       d.set(lv, time, dt, ctaFire); ctaFire = false;
     },

@@ -466,19 +466,21 @@ h2 em { font-family: "Instrument Serif", serif; font-style: italic; font-weight:
 .faq-list details p { max-width: 640px; padding-bottom: 26px; font-size: 17px; line-height: 1.6; color: var(--mu); }
 .faq-list summary:hover { color: var(--volt-headline); }
 
-/* 10 check your street: forest card, blueprint grid, a live diorama on the right */
+/* 10 check your street: forest card; the copy on the left, the live diorama in its own panel on the right */
 .cta { padding: 40px 48px 80px; }
-.cta-card { position: relative; overflow: hidden; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr); grid-template-rows: 1fr auto; min-height: 760px; border-radius: 6px; color: #fff;
-  background: radial-gradient(55% 70% at 74% 42%, rgba(32,172,93,.32), transparent 70%), radial-gradient(40% 50% at 10% 100%, rgba(32,172,93,.12), transparent 70%), var(--headline); }
-.cta-grid { position: absolute; inset: 0; pointer-events: none; opacity: .5;
+.cta-card { position: relative; overflow: hidden; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); grid-template-rows: 1fr auto; column-gap: 24px; min-height: 760px; border-radius: 6px; color: #fff;
+  background: radial-gradient(40% 50% at 10% 100%, rgba(32,172,93,.12), transparent 70%), var(--headline); }
+.cta-stage { position: relative; grid-column: 2; grid-row: 1; margin: 20px 20px 0 0; overflow: hidden; border: 1px solid rgba(255,255,255,.08); border-radius: 4px;
+  background: radial-gradient(70% 70% at 50% 48%, rgba(32,172,93,.26), transparent 72%), #001a0c; }
+.cta-grid { position: absolute; inset: 0; pointer-events: none; opacity: .6;
   background-image: linear-gradient(rgba(255,255,255,.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.05) 1px, transparent 1px);
-  background-size: 56px 56px; -webkit-mask-image: radial-gradient(70% 80% at 72% 45%, #000, transparent 75%); mask-image: radial-gradient(70% 80% at 72% 45%, #000, transparent 75%); }
-.cta-card > canvas, .cta-still { position: absolute; inset: 0; width: 100%; height: 100%; }
-/* the diorama is the card's background: it fades out under the copy and toward the edges */
-.cta-card > canvas { -webkit-mask-image: radial-gradient(80% 95% at 70% 42%, #000 35%, transparent 82%); mask-image: radial-gradient(80% 95% at 70% 42%, #000 35%, transparent 82%); }
-.cta-card::after { content: ""; position: absolute; inset: 0; pointer-events: none; background: linear-gradient(90deg, var(--headline) 0%, color-mix(in srgb, var(--headline) 70%, transparent) 30%, transparent 55%), linear-gradient(0deg, var(--headline) 0%, transparent 22%); }
+  background-size: 48px 48px; background-position: center; -webkit-mask-image: radial-gradient(70% 70% at 50% 50%, #000, transparent 80%); mask-image: radial-gradient(70% 70% at 50% 50%, #000, transparent 80%); }
+.cta-stage canvas, .cta-still { position: absolute; inset: 0; width: 100%; height: 100%; }
+/* the diorama stays inside its panel and fades softly at the panel's edges */
+.cta-stage canvas { -webkit-mask-image: radial-gradient(75% 75% at 50% 50%, #000 55%, transparent 100%); mask-image: radial-gradient(75% 75% at 50% 50%, #000 55%, transparent 100%); }
 .cta-still { object-fit: contain; padding: 40px; }
-.cta-copy { position: relative; z-index: 2; padding: 64px 0 40px 64px; align-self: center; }
+.cta-stage-tag { position: absolute; left: 18px; bottom: 16px; display: flex; align-items: center; gap: 10px; font: 400 10px/1 "Geist Mono", monospace; letter-spacing: .08em; text-transform: uppercase; color: rgba(255,255,255,.55); }
+.cta-copy { position: relative; z-index: 2; grid-column: 1; grid-row: 1; padding: 64px 0 48px 64px; align-self: center; }
 .cta .kicker { color: rgba(255,255,255,.55); }
 .cta h2 { color: #fff; font-size: clamp(56px, 7vw, 108px); }
 .cta h2 em { color: var(--volt); }
@@ -510,7 +512,7 @@ h2 em { font-family: "Instrument Serif", serif; font-style: italic; font-weight:
 .join-steps span { grid-row: span 2; font: 400 11px/1.6 "Geist Mono", monospace; color: var(--volt); }
 .join-steps b { font-weight: 500; font-size: 18px; letter-spacing: -.01em; }
 .join-steps small { font-size: 14px; color: rgba(255,255,255,.6); }
-.promises { position: absolute; z-index: 2; right: 32px; top: 32px; list-style: none; display: flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end; max-width: 50%; }
+.promises { margin-top: 28px; list-style: none; display: flex; gap: 6px; flex-wrap: wrap; max-width: 580px; }
 .promises li { padding: 7px 11px; border: 1px solid rgba(255,255,255,.14); border-radius: 999px; font: 400 10px/1 "Geist Mono", monospace; letter-spacing: .08em; text-transform: uppercase; color: rgba(255,255,255,.75); background: rgba(0,0,0,.12); }
 .promises li::before { content: "✓"; margin-right: 6px; color: var(--volt); }
 
@@ -550,12 +552,10 @@ h2 em { font-family: "Instrument Serif", serif; font-style: italic; font-weight:
   .cell { border-top: 1px solid var(--hair); }
   .calc-grid { grid-template-columns: 1fr; }
   .faq { grid-template-columns: 1fr; gap: 48px; }
-  .cta-card { grid-template-columns: 1fr; grid-template-rows: 380px auto auto; }
-  .cta-card > canvas, .cta-still { height: 380px; }
-  .cta-card::after { background: linear-gradient(0deg, var(--headline) 45%, transparent 70%); }
-  .cta-copy { grid-row: 2; padding: 0 40px 40px; }
+  .cta-card { grid-template-columns: 1fr; grid-template-rows: auto auto auto; min-height: 0; }
+  .cta-stage { grid-column: 1; grid-row: 1; height: 420px; margin: 20px 20px 0; }
+  .cta-copy { grid-column: 1; grid-row: 2; padding: 48px 40px 40px; }
   .join-steps { grid-row: 3; }
-  .promises { left: 24px; right: 24px; top: 20px; max-width: none; justify-content: flex-start; }
 }
 @media (max-width: 900px) {
   .nav { padding: 12px 16px; }
@@ -608,14 +608,12 @@ h2 em { font-family: "Instrument Serif", serif; font-style: italic; font-weight:
   .beliefs li.on { padding-left: 12px; }
   .faq-list summary { font-size: 18px; }
   .cta { padding: 16px 16px 48px; }
-  .cta-card { min-height: 0; grid-template-rows: 320px auto auto; }
-  .cta-card > canvas, .cta-still { height: 360px; }
-  .cta-copy { padding: 0 22px 32px; }
+  .cta-stage { height: 320px; margin: 12px 12px 0; }
+  .cta-copy { padding: 32px 22px 32px; }
   .check { flex-direction: column; }
   .result dl { grid-template-columns: 1fr 1fr; }
   .join-steps { grid-template-columns: 1fr; }
   .join-steps li, .join-steps li + li { padding: 18px 22px; border-left: 0; border-top: 1px solid rgba(255,255,255,.12); }
-  .promises li:nth-child(n+3) { display: none; }
   .foot { padding: 64px 16px 28px; }
   .foot-top, .foot-bottom { flex-direction: column; align-items: flex-start; }
   .foot-cols { gap: 32px; flex-wrap: wrap; }
