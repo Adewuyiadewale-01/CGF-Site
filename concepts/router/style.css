@@ -133,7 +133,7 @@ dd { font-weight: 500; font-size: 16px; }
 .acts button.on { background: var(--ink); color: #fff; }
 .acts button:hover:not(.on) { background: #E2DDD3; }
 .path-big { display: flex; align-items: baseline; gap: 10px; }
-.path-big span { font: 300 40px/1 var(--serif); letter-spacing: -.02em; }
+.path-big span { font: 300 40px/1 var(--serif); letter-spacing: -.02em; white-space: nowrap; }
 .path-big small { font-size: 12px; color: var(--mute); }
 .path dl { display: grid; gap: 8px; margin: 0; padding-bottom: 14px; border-bottom: 1px solid var(--line); }
 .path dl div { display: flex; justify-content: space-between; } .path dt { font: 12.5px var(--sans); text-transform: none; letter-spacing: 0; } .path dd { font-size: 12.5px; }
