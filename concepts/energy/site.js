@@ -97,15 +97,24 @@ view($('#street3d'), { fov: 32 }, (st) => {
   const r = { export: $('#r-export'), charge: $('#r-charge'), import: $('#r-import'), paid: $('#r-paid') };
   // camera stops: [position, look-at, street phase, readout anchor]
   const K = [
-    [V(-11, 8.6, 14.5), V(-22.5, 3.0, 1.5), 0.5, V(-19.2, 4.9, 0)],      // 01 roof close-up
-    [V(-3.5, 5.6, 13), V(-7.5, 1.4, 3.9), 0.75, V(-6, 1.6, 3.9)],         // 02 along the tray
-    [V(11, 9, 17), V(-1.5, 2.6, 1.5), 1.0, V(1.9, 5.8, -0.8)],         // 03 the battery
-    [V(16, 15, 27), V(1, 2.6, 0), 2.35, V(-9.6, 5.1, -0.6)],              // 04 evening, pulled back
+    [V(-7, 16, 26), V(-21.5, 3.6, 0.5), 0.5, V(-19.2, 5.2, -0.6)],      // 01 the two solar roofs
+    [V(2, 19, 27), V(-9, 6.2, 2.5), 0.8, V(0.9, 9.2, 4.15)],            // 02 along the mains
+    [V(13, 15, 23), V(-1.5, 3.2, 0.5), 1.15, V(2.2, 5.6, -0.8)],        // 03 the street battery
+    [V(20, 19, 33), V(-1, 3.6, 0), 2.35, V(-8.8, 5.4, -0.6)],           // 04 six o'clock
     [V(-2, 40, 40), V(-2, 0, -4), 3.05, V(13.5, 15.6, -1.4)],           // 05 high and wide
   ];
+  // what each chapter is about; everything else fades back
+  const F = [
+    { h1: 1, h2: 1, bat: 0, apt: 0, shop: 0 },
+    { h1: 0.35, h2: 0.35, bat: 0.35, apt: 0, shop: 0 },
+    { h1: 0, h2: 0, bat: 1, apt: 0, shop: 0 },
+    { h1: 1, h2: 1, bat: 1, apt: 1, shop: 1 },
+    { h1: 1, h2: 1, bat: 1, apt: 1, shop: 1 },
+  ];
+  const focus = {}, sticky = $('.how-sticky'), dayBg = new THREE.Color(getComputedStyle(root).getPropertyValue('--bg').trim()), duskBg = new THREE.Color('#D3DCD8'), bgNow = new THREE.Color();
   const readouts = (ph) => [
     'Panel array · 6.6 kW · ' + Math.round(1020 * clamp(1.4 - ph)) + ' W/m²',
-    'Street cable · 415 V · flowing east',
+    'Mains · 415 V · flowing to the battery',
     'Street battery · ' + Math.round(clamp(ph / 1.1) * 100) + '% · charging',
     'Home 14 · from the battery · 1.9 kW',
     'This street today · 61 homes · +$146.20',
@@ -132,7 +141,11 @@ view($('#street3d'), { fov: 32 }, (st) => {
       if (aspect < 1.2) pos.sub(look).multiplyScalar(1 + (1.2 - aspect) * 1.1).add(look);
       pos.x += pointer.x * 1.6; pos.y -= pointer.y * 1.0;
       cam.position.copy(pos); cam.lookAt(look);
-      s.set(ph, time, dt);
+      for (const key of ['h1', 'h2', 'bat', 'apt', 'shop']) focus[key] = F[a][key] + (F[a + 1][key] - F[a][key]) * t;
+      const { eve } = s.set(ph, time, dt, focus);
+      // the page darkens with the street at dusk
+      bgNow.copy(dayBg).lerp(duskBg, eve * 0.9); st.scene.fog.color.copy(bgNow);
+      const hex = '#' + bgNow.getHexString(); if (sticky.dataset.bg !== hex) { sticky.dataset.bg = hex; sticky.style.setProperty('--how-bg', hex); }
       // chapter text
       const c = Math.round(k);
       if (c !== chOn) {
@@ -279,24 +292,26 @@ quote.innerHTML = quote.textContent.split(' ').map((w) => `<span class="w">${w}<
 words.push(...$$('.w', quote));
 
 /* ---------- 07 what we believe: photo drifts, the promise nearest the middle of the screen lights up ---------- */
-const believe = $('.believe'), beliefRows = $$('#beliefs li'), believeImg = $('.believe-photo img');
+const believe = $('.believe'), beliefRows = $$('#beliefs li'), believeImg = $('.team-photo img');
 function believeTick() {
   const r = believe.getBoundingClientRect(); if (r.bottom < 0 || r.top > innerHeight) return;
-  if (!reduced) believeImg.style.setProperty('--py', (r.top * -0.12).toFixed(1) + 'px');
+  if (!reduced) { const c = believeImg.parentElement.getBoundingClientRect(); believeImg.style.setProperty('--py', ((c.top + c.height / 2 - innerHeight / 2) * -0.08).toFixed(1) + 'px'); }
   let best = -1, bestD = Infinity;
   beliefRows.forEach((li, i) => { const b = li.getBoundingClientRect(), d = Math.abs(b.top + b.height / 2 - innerHeight * 0.52); if (d < bestD) { bestD = d; best = i; } });
-  beliefRows.forEach((li, i) => li.classList.toggle('on', i === best && bestD < innerHeight * 0.4));
+  if (bestD < innerHeight * 0.45) beliefRows.forEach((li, i) => li.classList.toggle('on', i === best));
 }
 
 /* ---------- 10 check your street: a live diorama; checking an address lights the street up (demo: nothing leaves the page) ---------- */
 let ctaFire = false, ctaLevel = 0;
-view($('#cta3d'), { viewH: 50, look: V(0, -1, 0), el: 0.62 }, (st) => {
+view($('#cta3d'), { viewH: 64, look: V(-14, -1, 4), el: 0.6 }, (st) => {
   const d = diorama(st); let lv = 0;
   return {
     tick(time, dt) {
       lv += (ctaLevel - lv) * Math.min(1, dt * 3);
       st.view.az = Math.PI / 4 + (reduced ? 0 : time * 0.06) + pointer.x * 0.15;
-      st.view.viewH = 50 - 6 * lv; st.project(); st.place();
+      const aspect = st.renderer.domElement.clientWidth / Math.max(1, st.renderer.domElement.clientHeight);
+      st.view.viewH = (64 - 6 * lv) * Math.max(1, 1.4 / aspect); st.view.look.set(aspect > 1.2 ? -16 : 0, -1, aspect > 1.2 ? 6 : 0);
+      st.project(); st.place();
       d.set(lv, time, dt, ctaFire); ctaFire = false;
     },
   };
@@ -318,6 +333,14 @@ $('#check-form').addEventListener('submit', (e) => {
   res.hidden = false;
   ctaLevel = live ? 1 : 0.45; ctaFire = true;
 });
+
+/* ---------- footer: the logo, huge; letters rise in, the mark turns ---------- */
+{
+  const giant = $('#footGiant'), word = $('#footWord');
+  $('#footMark').append($('.logo .mark').cloneNode(true));
+  word.innerHTML = [...word.textContent].map((c, i) => '<span class="l" style="--i:' + i + '">' + c + '</span>').join('');
+  new IntersectionObserver(([e], o) => { if (e.isIntersecting) { giant.classList.add('in'); o.disconnect(); } }, { threshold: 0.35 }).observe(giant);
+}
 
 /* ---------- the loop ---------- */
 let last = performance.now();

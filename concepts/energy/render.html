@@ -28,7 +28,7 @@
     battery: { viewH: 17, look: V(-0.8, 6.4, -0.4) },
   };
   // ?asset=flight&cam=px,py,pz,lx,ly,lz&phase=: the How it works camera (perspective, fogged)
-  const cam = (q.get('cam') || '-11,8.6,14.5,-22.5,3,1.5').split(',').map(Number);
+  const cam = (q.get('cam') || '-7,16,26,-21.5,3.6,0.5').split(',').map(Number);
   const stage = makeStage(document.getElementById('c'), { ...(frames[asset] || { viewH: 50, look: V(0, -1, 0), el: 0.62 }), preserve: true, fov: asset === 'flight' ? 32 : 0 });
   let s;
   if (asset === 'diorama') { const d = diorama(stage); for (let i = 0; i < 60; i++) d.set(1, 2 + i * 0.016, 0.016, i === 30); stage.render(); window.__ready = true; throw 0; }
