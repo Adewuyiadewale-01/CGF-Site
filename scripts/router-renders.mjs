@@ -21,6 +21,9 @@ const JOBS = {
   'plan-dark':     ['asset=plan-dark', 1600, 1100],
   signal:          ['asset=signal', 1600, 1100],
   macro:           ['asset=macro', 1400, 1000],
+  'cut-graphite':  ['asset=cut&f=graphite', 900, 1000, true],
+  'cut-bone':      ['asset=cut&f=bone', 900, 1000, true],
+  'cut-cobalt':    ['asset=cut&f=cobalt', 900, 1000, true],
 };
 const names = process.argv.slice(2).length ? process.argv.slice(2) : Object.keys(JOBS);
 const browser = await chromium.launch({ args: ['--use-angle=metal', '--enable-gpu', '--ignore-gpu-blocklist'] });

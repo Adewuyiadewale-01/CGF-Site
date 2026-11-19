@@ -26,6 +26,17 @@
     st = makeStage(c, { bg: '#E3DDD2', bloom: 0, fov: 26, preserve: true, exposure: 0.82 });
     const s = studioScene(st, asset === 'single' ? [q.get('f') || 'graphite'] : undefined);
     if (asset === 'single') { st.camera.position.set(0, 2.0, 6.2); st.camera.lookAt(0, 1.1, 0); }
+  } else if (asset === 'cut') {
+    // one finish on a transparent background with a soft contact shadow, for compositing
+    st = makeStage(c, { bg: null, bloom: 0, fov: 24, preserve: true, exposure: 0.9 });
+    st.renderer.shadowMap.enabled = true; st.renderer.shadowMap.type = THREE.PCFSoftShadowMap; st.scene.environmentIntensity = 0.5;
+    const r = vyreOne(q.get('f') || 'graphite'); r.rotation.y = -0.3; r.traverse((o) => { if (o.isMesh) o.castShadow = true; }); st.scene.add(r);
+    const key = new THREE.DirectionalLight('#fff6ee', 2.6); key.position.set(-3, 9, 5); key.castShadow = true; key.shadow.mapSize.set(2048, 2048); key.shadow.radius = 6;
+    for (const k of ['left', 'right', 'top', 'bottom']) key.shadow.camera[k] = { left: -3, right: 3, top: 3, bottom: -3 }[k];
+    st.scene.add(key, new THREE.HemisphereLight('#ffffff', '#cfc6b8', 0.6));
+    const fill = new THREE.DirectionalLight('#B9B6FF', 0.7); fill.position.set(5, 2, -3); st.scene.add(fill);
+    const floor = new THREE.Mesh(new THREE.PlaneGeometry(20, 20), new THREE.ShadowMaterial({ opacity: 0.22 })); floor.rotation.x = -Math.PI / 2; floor.receiveShadow = true; st.scene.add(floor);
+    st.camera.position.set(0, 3.6, 7.0); st.camera.lookAt(0, 1.05, 0); st.camera.fov = 27; st.camera.updateProjectionMatrix();
   } else if (asset === 'plan' || asset === 'plan-dark') {
     const dark = asset === 'plan-dark';
     st = makeStage(c, { bg: dark ? '#0B0A10' : null, bloom: dark ? 0.8 : 0, fov: 22, preserve: true });
