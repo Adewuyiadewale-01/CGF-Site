@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Vyre — render</title>
+<!-- Renders one asset for Figma and for the site's stills: ?asset=hero | studio | single&f=bone | plan | plan-dark | signal | macro -->
+<style>html, body { margin: 0; background: transparent; } canvas { display: block; width: 100vw; height: 100vh; }</style>
+<script type="importmap">
+{ "imports": {
+  "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js",
+  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"
+} }
+</script>
+</head>
+<body>
+<canvas id="c"></canvas>
+<script type="module">
+  import { THREE, V, makeStage, heroScene, studioScene, planScene, signalScene, vyreOne, glowTex, COBALT } from './vyre.js';
+  const q = new URLSearchParams(location.search), asset = q.get('asset') || 'hero', c = document.getElementById('c');
+  const t = +(q.get('t') ?? 2.4);
+  let st;
+  if (asset === 'hero') {
+    st = makeStage(c, { bg: '#0B0A10', bloom: 1.1, fov: 30, preserve: true });
+    const h = heroScene(st); h.set(t, { spin: +(q.get('spin') ?? 0), tilt: +(q.get('tilt') ?? 0) });
+  } else if (asset === 'studio' || asset === 'single') {
+    st = makeStage(c, { bg: '#E3DDD2', bloom: 0, fov: 26, preserve: true, exposure: 0.82 });
+    const s = studioScene(st, asset === 'single' ? [q.get('f') || 'graphite'] : undefined);
+    if (asset === 'single') { st.camera.position.set(0, 2.0, 6.2); st.camera.lookAt(0, 1.1, 0); }
+  } else if (asset === 'plan' || asset === 'plan-dark') {
+    const dark = asset === 'plan-dark';
+    st = makeStage(c, { bg: dark ? '#0B0A10' : null, bloom: dark ? 0.8 : 0, fov: 22, preserve: true });
+    const p = planScene(st, { dark }); p.set(t, q.get('focus'));
+    for (let i = 0; i < 60; i++) p.set(t, q.get('focus'));
+  } else if (asset === 'signal') {
+    st = makeStage(c, { bg: '#0B0A10', bloom: 0.7, fov: 26, preserve: true });
+    signalScene(st).set(t, { mesh: +(q.get('mesh') ?? 1) });
+  } else if (asset === 'macro') {
+    st = makeStage(c, { bg: '#0B0A10', bloom: 1.2, fov: 22, preserve: true });
+    const r = vyreOne(q.get('f') || 'graphite'); st.scene.add(r);
+    const key = new THREE.DirectionalLight('#fff', 2); key.position.set(3, 6, 4); st.scene.add(key);
+    const rim = new THREE.DirectionalLight('#6E6BFF', 3); rim.position.set(-4, 2, -3); st.scene.add(rim);
+    st.camera.position.set(1.6, 3.3, 2.3); st.camera.lookAt(0, 1.75, 0); r.rotation.y = -0.4;
+  }
+  st.resize(); st.render(); st.render();
+  window.__ready = true;
+</script>
+</body>
+</html>

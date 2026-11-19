@@ -1,0 +1,34 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "cgf-site",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "run",
+        "dev"
+      ],
+      "port": 4321
+    },
+    {
+      "name": "energy",
+      "runtimeExecutable": "node",
+      "runtimeArgs": [
+        "scripts/serve-static.mjs",
+        "concepts/energy",
+        "4420"
+      ],
+      "port": 4420
+    },
+    {
+      "name": "router",
+      "runtimeExecutable": "node",
+      "runtimeArgs": [
+        "scripts/serve-static.mjs",
+        "concepts/router",
+        "4430"
+      ],
+      "port": 4430
+    }
+  ]
+}
