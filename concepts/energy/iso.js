@@ -8,7 +8,8 @@ import { LineGeometry } from 'three/addons/lines/LineGeometry.js';
 // colours come from the page theme (CSS custom properties), so v1 and v2 share this file
 const css = getComputedStyle(document.documentElement);
 const C = (name) => new THREE.Color(css.getPropertyValue(name).trim());
-const VOLT = C('--volt'), INK = C('--edge');
+const ACCENT = new URLSearchParams(location.search).get('accent');   // e.g. ?accent=20AC5D for the export
+const VOLT = ACCENT ? new THREE.Color('#' + ACCENT) : C('--volt'), INK = C('--edge');
 const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
 // ?scene=city: distant skyline behind the network, and proper pitched roofs
 const CITY = document.documentElement.dataset.scene === 'city';
@@ -410,4 +411,88 @@ if (EXPORT) {
   document.documentElement.classList.add('export');
   scene.traverse((o) => { if (o.isSprite) o.visible = false; });
   setTimeout(() => { window.__ready = true; }, 1500);
+}
+
+/* ---------- ?export=vector: a true vector SVG of the illustration (window.__svg) ----------
+   Fills: every camera-facing face, drawn back to front per object.
+   Lines: every edge, split into the pieces that are actually visible, by ray-testing samples
+   along each segment against the solid geometry. That gives a clean hidden-line drawing. */
+if (new URLSearchParams(location.search).get('export') === 'vector') {
+  await new Promise((r) => setTimeout(r, 800));
+  scene.traverse((o) => { if (o.isSprite) o.visible = false; });
+  scene.updateMatrixWorld(true);
+  const dir = camera.getWorldDirection(new THREE.Vector3());
+  const px = (p) => { const v = p.clone().project(camera); return [((v.x + 1) / 2) * W, ((1 - v.y) / 2) * H]; };
+  const depth = (p) => p.dot(dir);
+  const solids = []; scene.traverse((o) => { if (o.isMesh && o.visible && !o.isLineSegments2) solids.push(o); });
+  const ray = new THREE.Raycaster(); ray.camera = camera;
+  const hex = (c) => '#' + c.getHexString();
+  const f2 = (n) => Math.round(n * 100) / 100;
+  // visibility of a world point: nothing solid between the camera plane and it
+  const visible = (p) => {
+    ray.set(p.clone().addScaledVector(dir, -400), dir);
+    const hit = ray.intersectObjects(solids, false)[0];
+    return !hit || hit.distance >= 400 - 0.03;
+  };
+  // ---- fills
+  const fillItems = [];
+  for (const m of solids) {
+    const g = m.geometry, pos = g.attributes.position, idx = g.index, mats = Array.isArray(m.material) ? m.material : [m.material];
+    const groups = g.groups.length ? g.groups : [{ start: 0, count: idx ? idx.count : pos.count, materialIndex: 0 }];
+    const box = new THREE.Box3().setFromObject(m), centre = box.getCenter(new THREE.Vector3());
+    const paths = [];
+    for (const gr of groups) {
+      const mat = mats[gr.materialIndex]; if (!mat || !mat.visible) continue;
+      let d = '';
+      for (let i = gr.start; i < gr.start + gr.count; i += 3) {
+        const v = [0, 1, 2].map((k) => new THREE.Vector3().fromBufferAttribute(pos, idx ? idx.getX(i + k) : i + k).applyMatrix4(m.matrixWorld));
+        const n = new THREE.Vector3().subVectors(v[1], v[0]).cross(new THREE.Vector3().subVectors(v[2], v[0]));
+        if (n.dot(dir) >= 0 && mat.side !== THREE.DoubleSide) continue;      // back face
+        const q = v.map(px); d += `M${f2(q[0][0])} ${f2(q[0][1])}L${f2(q[1][0])} ${f2(q[1][1])}L${f2(q[2][0])} ${f2(q[2][1])}Z`;
+      }
+      if (d) paths.push(`<path d="${d}" fill="${hex(mat.color)}" stroke="${hex(mat.color)}" stroke-width="0.6" stroke-linejoin="round"/>`);
+    }
+    if (paths.length) fillItems.push({ z: depth(centre), svg: paths.join('') });
+  }
+  fillItems.sort((a, b) => b.z - a.z);                 // farthest first
+  // ---- lines (edges, details, rings, routes): keep only visible pieces
+  const lineOut = new Map();                           // style -> path data
+  const add = (style, a, b) => { lineOut.set(style, (lineOut.get(style) || '') + `M${f2(a[0])} ${f2(a[1])}L${f2(b[0])} ${f2(b[1])}`); };
+  const segmentsOf = (o) => {
+    const pos = o.geometry.attributes.position, out = [];
+    const P = (i) => new THREE.Vector3().fromBufferAttribute(pos, i).applyMatrix4(o.matrixWorld);
+    if (o.isLineSegments) for (let i = 0; i + 1 < pos.count; i += 2) out.push([P(i), P(i + 1)]);
+    else for (let i = 0; i + 1 < pos.count; i++) out.push([P(i), P(i + 1)]);
+    return out;
+  };
+  scene.traverse((o) => {
+    if (!(o.isLine || o.isLineSegments) || !o.visible || o.isLine2) return;
+    const m = o.material; if (m.opacity < 0.02) return;
+    // dashes are cut geometrically along the whole line, so they stay even across segments
+    const dashed = m.isLineDashedMaterial, period = dashed ? m.dashSize + m.gapSize : 0;
+    let along = 0;
+    const style = `stroke="${hex(m.color)}" stroke-opacity="${f2(m.opacity)}" stroke-width="${m.linewidth > 1 ? m.linewidth : 1}"`;
+    for (const [a, b] of segmentsOf(o)) {
+      const sa = px(a), sb = px(b), len = Math.hypot(sb[0] - sa[0], sb[1] - sa[1]), wl = a.distanceTo(b);
+      const n = Math.max(2, Math.ceil(len / (dashed ? 1 : 2.5)));
+      let runStart = null;
+      for (let i = 0; i <= n; i++) {
+        const t = i / n, p = a.clone().lerp(b, t);
+        const on = !dashed || ((along + wl * t) % period) < m.dashSize;
+        const vis = on && visible(p);
+        if (vis && runStart === null) runStart = t;
+        if ((!vis || i === n) && runStart !== null) {
+          const tEnd = vis ? t : (i - 1) / n;
+          if (tEnd > runStart) add(style, px(a.clone().lerp(b, runStart)), px(a.clone().lerp(b, tEnd)));
+          runStart = null;
+        }
+      }
+      along += wl;
+    }
+  });
+  // the active circuit on top, as one accent stroke
+  const c = current[active], pts = c.pts.map(px);
+  const live = `<path d="M${pts.map((p) => `${f2(p[0])} ${f2(p[1])}`).join('L')}" fill="none" stroke="${hex(VOLT)}" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>`;
+  const lineSvg = [...lineOut].map(([st, d]) => `<path d="${d}" fill="none" ${st} stroke-linecap="round"/>`).join('');
+  window.__svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}"><g id="fills">${fillItems.map((f) => f.svg).join('')}</g><g id="lines">${lineSvg}</g><g id="circuit">${live}</g></svg>`;
 }
