@@ -112,3 +112,131 @@ if (insideSec) new IntersectionObserver(async ([e], o) => {
   };
   st.resize(); requestAnimationFrame(tick);
 }, { rootMargin: '800px' }).observe(insideSec);
+
+/* the vyre app: every route out of the house, live on a globe */
+const appSec = $('#app');
+if (appSec) (async () => {
+  const dash = $('#dash'), size = $('#dashSize'), scroller = $('#dashScroll'), device = $('#device'), NS = 'http://www.w3.org/2000/svg';
+  const el = (tag, attrs = {}, parent) => { const n = document.createElementNS(NS, tag); for (const k in attrs) n.setAttribute(k, attrs[k]); if (parent) parent.append(n); return n; };
+  // fit the 1172 × 733 artboard to the device; on phones it keeps a readable size and scrolls sideways
+  const fit = () => { const w = scroller.clientWidth, k = innerWidth <= 760 ? 0.66 : w / 1172; dash.style.setProperty('--k', k); size.style.width = innerWidth <= 760 ? 1172 * k + 'px' : ''; size.style.height = 733 * k + 'px'; };
+  new ResizeObserver(fit).observe(scroller); fit();
+  // the device leans back until it arrives, then lies flat
+  const tilt = () => { if (reduced || innerWidth <= 760) return device.style.setProperty('--tilt', 0); const r = device.getBoundingClientRect(), p = Math.min(1, Math.max(0, (innerHeight - r.top) / (innerHeight * 0.75))); device.style.setProperty('--tilt', (1 - p * p * (3 - 2 * p)).toFixed(3)); };
+  addEventListener('scroll', tilt, { passive: true }); addEventListener('resize', tilt); tilt();
+
+  // small drawn details: the logo's dot matrix and the router drawing's ribs
+  [3, 5, 7, 7, 7, 5, 3].forEach((n, row) => { for (let i = 0; i < n; i++) el('circle', { cx: 27.67 + (i - (n - 1) / 2) * 3.2556, cy: 17.9 + row * 3.2556, r: 1.22 }, $('#logoDots')); });
+  for (let i = 0, y = 56.97; y < 228; i++, y += 5.86) el('path', { d: `M19.5 ${y.toFixed(1)}H94.4`, opacity: i % 5 ? .25 : .55 }, $('#drawRules'));
+
+  const ROUTES = {
+    sg: { city: 'Singapore', svc: 'Valorant · SG-1', cat: 'Gaming', ms: 38.2, isp: 74, fly: '1,840 km over the Indian Ocean', at: [10, -10], hops: [['Cable landing', 'Perth coast', 3.0], ['Subsea west', '3,900 km · Indian Ocean', 34.6], ['SG-1 edge', 'Singapore', 38.2]] },
+    syd: { city: 'Sydney', svc: 'Zoom · Sydney', cat: 'Calls', ms: 47.1, isp: 63, fly: '1,650 km across the Nullarbor', at: [6, -30], hops: [['Nullarbor fibre', '2,700 km · overland', 39.5], ['Adelaide relay', 'South Australia', 42.8], ['Sydney edge', 'New South Wales', 47.1]] },
+    tyo: { city: 'Tokyo', svc: 'Steam · Tokyo', cat: 'Downloads', ms: 96.4, isp: 131, fly: '3,900 km over the South China Sea', at: [10, -10], hops: [['Singapore relay', 'via Subsea west', 38.6], ['Subsea north', '5,300 km · South China Sea', 91.7], ['Tokyo edge', 'Japan', 96.4]] },
+    jkt: { city: 'Jakarta', svc: 'Mobile Legends · JKT', cat: 'Gaming', ms: 33.2, isp: 52, fly: '1,500 km over the Indian Ocean', at: [11, -7], hops: [['Cable landing', 'Perth coast', 3.0], ['Subsea west', '3,000 km · Indian Ocean', 30.1], ['Jakarta edge', 'Indonesia', 33.2]] },
+    akl: { city: 'Auckland', svc: 'Slack huddle · AKL', cat: 'Calls', ms: 71.3, isp: 88, fly: '2,600 km over the Tasman Sea', at: [-84, 10], hops: [['Sydney relay', 'via Nullarbor fibre', 47.1], ['Tasman cable', '2,200 km · Tasman Sea', 67.9], ['Auckland edge', 'New Zealand', 71.3]] },
+    lax: { city: 'Los Angeles', svc: 'Twitch ingest · LA', cat: 'Streaming', ms: 148.2, isp: 192, fly: '7,400 km over the Pacific', at: [-112, -34], arrow: 'r', hops: [['Sydney relay', 'via Nullarbor fibre', 47.1], ['Trans-Pacific', '12,000 km · Pacific', 143.6], ['LA edge', 'California', 148.2]] },
+    fra: { city: 'Frankfurt', svc: 'GitHub · Frankfurt', cat: 'Work', ms: 211.4, isp: 248, fly: '6,900 km over the Arabian Sea', at: [-76, -31], arrow: 'l', hops: [['Singapore relay', 'via Subsea west', 38.6], ['Subsea Europe', '10,200 km · via Suez', 205.3], ['Frankfurt edge', 'Germany', 211.4]] },
+  };
+  const ORDER = ['sg', 'syd', 'jkt', 'akl', 'tyo', 'lax', 'fra'];
+  let geo; try { geo = await (await fetch('./assets/globe.json')).json(); } catch { return; }
+  const D = ([x, y]) => [222 + x * 0.4875, y * 0.4875];
+  const svg = $('#routesSvg'), gGlow = el('g', {}, svg), gArc = el('g', {}, svg), gDots = el('g', {}, svg);
+  const per = geo.cities.perth;
+  for (const id of ORDER) {
+    const r = ROUTES[id], g = geo.routes[id];
+    r.glow = el('path', { d: g.d, class: 'glow' }, gGlow); r.arc = el('path', { d: g.d, class: 'arc' }, gArc);
+    if (g.endVisible) r.end = el('circle', { cx: g.end[0], cy: g.end[1], r: 7, class: 'end' }, gDots);
+    r.anchor = D(g.endVisible ? g.end : g.last); r.mid = D(g.mid); r.len = r.arc.getTotalLength();
+    const p = document.createElement('button'); p.type = 'button'; p.className = 'pill'; p.dataset.id = id;
+    p.innerHTML = r.arrow === 'l' ? `<b>←&nbsp; ${r.city}</b><span>${Math.round(r.ms)} ms</span>` : `<b>${r.city}${r.arrow ? '&nbsp; →' : ''}</b><span>${Math.round(r.ms)} ms</span>`;
+    p.style.left = r.anchor[0] + r.at[0] + 'px'; p.style.top = r.anchor[1] + r.at[1] + 'px'; p.setAttribute('aria-label', `Show the route to ${r.city}`);
+    $('#pills').append(p); r.pill = p;
+  }
+  el('circle', { cx: per[0], cy: per[1], r: 26, class: 'ping' }, gDots);
+  el('circle', { cx: per[0], cy: per[1], r: 14, class: 'home-dot' }, gDots);
+  const pk = [0, 1, 2].map(() => el('circle', { r: 7, class: 'pk' }, gDots));
+  const pp = D(per), me = document.createElement('span'); me.className = 'pill dark'; me.innerHTML = '<b>Vyre One · Perth</b>'; me.style.left = pp[0] + 12 + 'px'; me.style.top = pp[1] + 11 + 'px'; $('#pills').append(me);
+
+  // the list view
+  const list = $('#routeList');
+  list.innerHTML = '<div class="lr" role="row"><span>Route</span><span>Traffic</span><span>ISP</span><span>Vyre</span><span>Saved</span></div>' + ORDER.map((id) => { const r = ROUTES[id]; return `<button type="button" class="lr" role="row" data-id="${id}"><span><b>Perth → ${r.city}</b><small>${r.svc}</small></span><span>${r.cat}</span><span class="m">${r.isp} ms</span><span class="m v">${Math.round(r.ms)} ms</span><span class="bars"><i style="width:${r.isp / 2.5}%"></i><i style="width:${r.ms / 2.5}%"></i></span></button>`; }).join('');
+
+  // home view: lanes from Vyre One to the rooms
+  // pin spots are measured on the 1026 × 684 render placed at (97, 33); the render now sits smaller, clear of the title
+  const IMG = { x: 280, y: 70, k: 800 / 1026 }, H = ([x, y]) => [IMG.x + (x - 97) * IMG.k, IMG.y + (y - 33) * IMG.k];
+  const HOME = { hub: H([815.5, 326.5]), pins: [[...H([414.5, 236.5]), 'big'], [...H([685, 205]), 'Bedroom · Phone'], [...H([657, 370]), 'Living · TV 4K'], [...H([741, 423]), 'Den · Console 9.8 ms']] };
+  const lanes = $('#lanesSvg'), hp = $('#homePins');
+  HOME.pins.forEach(([x, y, label], i) => {
+    const [hx, hy] = HOME.hub, cx = (x + hx) / 2, cy = Math.min(y, hy) - 40 - i * 6;
+    el('path', { d: `M${hx} ${hy}Q${cx} ${cy} ${x} ${y}`, class: i ? '' : 'on' }, lanes);
+    const pin = document.createElement('i'); pin.className = 'hpin' + (i ? '' : ' big'); pin.style.left = x + 'px'; pin.style.top = y + 'px'; hp.append(pin);
+    if (i) { const t = document.createElement('span'); t.className = 'pill'; t.style.cursor = 'default'; t.innerHTML = `<b>${label.split(' · ')[0]}</b><span>${label.split(' · ').slice(1).join(' · ')}</span>`; t.style.left = x + 10 + 'px'; t.style.top = y - 8 + 'px'; if (x > 740) { t.style.left = x - 10 + 'px'; t.style.transform = 'translateX(-100%)'; } hp.append(t); }
+  });
+  const hub = document.createElement('span'); hub.className = 'pill dark'; hub.innerHTML = '<b>Vyre One</b>'; hub.style.left = HOME.hub[0] - 16 + 'px'; hub.style.top = HOME.hub[1] - 10 + 'px'; hub.style.transform = 'translateX(-100%)'; hp.append(hub);
+  const hubPin = document.createElement('i'); hubPin.className = 'hpin big'; hubPin.style.left = HOME.hub[0] + 'px'; hubPin.style.top = HOME.hub[1] + 'px'; hp.append(hubPin);
+
+  // selecting a route updates the arc, the callout, the in-flight tag and the left panel
+  let cur = 'sg', view = 'globe';
+  const callout = $('#callout'), line = $('#leaderLine'), flight = $('#flight');
+  const fmt = (v) => v.toFixed(1);
+  function placeCallout() {
+    if (view === 'home') { callout.style.left = HOME.pins[0][0] - 30 + 'px'; callout.style.top = HOME.pins[0][1] - 128 + 'px'; $('#cK').textContent = 'Studio · Video call'; $('#cMs').textContent = '3.1'; $('#cWas').textContent = '4K · lane 1 of 23'; return; }
+    const r = ROUTES[cur], [ax, ay] = r.anchor;
+    let x = ax - 185, y = ay - 76; x = Math.min(Math.max(x, 338), 720); y = Math.min(Math.max(y, 72), 560);
+    callout.style.left = x + 'px'; callout.style.top = y + 'px';
+    const ex = x + 166 < ax ? x + 166 : x > ax ? x : x + 83, ey = x + 166 < ax || x > ax ? y + 44 : y + 88;
+    line.setAttribute('x1', ex); line.setAttribute('y1', ey); line.setAttribute('x2', ax); line.setAttribute('y2', ay);
+    $('#cK').textContent = r.svc; $('#cWas').textContent = `Was ${r.isp} ms on your ISP’s path`;
+    $('#flightTxt').textContent = r.fly; flight.style.left = r.mid[0] - 12 - flight.offsetWidth + 'px'; flight.style.top = r.mid[1] - 11 + 'px';
+  }
+  function select(id) {
+    cur = id; const r = ROUTES[id];
+    for (const k of ORDER) { const o = ROUTES[k], on = k === id; o.arc.classList.toggle('on', on); o.glow.classList.toggle('on', on); o.end?.classList.toggle('on', on); o.end?.setAttribute('r', on ? 11 : 7); o.pill.classList.toggle('on', on); }
+    $('#rTitle').innerHTML = `Perth →<br>${r.city}`; $('#rCat').textContent = r.cat;
+    const hops = [['Vyre One', 'Home · Perth', 0.4], ['WA exchange', 'Peering · 2 km', 2.1], ...r.hops];
+    $('#hops').innerHTML = hops.map(([a, b, ms], i) => `<li class="${i === 3 ? 'lead' : ''}"><b>${a}</b><small>${b}</small><em>${fmt(ms)}</em></li>`).join('');
+    $('#ispMs').textContent = r.isp + ' ms'; $('#ispBar').style.width = '92%'; $('#vyreBar').style.width = (92 * r.ms / r.isp).toFixed(1) + '%';
+    $('#saved').textContent = '−' + Math.round(r.isp - r.ms); $('#eSaved').textContent = Math.round(r.isp - r.ms) + ' ms';
+    tickMs(); placeCallout();
+  }
+  function tickMs() {
+    if (view === 'home') return;
+    const r = ROUTES[cur], v = r.ms + (Math.random() - 0.5) * (reduced ? 0 : 0.8);
+    $('#cMs').textContent = Math.round(v); $('#vyreMs').textContent = Math.round(v) + ' ms';
+    const last = $('#hops li:last-child em'); if (last) last.textContent = fmt(v);
+  }
+  $('#pills').addEventListener('click', (e) => { const b = e.target.closest('.pill[data-id]'); if (b) select(b.dataset.id); });
+  list.addEventListener('click', (e) => { const b = e.target.closest('[data-id]'); if (b) { select(b.dataset.id); setView('globe'); } });
+
+  const TITLES = { globe: ['Live<br>Routes', '47 routes · 6 regions · live'], home: ['Home<br>Overview', '23 devices · 5 rooms · live'], list: ['All<br>Routes', '7 pinned of 47 · sorted by traffic'] };
+  function setView(v) {
+    view = v; dash.dataset.view = v;
+    $$('.d-switch button').forEach((b) => b.setAttribute('aria-selected', b.dataset.v === v));
+    $('#dTitle').innerHTML = TITLES[v][0]; $('#dSub').textContent = TITLES[v][1];
+    if (v === 'home') placeCallout(); else select(cur);
+  }
+  $$('.d-switch button').forEach((b) => b.addEventListener('click', () => setView(b.dataset.v)));
+
+  // latency budget: a tighter budget means Vyre re-routes more often
+  const budget = $('#budget');
+  const onBudget = () => { const v = +budget.value; $('#budgetV').textContent = v + ' ms'; $('#budgetFill').style.width = (v / 20 * 100).toFixed(1) + '%'; $('#reroutes').textContent = Math.max(2, Math.round(12 + (8 - v) * 1.6)); };
+  budget.addEventListener('input', onBudget); onBudget();
+
+  select('sg');
+  // live: packets ride the pinned arc; numbers breathe every two seconds
+  let on = false; new IntersectionObserver(([e]) => { on = e.isIntersecting; }, { rootMargin: '200px' }).observe(appSec);
+  let gb = 72.3;
+  setInterval(() => {
+    if (!on) return; tickMs();
+    const s = 98.4 + Math.random() * 0.4; $('#score').textContent = s.toFixed(1); $('#gaugeArc').setAttribute('stroke-dasharray', `${(128.4 + (s - 98.6) * 6).toFixed(1)} 138`);
+    $('#jitter').textContent = (0.6 + Math.random() * 0.4).toFixed(1) + ' ms';
+    if (Math.random() < 0.5) $('#abroad').textContent = (gb += 0.1).toFixed(1) + ' GB';
+  }, 2000);
+  const step = (now) => {
+    requestAnimationFrame(step); if (!on || view !== 'globe') return;
+    const r = ROUTES[cur], t = reduced ? 0 : now / 2600;
+    pk.forEach((c, i) => { const q = r.arc.getPointAtLength(((t + i / 3) % 1) * r.len); c.setAttribute('cx', q.x); c.setAttribute('cy', q.y); });
+  };
+  requestAnimationFrame(step);
+})();

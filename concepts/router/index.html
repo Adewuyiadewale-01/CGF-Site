@@ -207,6 +207,110 @@
   </div>
 </section>
 
+<!-- 6c the vyre app: every route out of the house, live on a globe -->
+<section class="panel appsec" id="app" aria-labelledby="app-h">
+  <header class="app-head rise">
+    <p class="eyebrow">The Vyre app</p>
+    <h2 id="app-h">Your whole internet,<br>not just your house.</h2>
+    <p class="sec-body">Vyre tests every path out of your home every two seconds and sends each game, call and stream down the fastest one, on its own. Watch it happen live, from Perth to Singapore, Sydney or LA.</p>
+  </header>
+  <div class="device" id="device">
+    <div class="dash-scroll" id="dashScroll">
+      <div class="dash-size" id="dashSize">
+        <div class="vdash" id="dash" data-view="globe">
+          <div class="d-grid" aria-hidden="true"></div>
+
+          <!-- canvas: globe -->
+          <div class="d-globe v-globe" aria-hidden="true">
+            <img src="./assets/globe-base.png" alt="" width="780" height="780">
+            <svg viewBox="0 0 1600 1600" id="routesSvg"></svg>
+          </div>
+          <!-- canvas: home -->
+          <div class="d-home v-home" aria-hidden="true">
+            <img src="./assets/app-home.jpg" alt="" width="1026" height="684">
+            <svg viewBox="0 0 1172 733" id="lanesSvg"></svg>
+          </div>
+          <div class="d-labels v-globe" id="pills"></div>
+          <div class="d-labels v-home" id="homePins"></div>
+          <div class="d-callout" id="callout"><span class="c-k" id="cK">Valorant · SG-1</span><span class="c-live">LIVE</span><b id="cMs">38</b><i>ms</i><small id="cWas">Was 74 ms on your ISP’s path</small></div>
+          <svg class="d-leader" id="leader" viewBox="0 0 1172 733" aria-hidden="true"><line id="leaderLine"/></svg>
+          <div class="d-flight v-globe" id="flight"><b>In flight</b><span id="flightTxt">1,840 km over the Indian Ocean</span></div>
+          <p class="d-coord v-globe">−31.95°&nbsp; 115.86°&nbsp; ·&nbsp; PERTH</p>
+
+          <!-- canvas: list -->
+          <div class="d-list v-list" id="routeList" role="table" aria-label="Live routes"></div>
+
+          <!-- chrome -->
+          <div class="d-logo" aria-hidden="true"><svg viewBox="0 0 56 56" id="logoDots"></svg></div>
+          <svg class="ico" style="left:104.2px;top:39.1px" viewBox="0 0 17 17"><circle cx="7.3" cy="7.3" r="5.3"/><path d="M11.4 11.4l3.25 3.25"/></svg>
+          <span class="d-search">Search</span>
+          <svg class="ico" style="left:37.4px;top:183.9px" viewBox="0 0 17 17"><path d="M13 8.14H3.26M7.33 12.2 3.26 8.14l4.07-4.07"/></svg>
+          <h3 class="d-title" id="dTitle">Live<br>Routes</h3>
+          <p class="d-sub" id="dSub">47 routes · 6 regions · live</p>
+          <nav class="d-rail" aria-hidden="true">
+            <svg viewBox="0 0 17 17"><path d="M2.44 7.32 8.14 2.85l5.7 4.47v6.1a.81.81 0 0 1-.82.82H3.26a.81.81 0 0 1-.82-.82z"/></svg>
+            <svg viewBox="0 0 17 17"><circle cx="7.33" cy="7.33" r="4.48"/><path d="m10.74 10.74 3.1 3.1"/></svg>
+            <svg viewBox="0 0 17 17" class="on"><path d="M8.14 14.24s4.88-4.47 4.88-8.14a4.88 4.88 0 0 0-9.76 0c0 3.67 4.88 8.14 4.88 8.14z"/><circle cx="8.14" cy="6.1" r="1.63"/></svg>
+            <svg viewBox="0 0 17 17"><path d="M2.03 6.1a8.63 8.63 0 0 1 12.21 0M4.07 8.55a5.7 5.7 0 0 1 8.14 0M6.1 10.82a2.6 2.6 0 0 1 4.07 0"/><circle cx="8.14" cy="13.02" r=".73"/></svg>
+            <svg viewBox="0 0 17 17"><rect x="2.03" y="2.85" width="12.21" height="8.14" rx="1.22"/><path d="M5.7 13.84h4.88"/></svg>
+            <svg viewBox="0 0 17 17"><path d="m8.14 2.03 5.29 2.04v3.66c0 3.26-2.28 5.54-5.29 6.51-3.01-.97-5.29-3.25-5.29-6.5V4.07z"/></svg>
+            <svg viewBox="0 0 17 17"><path d="m2.44 12.2 3.26-4.06 2.44 2.44 3.26-4.88 2.44 3.26"/></svg>
+            <svg viewBox="0 0 17 17"><rect x="2.85" y="3.26" width="10.58" height="10.17" rx="1.22"/><path d="M2.85 6.51h10.58M5.7 2.04v2.44m4.88-2.44v2.44"/></svg>
+            <i></i>
+          </nav>
+          <svg class="ico" style="left:37.4px;top:660.9px" viewBox="0 0 17 17"><path d="M4.48 10.99V7.32a3.66 3.66 0 0 1 7.32 0v3.67l1.06 1.46H3.42zM6.92 14.24h2.44"/></svg>
+          <svg class="ico" style="left:37.4px;top:696.7px" viewBox="0 0 17 17"><circle cx="8.14" cy="8.14" r="2.12"/><path d="M8.14 2.03v1.8m0 8.62v1.8M2.03 8.14h1.8m8.62 0h1.8M3.83 3.83l1.3 1.3m6.02 6.02 1.3 1.3m-8.62 0 1.3-1.3m6.02-6.02 1.3-1.3"/></svg>
+
+          <div class="d-switch" role="tablist" aria-label="View">
+            <button role="tab" aria-selected="true" data-v="globe">Globe</button><button role="tab" aria-selected="false" data-v="home">Home</button><button role="tab" aria-selected="false" data-v="list">List</button>
+          </div>
+          <div class="d-budget"><span class="bl">Latency budget</span><b id="budgetV">8 ms</b><span class="bmax">20 ms</span><i class="bar"><i id="budgetFill"></i></i><input type="range" min="2" max="20" value="8" id="budget" aria-label="Latency budget"></div>
+          <div class="d-zoom" aria-hidden="true"><svg viewBox="0 0 152 49"><path d="M26 19.5v9.8M21.2 24.4h9.7M70 24.4h9.8"/><circle cx="123.7" cy="24.4" r="5.3"/><path d="m123.7 21.6 1.6 4-1.6-.8-1.6.8z"/></svg></div>
+          <div class="d-dock" aria-hidden="true"><svg viewBox="0 0 365 46"><rect x="4.9" y="4.9" width="35.8" height="35.8" rx="3.3" class="db"/><path class="dw" d="m22.8 17.1 1.3 3.6 3.6 1.3-3.6 1.3-1.3 3.6-1.3-3.6-3.6-1.3 3.6-1.3z"/><path d="M78.1 21.2h9.8m-9.8 3.2h9.8M143.2 28.9s4.9-4.5 4.9-8.1a4.9 4.9 0 0 0-9.8 0c0 3.6 4.9 8.1 4.9 8.1z"/><circle cx="143.2" cy="20.8" r="1.6"/><path d="m197.8 23.2 5.7 3.1 5.7-3.1m-11.4 2.4 5.7 3.1 5.7-3.1m-5.7-8.5 5.7 3.1-5.7 3.1-5.7-3.1z"/><circle cx="263.7" cy="22.8" r="5.7"/><path d="M258 22.8h11.4m-5.7-5.7c1.8 2 1.8 9.4 0 11.4-1.8-2-1.8-9.4 0-11.4zM318.6 20.3v-2.8h2.9m4.9 0h2.8v2.8m0 4.9v2.9h-2.8m-4.9 0h-2.9v-2.9"/></svg></div>
+
+          <!-- left: the pinned route -->
+          <div class="d-route" id="routePanel">
+            <span class="k">Pinned route</span><span class="r-open" aria-hidden="true">↗</span>
+            <h4 id="rTitle">Perth →<br>Singapore</h4>
+            <div class="r-chips"><span class="t" id="rCat">Gaming</span><span>Vyre path</span></div>
+            <ol class="hops" id="hops"></ol>
+            <span class="k r-ck">Path compare</span>
+            <div class="cmp"><span>Your ISP’s path</span><b id="ispMs">74 ms</b><i><i id="ispBar"></i></i></div>
+            <div class="cmp v"><span>Vyre’s path</span><b id="vyreMs">38 ms</b><i><i id="vyreBar"></i></i></div>
+            <p class="saved"><b id="saved">−36</b><span>ms faster,<br>every single match</span></p>
+          </div>
+
+          <!-- right: your edge -->
+          <div class="d-edge">
+            <span class="k">Your edge · Perth, WA</span>
+            <span class="e-btn" aria-hidden="true"><svg viewBox="0 0 31 31"><path d="M21.16 14.65V9.77h-4.88m4.88 0-5.7 5.7m3.26 1.62v3.26a.81.81 0 0 1-.81.81h-7.33a.81.81 0 0 1-.81-.81v-7.33c0-.45.36-.81.81-.81h3.26"/></svg></span>
+            <span class="e-btn x" aria-hidden="true"><svg viewBox="0 0 31 31"><path d="m11.4 11.4 8.13 8.13m0-8.13-8.13 8.13"/></svg></span>
+            <b class="e-name">Vyre One</b><b class="e-code">VY1-402</b>
+            <div class="e-chips"><span>Online<i style="background:#0D9F5B"></i></span><span>6 regions<i style="background:#3D38FF"></i></span><span>Guarded<i style="background:#F2552C"></i></span></div>
+            <dl class="e-stats">
+              <div><dt>Routes</dt><dd>47</dd></div><div><dt>Data abroad</dt><dd id="abroad">72.3 GB</dd></div>
+              <div><dt>Re-routes</dt><dd id="reroutes">12</dd></div><div><dt>Time saved</dt><dd id="eSaved">36 ms</dd></div>
+            </dl>
+            <span class="e-act">Route settings<svg viewBox="0 0 10 10"><path d="m2.5 4 2.5 2.5L7.5 4"/></svg></span>
+          </div>
+          <div class="d-health">
+            <b class="h-t">Route health</b><span class="h-s">47 live routes · 6 regions<br>Re-checked every 2 s</span>
+            <svg class="h-g" viewBox="0 0 106 61" aria-hidden="true"><path d="M8.95 53.72a43.95 43.95 0 0 1 87.9 0" opacity=".25"/><path d="M8.95 53.72a43.95 43.95 0 0 1 87.9 0" id="gaugeArc" stroke-dasharray="128.4 138"/></svg>
+            <b class="h-score" id="score">98.6</b>
+            <i class="h-rule" style="top:174.2px"></i><span class="h-l" style="top:183.9px">Packet loss</span><b class="h-v" style="top:197px">0.0 %</b>
+            <i class="h-rule" style="top:229.5px"></i><span class="h-l" style="top:239.3px">Jitter</span><b class="h-v" style="top:252.3px" id="jitter">0.8 ms</b>
+            <dl class="h-meta"><div><dt>Code</dt><dd>VY1-402-LR</dd></div><div><dt>Firmware</dt><dd>4.12.0</dd></div><div><dt>Uptime</dt><dd>41 days</dd></div></dl>
+            <i class="h-tone" aria-hidden="true"></i>
+            <svg class="h-draw" viewBox="0 0 123 269" aria-hidden="true"><ellipse cx="57" cy="17.9" rx="32.6" ry="6.5" opacity=".9"/><ellipse cx="57" cy="17.9" rx="26.9" ry="4.9" opacity=".7" stroke-dasharray="1.6 2.4"/><path d="M24.4 17.9v6.5m65.1-6.5v6.5" opacity=".6" stroke-dasharray="1.6 2.4"/><path d="M19.5 48.8q0-6.5 6.5-6.5h61.9q6.5 0 6.5 6.5V236q0 8.1-8.1 8.1H27.7q-8.2 0-8.2-8.1z" opacity=".95"/><ellipse cx="57" cy="45.6" rx="37.4" ry="7.3" opacity=".6"/><path d="M57 58.6v144.9" stroke-width="1.95"/><path d="M32.6 244.2v9.7h48.8v-9.7" opacity=".8"/><path d="M57 4.9v257.2" opacity=".45" stroke-dasharray="4.9 2.4 .8 2.4"/><path d="M107.4 42.3v201.9m-3.2-201.9h6.5m-6.5 201.9h6.5M19.5 258.8h74.9m-74.9-3.2v6.5m74.9-6.5v6.5" opacity=".7"/><g id="drawRules" stroke-width=".65"></g></svg>
+            <span class="h-nav" aria-hidden="true"><svg viewBox="0 0 74 36"><path d="M22.8 17.9h-8.15m3.26 3.26-3.26-3.26 3.26-3.25M50.5 17.9h8.1m-3.26 3.26 3.26-3.26-3.26-3.25"/></svg></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <p class="app-hint" aria-hidden="true">Swipe to explore the dashboard →</p>
+</section>
+
 <!-- 7 for work -->
 <section class="panel work" id="work" aria-labelledby="wk-h">
   <div class="sec-copy">
