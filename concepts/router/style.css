@@ -381,7 +381,7 @@ h1, h2, blockquote { font-family: var(--serif); font-weight: 400; }
 .appsec { padding: 72px 24px 24px; background: #E9E8E4; text-align: center; }
 .app-head h2 { margin-top: 4px; font-size: 48px; line-height: 48px; letter-spacing: -.01em; }
 .app-head .sec-body { max-width: 600px; margin: 20px auto 0; }
-.device { max-width: 1200px; margin: 48px auto 0; padding: 14px; border-radius: 30px; background: #0F0F11; box-shadow: 0 40px 80px -40px rgba(38,35,34,.55), inset 0 0 0 1px rgba(255,255,255,.06); transform-origin: 50% 0; transform: perspective(2200px) rotateX(calc(var(--tilt, 1) * 14deg)) scale(calc(1 - var(--tilt, 1) * .06)); will-change: transform; }
+.device { max-width: 1200px; margin: 48px auto 0; padding: 14px; border-radius: 30px; background: #0F0F11; box-shadow: 0 40px 80px -40px rgba(38,35,34,.55), inset 0 0 0 1px rgba(255,255,255,.06); transform-origin: 50% 0; transform: perspective(2200px) rotateX(calc(var(--tilt, 0) * 14deg)) scale(calc(1 - var(--tilt, 0) * .06)); will-change: transform; }
 .dash-scroll { border-radius: 18px; overflow: hidden; }
 .dash-size { position: relative; overflow: hidden; }
 .vdash { position: absolute; left: 0; top: 0; width: 1172px; height: 733px; transform-origin: 0 0; transform: scale(var(--k, 1)); background: #EDECE8; color: var(--ink); text-align: left; font-family: var(--sans); overflow: hidden; }
@@ -557,3 +557,19 @@ h1, h2, blockquote { font-family: var(--serif); font-weight: 400; }
   .app-hint { display: block; }
 }
 @media (prefers-reduced-motion: reduce) { .device { transform: none; } #routesSvg .arc, #lanesSvg path, .ping { animation: none; } }
+
+/* the app section as a pinned scene: a bare globe, routes drawing out of Perth, then the dashboard assembles around it */
+.app-caps { display: none; }
+.appsec.scrolly { height: 460vh; padding: 0; overflow: clip; }
+.scrolly .app-pin { position: sticky; top: 0; height: 100vh; overflow: hidden; }
+.scrolly .app-head { position: absolute; left: 50%; top: 0; width: 960px; transform-origin: 50% 0; transform: translate(-50%, var(--hy, 30vh)) scale(var(--hs, 1)); will-change: transform; }
+.scrolly .app-head h2 { font-size: 76px; line-height: 74px; letter-spacing: -.02em; }
+.scrolly .app-head .sec-body { display: none; }
+.scrolly .device { position: absolute; left: 50%; bottom: 4vh; width: var(--dw, 1100px); max-width: none; margin: 0; transform-origin: 50% 100%; transform: translateX(-50%) perspective(2400px) rotateX(var(--rx, 0deg)); background: rgba(15,15,17,var(--pb, 1)); box-shadow: 0 50px 90px -40px rgba(38,35,34,calc(var(--pb, 1) * .55)), inset 0 0 0 1px rgba(255,255,255,calc(var(--pb, 1) * .06)); }
+.scrolly .dash-scroll, .scrolly .dash-size { overflow: visible; }
+.scrolly .vdash { overflow: visible; background: rgba(237,236,232,var(--bga, 1)); clip-path: inset(calc(var(--ci, 0) * -1px) round 18px); transform: scale(var(--k, 1)) translate(var(--zx, 0px), var(--zy, 0px)) translate(612px, 395px) scale(var(--z, 1)) translate(-612px, -395px); }
+.scrolly .d-grid { opacity: var(--bga, 1); }
+.scrolly .dash-scroll { border-radius: 18px; }
+.scrolly .app-caps { display: block; position: absolute; left: 0; right: 0; bottom: 7vh; height: 40px; pointer-events: none; }
+.scrolly .app-caps p { position: absolute; left: 50%; top: 0; width: 760px; margin-left: -380px; text-align: center; font: 400 24px/32px var(--serif); color: var(--ink); opacity: 0; transform: translateY(12px); }
+.scrolly .app-caps p span { display: inline-block; padding: 6px 16px; border-radius: 30px; background: rgba(233,232,228,.82); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }

@@ -119,11 +119,15 @@ if (appSec) (async () => {
   const dash = $('#dash'), size = $('#dashSize'), scroller = $('#dashScroll'), device = $('#device'), NS = 'http://www.w3.org/2000/svg';
   const el = (tag, attrs = {}, parent) => { const n = document.createElementNS(NS, tag); for (const k in attrs) n.setAttribute(k, attrs[k]); if (parent) parent.append(n); return n; };
   // fit the 1172 × 733 artboard to the device; on phones it keeps a readable size and scrolls sideways
-  const fit = () => { const w = scroller.clientWidth, k = innerWidth <= 760 ? 0.66 : w / 1172; dash.style.setProperty('--k', k); size.style.width = innerWidth <= 760 ? 1172 * k + 'px' : ''; size.style.height = 733 * k + 'px'; };
-  new ResizeObserver(fit).observe(scroller); fit();
-  // the device leans back until it arrives, then lies flat
-  const tilt = () => { if (reduced || innerWidth <= 760) return device.style.setProperty('--tilt', 0); const r = device.getBoundingClientRect(), p = Math.min(1, Math.max(0, (innerHeight - r.top) / (innerHeight * 0.75))); device.style.setProperty('--tilt', (1 - p * p * (3 - 2 * p)).toFixed(3)); };
-  addEventListener('scroll', tilt, { passive: true }); addEventListener('resize', tilt); tilt();
+  // on wide screens with motion allowed, the section is a pinned scene; otherwise a plain device that scrolls sideways on phones
+  const isScene = () => !reduced && innerWidth > 760;
+  const fit = () => {
+    appSec.classList.toggle('scrolly', isScene());
+    if (isScene()) { const vh = innerHeight, avail = vh * 0.96 - 205 - 28; appSec.style.setProperty('--dw', Math.min(1220, innerWidth - 96, avail * 1172 / 733 + 28) + 'px'); }
+    else { appSec.style.removeProperty('--dw'); appSec.style.removeProperty('--pb'); }
+    const w = scroller.clientWidth, k = innerWidth <= 760 ? 0.66 : w / 1172; dash.style.setProperty('--k', k); size.style.width = innerWidth <= 760 ? 1172 * k + 'px' : ''; size.style.height = 733 * k + 'px';
+  };
+  new ResizeObserver(fit).observe(scroller); addEventListener('resize', fit); fit();
 
   // small drawn details: the logo's dot matrix and the router drawing's ribs
   [3, 5, 7, 7, 7, 5, 3].forEach((n, row) => { for (let i = 0; i < n; i++) el('circle', { cx: 27.67 + (i - (n - 1) / 2) * 3.2556, cy: 17.9 + row * 3.2556, r: 1.22 }, $('#logoDots')); });
@@ -239,4 +243,71 @@ if (appSec) (async () => {
     pk.forEach((c, i) => { const q = r.arc.getPointAtLength(((t + i / 3) % 1) * r.len); c.setAttribute('cx', q.x); c.setAttribute('cy', q.y); });
   };
   requestAnimationFrame(step);
+
+  /* the scene: scroll drives a bare globe → routes drawing out of Perth → the dashboard assembling → the device closing around it */
+  const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x)), ease = (x) => x * x * (3 - 2 * x), out = (x) => 1 - Math.pow(1 - x, 3);
+  const seg = (p, a, b) => clamp((p - a) / (b - a)), lerp = (a, b, t) => a + (b - a) * t;
+  const head = $('#appHead'), caps = $$('.app-caps p');
+  caps.forEach((c) => { c.innerHTML = `<span>${c.textContent}</span>`; });
+  const canvasBits = new Set($$('.d-grid, .d-globe, .d-home, .d-labels, .d-list', dash));
+  // every piece of chrome flies in from the edge it lives on, top to bottom
+  const parts = [...dash.children].filter((n) => !canvasBits.has(n)).map((n) => {
+    const x = n.offsetLeft || parseFloat(n.style.left) || 0, y = n.offsetTop || parseFloat(n.style.top) || 0, float = n.matches('#callout, #flight, .d-leader');
+    const dir = float ? [0, 0] : x > 880 ? [1, 0] : y < 80 ? [0, -1] : y > 640 ? [0, 1] : [-1, 0];
+    return { n, dir, float, order: float ? 9 : dir[0] === 1 ? 2 + y / 733 : dir[1] === -1 ? 1 + x / 1172 : dir[1] === 1 ? 3 : y / 733 };
+  }).sort((a, b) => a.order - b.order);
+  const meDot = $$('.pill.dark', $('#pills'))[0], perthDots = $$('.ping, .home-dot', svg);
+  let lastP = -1, done = false;
+  function scene() {
+    if (!appSec.classList.contains('scrolly')) { if (lastP !== -2) { clearScene(); lastP = -2; } return; }
+    const r = appSec.getBoundingClientRect(), vh = innerHeight, p = clamp(-r.top / Math.max(1, r.height - vh));
+    if (Math.abs(p - lastP) < 0.0004) return; lastP = p;
+    if (p < 0.8 && view !== 'globe') setView('globe');
+    // headline: big under the nav, then it settles small at the top
+    const h = out(seg(p, 0.3, 0.56)); head.style.setProperty('--hy', lerp(vh * 0.13, 78, h) + 'px'); head.style.setProperty('--hs', lerp(1, 0.58, h));
+    // captions, one at a time
+    [[0.12, 0.27], [0.29, 0.44], [0.5, 0.68]].forEach(([a, b], i) => { const t = Math.min(seg(p, a, a + 0.025), 1 - seg(p, b - 0.025, b)); caps[i].style.opacity = t; caps[i].style.transform = `translateY(${(1 - t) * 12}px)`; });
+    // the globe starts large and tilted back, then shrinks into its place on the screen
+    const k = +dash.style.getPropertyValue('--k') || 1, devH = device.offsetHeight;
+    const devMid = vh * 0.96 - devH / 2, z = out(seg(p, 0.42, 0.74));
+    dash.style.setProperty('--z', lerp(1.42, 1, z));
+    dash.style.setProperty('--zx', lerp(-26, 0, z) + 'px');
+    dash.style.setProperty('--zy', lerp((vh * 0.64 - devMid) / k - 28.5, 0, z) + 'px');
+    device.style.setProperty('--rx', lerp(16, 0, out(seg(p, 0.36, 0.76))) + 'deg');
+    // the screen: background, then the bezel closes in around everything
+    const b = ease(seg(p, 0.7, 0.86));
+    appSec.style.setProperty('--pb', b); dash.style.setProperty('--bga', ease(seg(p, 0.62, 0.8))); dash.style.setProperty('--ci', (1 - b) * 900);
+    // routes draw out of Perth, the pinned one first
+    const pd = ease(seg(p, 0.06, 0.12)); perthDots.forEach((d) => (d.style.opacity = pd)); meDot.style.opacity = pd;
+    ORDER.forEach((id, i) => {
+      const o = ROUTES[id], t = ease(seg(p, 0.1 + i * 0.045, 0.18 + i * 0.045));
+      if (t < 1) { o.arc.style.strokeDasharray = `${o.len} ${o.len}`; o.arc.style.strokeDashoffset = o.len * (1 - t); o.arc.style.animation = 'none'; }
+      else { o.arc.style.strokeDasharray = o.arc.style.strokeDashoffset = o.arc.style.animation = ''; }
+      o.glow.style.opacity = t; if (o.end) o.end.style.opacity = t > 0.96 ? 1 : 0;
+      const pt = seg(t, 0.85, 1); o.pill.style.opacity = pt; o.pill.style.transform = `translateY(${(1 - pt) * 6}px) scale(${0.9 + pt * 0.1})`;
+    });
+    pk.forEach((c) => (c.style.opacity = seg(p, 0.18, 0.2)));
+    // chrome flies in from its edges
+    parts.forEach(({ n, dir, float }, i) => {
+      const t = out(seg(p, (float ? 0.66 : 0.5) + i * 0.008, (float ? 0.74 : 0.62) + i * 0.008));
+      if (t >= 1) { n.style.opacity = n.style.translate = n.style.scale = ''; return; }
+      n.style.opacity = t; n.style.translate = `${dir[0] * (1 - t) * 48}px ${dir[1] * (1 - t) * 48}px`; n.style.scale = float ? 0.94 + t * 0.06 : '';
+    });
+    done = p > 0.86;
+  }
+  function clearScene() {
+    for (const n of [...parts.map((x) => x.n), ...caps, meDot, ...perthDots, ...pk]) { n.style.opacity = n.style.translate = n.style.scale = n.style.transform = ''; }
+    ORDER.forEach((id) => { const o = ROUTES[id]; o.arc.style.strokeDasharray = o.arc.style.strokeDashoffset = o.arc.style.animation = o.glow.style.opacity = o.pill.style.opacity = o.pill.style.transform = ''; if (o.end) o.end.style.opacity = ''; });
+    for (const v of ['--z', '--zx', '--zy', '--bga', '--ci']) dash.style.removeProperty(v);
+    device.style.removeProperty('--rx'); head.style.removeProperty('--hy'); head.style.removeProperty('--hs'); done = true;
+  }
+  // once it has assembled, the dashboard tours its routes on its own until someone takes over
+  let idleUntil = 0, lastTour = 0;
+  dash.addEventListener('pointerdown', () => { idleUntil = performance.now() + 15000; });
+  const sceneLoop = (now) => {
+    requestAnimationFrame(sceneLoop); if (!on) return; scene();
+    if (!done || view !== 'globe' || reduced || now < idleUntil) { lastTour = now; return; }
+    if (now - lastTour > 4500) { lastTour = now; select(ORDER[(ORDER.indexOf(cur) + 1) % ORDER.length]); }
+  };
+  requestAnimationFrame(sceneLoop);
 })();
