@@ -39,7 +39,7 @@ for (let lat = -84; lat <= 84; lat += 0.82) {
   for (let lon = -180; lon < 180; lon += step) {
     const q = v3(lon, lat); if (q.z < 0.02) continue;
     if (!onLand(lon, lat)) continue;
-    const r = (1.0 + q.z * 1.55).toFixed(2), a = (0.25 + q.z * 0.75).toFixed(2);
+    const r = (1.15 + q.z * 1.6).toFixed(2), a = (0.5 + q.z * 0.5).toFixed(2);
     dots += `<circle cx="${q.x.toFixed(1)}" cy="${q.y.toFixed(1)}" r="${r}" fill="#262322" fill-opacity="${a}"/>`;
   }
 }
@@ -80,9 +80,9 @@ for (const r of ROUTES) {
   const vis = pts.map((q) => q.z >= 0 || Math.hypot(q.x - CX, q.y - CY) > R + 1);
   const d = pts.reduce((s, q, i) => s + (vis[i] ? ((i && vis[i - 1]) ? 'L' : 'M') + q.x.toFixed(1) + ' ' + q.y.toFixed(1) : ''), '');
   if (r.on) {
-    glow += `<path d="${d}" stroke="#3D38FF" stroke-width="22" stroke-opacity=".16"/>`;
-    arcsSvg += `<path d="${d}" stroke="#3D38FF" stroke-width="5.5"/>`;
-  } else arcsSvg += `<path d="${d}" stroke="#3D38FF" stroke-opacity=".7" stroke-width="2.4" stroke-dasharray="2 9" stroke-linecap="round"/>`;
+    glow += `<path d="${d}" stroke="#3D38FF" stroke-width="34" stroke-opacity=".22"/>`;
+    arcsSvg += `<path d="${d}" stroke="#3D38FF" stroke-width="8"/>`;
+  } else arcsSvg += `<path d="${d}" stroke="#3D38FF" stroke-opacity=".85" stroke-width="3" stroke-dasharray="2 8" stroke-linecap="round"/>`;
   for (const t of r.on ? [0.22, 0.47, 0.71] : [0.38, 0.74]) { const q = pts[Math.round(t * 160)]; if (vis[Math.round(t * 160)]) packets += `<circle cx="${q.x.toFixed(1)}" cy="${q.y.toFixed(1)}" r="${r.on ? 7 : 4.5}" fill="${r.on ? '#fff' : '#3D38FF'}" ${r.on ? 'stroke="#3D38FF" stroke-width="4"' : ''}/>`; }
   const end = v3(...r.to), top = pts[80], last = [...pts].reverse().find((q, i) => vis[160 - i]);
   meta.routes[r.id] = { name: r.name, end: [end.x, end.y], endVisible: end.z > 0, mid: [top.x, top.y], last: [last.x, last.y] };
@@ -99,7 +99,7 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${S}" height="${S}" 
 </defs>
 <ellipse cx="${CX}" cy="${CY + R + 46}" rx="${R * 0.78}" ry="34" fill="#262322" fill-opacity=".10" filter="url(#soft)"/>
 <circle cx="${CX}" cy="${CY}" r="${R}" fill="url(#sea)"/>
-<g clip-path="url(#disc)" fill="none" stroke="#262322" stroke-opacity=".09" stroke-width="1.2">${grat}</g>
+<g clip-path="url(#disc)" fill="none" stroke="#262322" stroke-opacity=".12" stroke-width="1.3">${grat}</g>
 <g>${dots}</g>
 <circle cx="${CX}" cy="${CY}" r="${R}" fill="url(#rim)"/>
 <circle cx="${CX}" cy="${CY}" r="${R}" fill="none" stroke="#262322" stroke-opacity=".22" stroke-width="1.5"/>
