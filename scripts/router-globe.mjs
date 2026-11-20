@@ -85,7 +85,7 @@ for (const r of ROUTES) {
   } else arcsSvg += `<path d="${d}" stroke="#3D38FF" stroke-opacity=".85" stroke-width="3" stroke-dasharray="2 8" stroke-linecap="round"/>`;
   for (const t of r.on ? [0.22, 0.47, 0.71] : [0.38, 0.74]) { const q = pts[Math.round(t * 160)]; if (vis[Math.round(t * 160)]) packets += `<circle cx="${q.x.toFixed(1)}" cy="${q.y.toFixed(1)}" r="${r.on ? 7 : 4.5}" fill="${r.on ? '#fff' : '#3D38FF'}" ${r.on ? 'stroke="#3D38FF" stroke-width="4"' : ''}/>`; }
   const end = v3(...r.to), top = pts[80], last = [...pts].reverse().find((q, i) => vis[160 - i]);
-  meta.routes[r.id] = { name: r.name, end: [end.x, end.y], endVisible: end.z > 0, mid: [top.x, top.y], last: [last.x, last.y] };
+  meta.routes[r.id] = { name: r.name, end: [end.x, end.y], endVisible: end.z > 0, mid: [top.x, top.y], last: [last.x, last.y], d: d.replace(/(\d+\.\d)\d*/g, '$1') };
   if (end.z > 0) packets += `<circle cx="${end.x.toFixed(1)}" cy="${end.y.toFixed(1)}" r="${r.on ? 11 : 7}" fill="#FFFFFB" stroke="#3D38FF" stroke-width="${r.on ? 5 : 3.5}"/>`;
 }
 const per = v3(...PER); meta.cities.perth = [per.x, per.y];
@@ -113,5 +113,8 @@ ${packets}
 <circle cx="${per.x}" cy="${per.y}" r="14" fill="#3D38FF" stroke="#FFFFFB" stroke-width="5"/>
 </svg>`;
 await sharp(Buffer.from(svg)).png().toFile(out + 'globe.png');
+// the site draws the routes live on top of a bare globe, so it can switch and animate them
+const base = svg.replace(/<g fill="none" filter="url\(#soft\)">[\s\S]*<\/svg>/, '</svg>');
+await sharp(Buffer.from(base)).png({ palette: true, quality: 92, compressionLevel: 9 }).toFile(out + 'globe-base.png');
 writeFileSync(out + 'globe.json', JSON.stringify(meta, null, 1));
 console.log(JSON.stringify(meta));
