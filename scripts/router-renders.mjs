@@ -25,6 +25,7 @@ const JOBS = {
   'inside-50':     ['asset=inside&t=0.5', 1200, 1100],
   'inside-100':    ['asset=inside&t=1', 1200, 1100],
   'inside-wide':   ['asset=inside&t=1&az=0.32', 1248, 600],
+  place:           ['asset=place', 600, 900, true],
   'cut-graphite':  ['asset=cut&f=graphite', 900, 1000, true],
   'cut-bone':      ['asset=cut&f=bone', 900, 1000, true],
   'cut-cobalt':    ['asset=cut&f=cobalt', 900, 1000, true],

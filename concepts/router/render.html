@@ -26,6 +26,15 @@
     st = makeStage(c, { bg: '#E3DDD2', bloom: 0, fov: 26, preserve: true, exposure: 0.82 });
     const s = studioScene(st, asset === 'single' ? [q.get('f') || 'graphite'] : undefined);
     if (asset === 'single') { st.camera.position.set(0, 2.0, 6.2); st.camera.lookAt(0, 1.1, 0); }
+  } else if (asset === 'place') {
+    // Vyre One lit like a dim living room at dusk: cool ambient, a warm edge from a lamp on the right
+    st = makeStage(c, { bg: null, bloom: 0, fov: 18, preserve: true, exposure: 0.85 });
+    st.scene.environmentIntensity = 0.18;
+    const r = vyreOne('graphite'); r.rotation.y = +(q.get('ry') ?? 0.35); st.scene.add(r);
+    st.scene.add(new THREE.HemisphereLight('#7E8CB0', '#2A2420', 0.55));
+    const warm = new THREE.DirectionalLight('#FFB47A', 1.6); warm.position.set(6, 2.5, 2); st.scene.add(warm);
+    const cool = new THREE.DirectionalLight('#8FA6D8', 0.5); cool.position.set(-4, 3, 4); st.scene.add(cool);
+    st.camera.position.set(0.6, 2.9, 9); st.camera.lookAt(0, 1.08, 0);
   } else if (asset === 'inside') {
     const { vyreInside } = await import('./inside.js');
     st = makeStage(c, { bg: '#363432', bloom: 0.7, fov: 26, preserve: true });
